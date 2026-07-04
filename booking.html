@@ -59,6 +59,10 @@
   .status-open { background: var(--gold-light); color: var(--sage-deep); }
   .status-few { background: #fde8d0; color: #8a5a1e; }
   .status-closed { background: #eee; color: #888; }
+  .time-of-day-badge {
+    display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 5px 12px;
+    border-radius: 10px; background: var(--warm); color: var(--sage-dark); margin-left: 8px; margin-bottom: 14px;
+  }
 
   .booking-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 18px; }
   .booking-desc { color: var(--muted); font-size: 0.95rem; margin-bottom: 26px; }
@@ -129,6 +133,7 @@
   const content = document.getElementById('content');
 
   const statusLabel = { open: '募集中', few: '残りわずか', closed: '受付終了' };
+  const timeOfDayBadge = { morning: '🌅 朝ヨガ', evening: '🌙 夜ヨガ' };
 
   if (!course) {
     content.innerHTML = `
@@ -144,7 +149,7 @@
       <div class="booking-card">
         <div class="booking-image"><img src="${course.image}" alt="${course.name}"></div>
         <div class="booking-body">
-          <span class="status-badge status-${course.status}">${statusLabel[course.status] || ''}</span>
+          <span class="status-badge status-${course.status}">${statusLabel[course.status] || ''}</span>${course.timeOfDay ? `<span class="time-of-day-badge">${timeOfDayBadge[course.timeOfDay]}</span>` : ''}
           <h1 class="booking-title">${course.name}</h1>
           <p class="booking-desc">${course.description}</p>
           <dl class="detail-grid">
@@ -178,7 +183,7 @@
       <div class="booking-card">
         <div class="booking-image"><img src="${course.image}" alt="${course.name}"></div>
         <div class="booking-body">
-          <span class="status-badge status-${course.status}">${statusLabel[course.status] || ''}</span>
+          <span class="status-badge status-${course.status}">${statusLabel[course.status] || ''}</span>${course.timeOfDay ? `<span class="time-of-day-badge">${timeOfDayBadge[course.timeOfDay]}</span>` : ''}
           <h1 class="booking-title">${course.name}</h1>
           <p class="booking-desc">${course.description}</p>
           <dl class="detail-grid">

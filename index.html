@@ -393,6 +393,10 @@
   }
   .open-course-status.open { background: var(--gold-light); color: var(--sage-deep); }
   .open-course-status.few { background: #fde8d0; color: #8a5a1e; }
+  .time-of-day-badge {
+    display: inline-block; font-size: 0.7rem; font-weight: 700; padding: 4px 10px;
+    border-radius: 10px; background: var(--warm); color: var(--sage-dark);
+  }
   .open-course-card h4 { font-size: 1rem; margin-bottom: 6px; color: var(--ink); }
   .open-course-date { font-size: 0.86rem; color: var(--sage-dark); font-weight: 700; margin-bottom: 4px; }
   .open-course-meta { font-size: 0.8rem; color: var(--muted); margin-bottom: 16px; }
@@ -768,6 +772,7 @@
 <script src="data/courses.js"></script>
 <script>
   const statusLabel = { open: '募集中', few: '残りわずか', closed: '受付終了' };
+  const timeOfDayBadge = { morning: '🌅 朝ヨガ', evening: '🌙 夜ヨガ' };
 
   const openGrid = document.getElementById('openCourseGrid');
   const openCourses = COURSES.filter(c => c.target === '個人向け' && c.status !== 'closed');
@@ -775,7 +780,10 @@
     <div class="open-course-card">
       <div class="open-course-img"><img src="${c.image}" alt="${c.name}" loading="lazy"></div>
       <div class="open-course-body">
-        <span class="open-course-status ${c.status}">${statusLabel[c.status]}</span>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+          <span class="open-course-status ${c.status}">${statusLabel[c.status]}</span>
+          ${c.timeOfDay ? `<span class="time-of-day-badge">${timeOfDayBadge[c.timeOfDay]}</span>` : ''}
+        </div>
         <h4>${c.name}</h4>
         <div class="open-course-date">${c.nextDateText}　${c.time}</div>
         <div class="open-course-meta">${c.venue}／${c.capacity}／${c.price}</div>
@@ -789,7 +797,7 @@
   const scheduleBody = document.getElementById('scheduleTableBody');
   scheduleBody.innerHTML = COURSES.map(c => `
     <tr>
-      <td>${c.name}</td>
+      <td>${c.name}${c.timeOfDay ? `<br><span class="time-of-day-badge">${timeOfDayBadge[c.timeOfDay]}</span>` : ''}</td>
       <td>${c.venue}</td>
       <td>${c.scheduleText}</td>
       <td>${c.nextDateText}</td>
