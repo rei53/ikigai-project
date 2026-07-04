@@ -165,7 +165,9 @@
       <div class="form-block">
         <h2>お申し込み方法</h2>
         <div class="form-placeholder" style="text-align:left;">
-          この講座は <strong style="color:var(--sage-dark);">${course.venue}</strong> が窓口となっています。<br><br>
+          ${course.venueIsFixed === false
+            ? ''
+            : `この講座は <strong style="color:var(--sage-dark);">${course.venue}</strong> が窓口となっています。<br><br>`}
           ${course.facilityNote || '会場に直接お申し込みください。'}<br><br>
           ご不明な点はIKIGAIプロジェクト（<a href="mailto:yodayoga2525@gmail.com" style="color:var(--sage-dark); font-weight:700;">yodayoga2525@gmail.com</a>）までお気軽にご連絡ください。
         </div>
