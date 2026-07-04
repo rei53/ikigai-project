@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お申し込み ｜ IKIGAIプロジェクト®</title>
+<meta name="description" content="IKIGAIプロジェクト®の講座お申し込みページです。">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#2f6d85">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧘</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700;900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --sage: #4d8fa6; --sage-light: #a9d3de; --sage-dark: #2f6d85; --sage-deep: #204b5c;
+    --cream: #f7fafc; --warm: #eaf4f7; --gold: #6fae9c; --gold-light: #cdeae0;
+    --ink: #263238; --muted: #5f6b72; --line: rgba(47,109,133,0.14); --white: #ffffff;
+    --shadow-sm: 0 2px 8px rgba(38,50,56,0.04), 0 8px 24px rgba(38,50,56,0.05);
+    --shadow-md: 0 6px 16px rgba(38,50,56,0.06), 0 18px 40px rgba(38,50,56,0.08);
+    --shadow-lg: 0 12px 28px rgba(38,50,56,0.08), 0 28px 60px rgba(38,50,56,0.12);
+  }
+  body {
+    font-family: 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+    background: var(--cream); color: var(--ink); line-height: 1.9;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .serif { font-family: 'Noto Serif JP', serif; }
+  a { color: inherit; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+  nav {
+    position: sticky; top: 0; width: 100%; z-index: 200;
+    background: rgba(247,250,252,0.94); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(47,109,133,0.12);
+  }
+  .nav-inner { max-width: 1080px; margin: 0 auto; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-family: 'Noto Serif JP', serif; font-weight: 700; font-size: 1.05rem; color: var(--sage-dark); display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+  .logo::before { content: ''; width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--sage-light), var(--sage-dark)); flex: none; }
+  .logo span { color: var(--gold); }
+  .back-link { font-size: 0.84rem; color: var(--sage-dark); text-decoration: none; font-weight: 700; }
+
+  main { padding: 56px 24px 100px; }
+
+  .breadcrumb { font-size: 0.8rem; color: var(--muted); margin-bottom: 20px; }
+  .breadcrumb a { color: var(--sage-dark); text-decoration: none; }
+
+  .booking-card {
+    background: var(--white); border-radius: 22px; box-shadow: var(--shadow-lg);
+    overflow: hidden; margin-bottom: 30px;
+  }
+  .booking-image { width: 100%; aspect-ratio: 16/9; overflow: hidden; }
+  .booking-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .booking-body { padding: 34px 32px; }
+  .status-badge {
+    display: inline-block; font-size: 0.74rem; font-weight: 700; padding: 5px 14px;
+    border-radius: 12px; margin-bottom: 14px; letter-spacing: 0.03em;
+  }
+  .status-open { background: var(--gold-light); color: var(--sage-deep); }
+  .status-few { background: #fde8d0; color: #8a5a1e; }
+  .status-closed { background: #eee; color: #888; }
+
+  .booking-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 18px; }
+  .booking-desc { color: var(--muted); font-size: 0.95rem; margin-bottom: 26px; }
+
+  .detail-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    background: var(--cream); border-radius: 14px; padding: 22px 24px; margin-bottom: 26px;
+  }
+  .detail-item dt { font-size: 0.72rem; color: var(--gold); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+  .detail-item dd { font-size: 0.94rem; font-weight: 600; }
+  @media (max-width: 520px) { .detail-grid { grid-template-columns: 1fr; } }
+
+  .payment-note {
+    background: var(--warm); border-left: 4px solid var(--gold);
+    padding: 18px 20px; border-radius: 4px; font-size: 0.86rem; color: var(--ink); margin-bottom: 30px;
+  }
+  .payment-note strong { color: var(--sage-dark); }
+
+  .form-block h2 { font-size: 1.1rem; margin-bottom: 16px; }
+  .form-frame-wrap {
+    border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-md); background: var(--white);
+    min-height: 600px;
+  }
+  .form-frame-wrap iframe { width: 100%; height: 900px; border: 0; display: block; }
+
+  .form-placeholder {
+    text-align: center; padding: 60px 30px; background: var(--white); border-radius: 16px;
+    box-shadow: var(--shadow-sm); color: var(--muted); font-size: 0.92rem;
+  }
+
+  .btn {
+    display: inline-block; padding: 14px 32px; border-radius: 28px; font-weight: 700; font-size: 0.9rem;
+    text-decoration: none; background: linear-gradient(135deg, var(--sage-dark), var(--sage-deep)); color: var(--white);
+    box-shadow: 0 10px 26px rgba(47,109,133,0.3); margin-top: 14px;
+  }
+
+  .not-found { text-align: center; padding: 80px 24px; }
+  .not-found h1 { font-size: 1.4rem; margin-bottom: 16px; }
+
+  footer { background: var(--ink); color: rgba(255,255,255,0.55); padding: 40px 24px; text-align: center; font-size: 0.8rem; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="index.html">IKIGAI<span>プロジェクト®</span></a>
+    <a class="back-link" href="index.html#program">← トップページに戻る</a>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap">
+    <div class="breadcrumb"><a href="index.html">トップ</a> ／ お申し込み</div>
+    <div id="content">読み込み中です…</div>
+  </div>
+</main>
+
+<footer>
+  &copy; 2026 IKIGAI Project. All rights reserved.
+</footer>
+
+<script src="data/courses.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('course');
+  const course = COURSES.find(c => c.id === id);
+  const content = document.getElementById('content');
+
+  const statusLabel = { open: '募集中', few: '残りわずか', closed: '受付終了' };
+
+  if (!course) {
+    content.innerHTML = `
+      <div class="not-found">
+        <h1>講座が見つかりませんでした</h1>
+        <p style="color:var(--muted); margin-bottom:20px;">お手数ですが、トップページから改めて講座をお選びください。</p>
+        <a class="btn" href="index.html#program">プログラム一覧へ</a>
+      </div>`;
+  } else {
+    document.title = course.name + ' お申し込み ｜ IKIGAIプロジェクト®';
+
+    const hasForm = course.formUrl && course.formUrl !== 'YOUR_GOOGLE_FORM_URL';
+    const formBlock = hasForm
+      ? `<div class="form-frame-wrap"><iframe src="${course.formUrl}${course.formUrl.includes('?') ? '&' : '?'}embedded=true" title="申し込みフォーム">読み込んでいます…</iframe></div>
+         <p style="margin-top:14px;"><a class="btn" href="${course.formUrl}" target="_blank" rel="noopener">フォームが表示されない場合はこちら</a></p>`
+      : `<div class="form-placeholder">申し込みフォームは準備中です。<br>お急ぎの場合はメール（<a href="mailto:yodayoga2525@gmail.com" style="color:var(--sage-dark); font-weight:700;">yodayoga2525@gmail.com</a>）にてお問い合わせください。</div>`;
+
+    content.innerHTML = `
+      <div class="booking-card">
+        <div class="booking-image"><img src="${course.image}" alt="${course.name}"></div>
+        <div class="booking-body">
+          <span class="status-badge status-${course.status}">${statusLabel[course.status] || ''}</span>
+          <h1 class="booking-title">${course.name}</h1>
+          <p class="booking-desc">${course.description}</p>
+          <dl class="detail-grid">
+            <div class="detail-item"><dt>次回開催日</dt><dd>${course.nextDateText}</dd></div>
+            <div class="detail-item"><dt>時間</dt><dd>${course.time}</dd></div>
+            <div class="detail-item"><dt>開催頻度</dt><dd>${course.scheduleText}</dd></div>
+            <div class="detail-item"><dt>会場</dt><dd>${course.venue}</dd></div>
+            <div class="detail-item"><dt>定員</dt><dd>${course.capacity}</dd></div>
+            <div class="detail-item"><dt>参加費</dt><dd>${course.price}</dd></div>
+          </dl>
+          <div class="payment-note">
+            <strong>お支払いについて：</strong>お申し込み後にお送りする確認メールにて、決済方法をご案内いたします。
+          </div>
+        </div>
+      </div>
+      <div class="form-block">
+        <h2>お申し込みフォーム</h2>
+        ${formBlock}
+      </div>`;
+  }
+</script>
+
+</body>
+</html>

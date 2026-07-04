@@ -294,6 +294,8 @@
   }
   .field-item:hover { background: rgba(255,255,255,0.16); border-color: rgba(205,234,224,0.5); transform: translateY(-5px); }
   .field-item small { display: block; font-size: 0.72rem; font-weight: 400; opacity: 0.75; margin-top: 6px; }
+  a.field-item-link { text-decoration: none; display: block; cursor: pointer; }
+  a.field-item-link::after { content: '予約する →'; display: block; margin-top: 10px; font-size: 0.72rem; color: var(--gold-light); font-weight: 700; }
 
   /* ─── TARGET ─── */
   .target { background: var(--white); }
@@ -369,6 +371,45 @@
   .training-shift .arrow { color: var(--gold-light); font-weight: 700; }
   .training-shift .after { font-weight: 700; color: var(--gold-light); }
 
+  /* ─── SCHEDULE ─── */
+  .schedule { background: var(--white); }
+  .schedule-subhead { font-size: 1.1rem; font-weight: 800; margin: 0 0 22px; color: var(--sage-dark); }
+  .schedule-note { font-size: 0.78rem; color: var(--muted); margin-bottom: 30px; }
+
+  .open-course-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-bottom: 60px;
+  }
+  .open-course-card {
+    background: var(--cream); border: 1px solid var(--line); border-radius: 18px; overflow: hidden;
+    display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .open-course-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
+  .open-course-img { width: 100%; aspect-ratio: 16/9; overflow: hidden; }
+  .open-course-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .open-course-body { padding: 22px 22px 26px; flex: 1; display: flex; flex-direction: column; }
+  .open-course-status {
+    display: inline-block; align-self: flex-start; font-size: 0.7rem; font-weight: 700; padding: 4px 12px;
+    border-radius: 10px; margin-bottom: 10px;
+  }
+  .open-course-status.open { background: var(--gold-light); color: var(--sage-deep); }
+  .open-course-status.few { background: #fde8d0; color: #8a5a1e; }
+  .open-course-card h4 { font-size: 1rem; margin-bottom: 6px; color: var(--ink); }
+  .open-course-date { font-size: 0.86rem; color: var(--sage-dark); font-weight: 700; margin-bottom: 4px; }
+  .open-course-meta { font-size: 0.8rem; color: var(--muted); margin-bottom: 16px; }
+  .open-course-body .btn-sm {
+    margin-top: auto; display: inline-block; text-align: center; padding: 10px 20px; border-radius: 22px;
+    background: linear-gradient(135deg, var(--sage-dark), var(--sage-deep)); color: var(--white);
+    font-size: 0.84rem; font-weight: 700; text-decoration: none; transition: transform 0.2s ease;
+  }
+  .open-course-body .btn-sm:hover { transform: translateY(-2px); }
+
+  .schedule-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+  .schedule-table th, .schedule-table td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  .schedule-table th { color: var(--sage-dark); font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; }
+  .schedule-table tr:last-child td { border-bottom: none; }
+  .schedule-table-wrap { overflow-x: auto; border-radius: 16px; border: 1px solid var(--line); }
+  @media (max-width: 640px) { .schedule-table { font-size: 0.8rem; } .schedule-table th, .schedule-table td { padding: 10px 12px; } }
+
   /* ─── PROFILE ─── */
   .profile { background: var(--white); }
   .profile-grid {
@@ -440,6 +481,7 @@
       <li><a href="#field">フィールド</a></li>
       <li><a href="#target">ターゲット</a></li>
       <li><a href="#program">プログラム</a></li>
+      <li><a href="#schedule">スケジュール</a></li>
       <li><a href="#profile">プロフィール</a></li>
       <li><a href="#contact" class="nav-cta">お問い合わせ</a></li>
     </ul>
@@ -561,10 +603,10 @@
       <p class="section-lead center">高松市周辺6拠点をはじめ、多様な現場でヨーガとマインドフルネスを届けています。</p>
     </div>
     <div class="field-grid reveal-grid">
-      <div class="field-item">お寺<br><small>法泉寺・西方寺</small></div>
-      <div class="field-item">カルチャーセンター<br><small>リビングカルチャー高松</small></div>
+      <a class="field-item field-item-link" href="#schedule">お寺<br><small>法泉寺・西方寺</small></a>
+      <a class="field-item field-item-link" href="#schedule">カルチャーセンター<br><small>リビングカルチャー高松</small></a>
       <div class="field-item">地域コミュニティ</div>
-      <div class="field-item">フィットネス<br><small>瀬戸内フィットネス</small></div>
+      <a class="field-item field-item-link" href="#schedule">フィットネス<br><small>瀬戸内フィットネス</small></a>
       <div class="field-item">放課後児童健全育成事業（学童）</div>
       <div class="field-item">少年院</div>
     </div>
@@ -655,6 +697,30 @@
   </div>
 </section>
 
+<section class="schedule" id="schedule">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="section-tag center">Schedule</span>
+      <h2 class="section-title center">スケジュール</h2>
+      <p class="section-lead center">個人向けの募集中の講座と、開催頻度の一覧です。気になる講座の「申し込む」からお進みください。</p>
+    </div>
+
+    <h3 class="schedule-subhead">個人向け 募集中の講座</h3>
+    <div id="openCourseGrid" class="open-course-grid reveal-grid"></div>
+
+    <h3 class="schedule-subhead">開催スケジュール一覧</h3>
+    <div class="schedule-table-wrap">
+      <table class="schedule-table">
+        <thead>
+          <tr><th>講座</th><th>会場</th><th>頻度</th><th>次回</th><th>状況</th></tr>
+        </thead>
+        <tbody id="scheduleTableBody"></tbody>
+      </table>
+    </div>
+    <p class="schedule-note">※日程は変更になる場合があります。最新の情報は各講座の詳細ページでご確認ください。</p>
+  </div>
+</section>
+
 <section class="profile" id="profile">
   <div class="wrap profile-grid">
     <div class="profile-photo reveal"><img src="images/profile.jpg" alt="IKIGAIプロジェクト® 代表 プロフィール写真" loading="lazy"></div>
@@ -696,7 +762,36 @@
   &copy; 2026 IKIGAI Project. All rights reserved.
 </footer>
 
+<script src="data/courses.js"></script>
 <script>
+  const statusLabel = { open: '募集中', few: '残りわずか', closed: '受付終了' };
+
+  const openGrid = document.getElementById('openCourseGrid');
+  const openCourses = COURSES.filter(c => c.target === '個人向け' && c.status !== 'closed');
+  openGrid.innerHTML = openCourses.map(c => `
+    <div class="open-course-card">
+      <div class="open-course-img"><img src="${c.image}" alt="${c.name}" loading="lazy"></div>
+      <div class="open-course-body">
+        <span class="open-course-status ${c.status}">${statusLabel[c.status]}</span>
+        <h4>${c.name}</h4>
+        <div class="open-course-date">${c.nextDateText}　${c.time}</div>
+        <div class="open-course-meta">${c.venue}／${c.capacity}／${c.price}</div>
+        <a class="btn-sm" href="booking.html?course=${c.id}">申し込む →</a>
+      </div>
+    </div>
+  `).join('');
+
+  const scheduleBody = document.getElementById('scheduleTableBody');
+  scheduleBody.innerHTML = COURSES.map(c => `
+    <tr>
+      <td>${c.name}</td>
+      <td>${c.venue}</td>
+      <td>${c.scheduleText}</td>
+      <td>${c.nextDateText}</td>
+      <td><a href="booking.html?course=${c.id}" style="color:var(--sage-dark); font-weight:700; text-decoration:none;">${statusLabel[c.status]} →</a></td>
+    </tr>
+  `).join('');
+
   const navToggle = document.getElementById('navToggle');
   const navLinks = document.getElementById('navLinks');
   const navOverlay = document.getElementById('navOverlay');
