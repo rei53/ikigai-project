@@ -402,6 +402,9 @@
     font-size: 0.84rem; font-weight: 700; text-decoration: none; transition: transform 0.2s ease;
   }
   .open-course-body .btn-sm:hover { transform: translateY(-2px); }
+  .open-course-body .btn-sm-outline {
+    background: transparent; border: 1.5px solid var(--sage-dark); color: var(--sage-dark);
+  }
 
   .schedule-table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
   .schedule-table th, .schedule-table td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--line); }
@@ -776,7 +779,9 @@
         <h4>${c.name}</h4>
         <div class="open-course-date">${c.nextDateText}　${c.time}</div>
         <div class="open-course-meta">${c.venue}／${c.capacity}／${c.price}</div>
-        <a class="btn-sm" href="booking.html?course=${c.id}">申し込む →</a>
+        ${c.bookingType === 'internal'
+          ? `<a class="btn-sm" href="booking.html?course=${c.id}">申し込む →</a>`
+          : `<a class="btn-sm btn-sm-outline" href="booking.html?course=${c.id}">会場に申し込む →</a>`}
       </div>
     </div>
   `).join('');
@@ -788,7 +793,9 @@
       <td>${c.venue}</td>
       <td>${c.scheduleText}</td>
       <td>${c.nextDateText}</td>
-      <td><a href="booking.html?course=${c.id}" style="color:var(--sage-dark); font-weight:700; text-decoration:none;">${statusLabel[c.status]} →</a></td>
+      <td><a href="booking.html?course=${c.id}" style="color:var(--sage-dark); font-weight:700; text-decoration:none;">
+        ${c.bookingType === 'internal' ? statusLabel[c.status] + ' →' : '会場へ →'}
+      </a></td>
     </tr>
   `).join('');
 

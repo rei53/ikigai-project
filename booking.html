@@ -137,6 +137,34 @@
         <p style="color:var(--muted); margin-bottom:20px;">お手数ですが、トップページから改めて講座をお選びください。</p>
         <a class="btn" href="index.html#program">プログラム一覧へ</a>
       </div>`;
+  } else if (course.bookingType === 'external') {
+    document.title = course.name + ' お申し込み ｜ IKIGAIプロジェクト®';
+
+    content.innerHTML = `
+      <div class="booking-card">
+        <div class="booking-image"><img src="${course.image}" alt="${course.name}"></div>
+        <div class="booking-body">
+          <span class="status-badge status-${course.status}">${statusLabel[course.status] || ''}</span>
+          <h1 class="booking-title">${course.name}</h1>
+          <p class="booking-desc">${course.description}</p>
+          <dl class="detail-grid">
+            <div class="detail-item"><dt>次回開催日</dt><dd>${course.nextDateText}</dd></div>
+            <div class="detail-item"><dt>時間</dt><dd>${course.time}</dd></div>
+            <div class="detail-item"><dt>開催頻度</dt><dd>${course.scheduleText}</dd></div>
+            <div class="detail-item"><dt>会場</dt><dd>${course.venue}</dd></div>
+            <div class="detail-item"><dt>定員</dt><dd>${course.capacity}</dd></div>
+            <div class="detail-item"><dt>参加費</dt><dd>${course.price}</dd></div>
+          </dl>
+        </div>
+      </div>
+      <div class="form-block">
+        <h2>お申し込み方法</h2>
+        <div class="form-placeholder" style="text-align:left;">
+          この講座は <strong style="color:var(--sage-dark);">${course.venue}</strong> が窓口となっています。<br><br>
+          ${course.facilityNote || '会場に直接お申し込みください。'}<br><br>
+          ご不明な点はIKIGAIプロジェクト（<a href="mailto:yodayoga2525@gmail.com" style="color:var(--sage-dark); font-weight:700;">yodayoga2525@gmail.com</a>）までお気軽にご連絡ください。
+        </div>
+      </div>`;
   } else {
     document.title = course.name + ' お申し込み ｜ IKIGAIプロジェクト®';
 
