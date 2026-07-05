@@ -68,7 +68,7 @@ const COURSES = [
     time: '10:00〜11:00',
     capacity: '定員15組',
     price: '1回 1,000円（お子さま1名につき）',
-    image: 'images/origin-story.jpg',
+    image: 'images/tera-yoga.jpg',
     description: '発達段階に応じた内容で、子どもが「自分を感じる」時間と生きる力を育む単発イベントです。おやこでの参加も歓迎。',
     facilityNote: '開催会場の窓口・受付にて直接お申し込みください。詳細は開催告知をご確認ください。',
     status: 'open'
@@ -145,7 +145,7 @@ const COURSES = [
     time: '10:30〜11:30',
     capacity: '定員12名',
     price: '1回 1,500円',
-    image: 'images/hero-yoga.jpg',
+    image: 'images/profile.jpg',
     description: '心身を整えるマインドフルネスを取り入れた、朝の時間のヨーガです。',
     facilityNote: 'リビングカルチャー高松の窓口・カルチャー会員申し込みより直接お申し込みください。',
     status: 'few'
@@ -164,7 +164,7 @@ const COURSES = [
     time: '19:30〜20:30',
     capacity: '定員12名',
     price: '1回 1,500円',
-    image: 'images/hero-yoga.jpg',
+    image: 'images/profile.jpg',
     description: '心身を整えるマインドフルネスを取り入れた、1日の終わりのヨーガです。',
     facilityNote: '瀬戸内フィットネスの会員申し込み・フロントより直接お申し込みください。',
     status: 'open'
