@@ -64,8 +64,21 @@
     border-radius: 10px; background: var(--warm); color: var(--sage-dark); margin-left: 8px; margin-bottom: 14px;
   }
 
-  .booking-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 18px; }
-  .booking-desc { color: var(--muted); font-size: 0.95rem; margin-bottom: 26px; }
+  .booking-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 12px; }
+  .booking-catch {
+    font-family: 'Noto Serif JP', serif; font-size: 1.02rem; font-weight: 700;
+    color: var(--sage-dark); margin-bottom: 14px;
+  }
+  .booking-desc { color: var(--muted); font-size: 0.95rem; margin-bottom: 22px; line-height: 1.9; }
+  .detail-list { margin-bottom: 22px; }
+  .detail-list h3 { font-size: 0.86rem; color: var(--sage-dark); margin-bottom: 8px; }
+  .detail-list ul { list-style: none; padding: 0; }
+  .detail-list li {
+    font-size: 0.88rem; color: var(--ink); padding: 8px 0 8px 22px; position: relative;
+    border-top: 1px solid var(--line);
+  }
+  .detail-list li:first-child { border-top: none; }
+  .detail-list li::before { content: '✦'; position: absolute; left: 0; color: var(--gold); font-size: 0.8rem; }
 
   .detail-grid {
     display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
@@ -135,6 +148,18 @@
   const statusLabel = { open: '募集中', few: '残りわずか', closed: '受付終了' };
   const timeOfDayBadge = { morning: '🌅 朝ヨガ', evening: '🌙 夜ヨガ' };
 
+  function renderDescription(c) {
+    const desc = (c.description || '').split('\n').join('<br>');
+    const catchLine = c.catch ? `<p class="booking-catch">${c.catch}</p>` : '';
+    const itemsBlock = c.items && c.items.length
+      ? `<div class="detail-list"><h3>内容</h3><ul>${c.items.map(i => `<li>${i}</li>`).join('')}</ul></div>`
+      : '';
+    const belongingsBlock = c.belongings && c.belongings.length
+      ? `<div class="detail-list"><h3>持ち物</h3><ul>${c.belongings.map(i => `<li>${i}</li>`).join('')}</ul></div>`
+      : '';
+    return `${catchLine}<p class="booking-desc">${desc}</p>${itemsBlock}${belongingsBlock}`;
+  }
+
   if (!course) {
     content.innerHTML = `
       <div class="not-found">
@@ -151,7 +176,7 @@
         <div class="booking-body">
           <span class="status-badge status-${course.status}">${statusLabel[course.status] || ''}</span>${course.timeOfDay ? `<span class="time-of-day-badge">${timeOfDayBadge[course.timeOfDay]}</span>` : ''}
           <h1 class="booking-title">${course.name}</h1>
-          <p class="booking-desc">${course.description}</p>
+          ${renderDescription(course)}
           <dl class="detail-grid">
             <div class="detail-item"><dt>次回開催日</dt><dd>${course.nextDateText}</dd></div>
             <div class="detail-item"><dt>時間</dt><dd>${course.time}</dd></div>
@@ -187,7 +212,7 @@
         <div class="booking-body">
           <span class="status-badge status-${course.status}">${statusLabel[course.status] || ''}</span>${course.timeOfDay ? `<span class="time-of-day-badge">${timeOfDayBadge[course.timeOfDay]}</span>` : ''}
           <h1 class="booking-title">${course.name}</h1>
-          <p class="booking-desc">${course.description}</p>
+          ${renderDescription(course)}
           <dl class="detail-grid">
             <div class="detail-item"><dt>次回開催日</dt><dd>${course.nextDateText}</dd></div>
             <div class="detail-item"><dt>時間</dt><dd>${course.time}</dd></div>

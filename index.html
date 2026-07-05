@@ -366,12 +366,16 @@
   .temple-desc { font-size: 0.9rem; color: var(--muted); margin-bottom: 26px; }
   .temple-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .temple-pillar {
-    background: var(--cream); border: 1px solid var(--line); border-radius: 14px; padding: 20px 18px;
+    display: block; text-decoration: none; background: var(--cream); border: 1px solid var(--line);
+    border-radius: 14px; padding: 20px 18px; transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
-  .temple-pillar h4 { font-size: 0.9rem; color: var(--sage-dark); margin-bottom: 8px; }
+  .temple-pillar:hover { transform: translateY(-4px); box-shadow: var(--shadow-sm); }
+  .temple-pillar h4 { font-size: 0.9rem; color: var(--sage-dark); margin-bottom: 10px; }
   .temple-pillar-catch {
-    font-family: 'Noto Serif JP', serif; font-size: 1.02rem; font-weight: 700; color: var(--ink);
+    font-family: 'Noto Serif JP', serif; font-size: 0.98rem; font-weight: 700; color: var(--ink);
+    line-height: 1.6; margin-bottom: 10px;
   }
+  .temple-pillar-note { font-size: 0.8rem; color: var(--muted); }
   @media (max-width: 780px) {
     .temple-panel { grid-template-columns: 1fr; }
     .temple-visual { min-height: 200px; }
@@ -728,14 +732,16 @@
         <p class="temple-catch">寺ヨガ ― 整えると育てる、ふたつの入口</p>
         <p class="temple-desc">寺ヨガは、「整える」と「育てる」を両輪にすることで、単なるヨガ教室ではなく、人生を支えるウェルネスコミュニティです。</p>
         <div class="temple-pillars">
-          <div class="temple-pillar">
-            <h4>法泉寺｜大人の隠れ家</h4>
-            <p class="temple-pillar-catch">静けさで整える。</p>
-          </div>
-          <div class="temple-pillar">
-            <h4>西方寺｜大人の寺子屋</h4>
-            <p class="temple-pillar-catch">学びで育つ。</p>
-          </div>
+          <a class="temple-pillar" href="#schedule">
+            <h4>法泉寺 座禅堂｜大人の隠れ家</h4>
+            <p class="temple-pillar-catch">動くことからはじまる、<br>心を整える60分。</p>
+            <p class="temple-pillar-note">静かな座禅堂で、呼吸に意識を向けながら身体を心地よく動かします。</p>
+          </a>
+          <a class="temple-pillar" href="#schedule">
+            <h4>西方寺 ご本堂｜大人の寺子屋</h4>
+            <p class="temple-pillar-catch">お茶をいただくことからはじまる、<br>心を整える90分。</p>
+            <p class="temple-pillar-note">季節のお茶を一口いただき、心と身体をゆるやかに日常から離していきます。</p>
+          </a>
         </div>
       </div>
     </div>
