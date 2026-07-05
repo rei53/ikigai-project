@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>document.documentElement.classList.add('js');</script>
-<title>IKIGAIプロジェクト® ｜ よく眠り、よく生きる — こどもヨーガ</title>
-<meta name="description" content="IKIGAIプロジェクト®は、高松市を拠点にヨーガとマインドフルネスを通して子どもから大人まで一人ひとりのウェルビーイングを育む地域実践プロジェクトです。">
+<title>IKIGAIプロジェクト® ｜ 生涯発達ヨーガ ― お腹の中から最期の瞬間まで</title>
+<meta name="description" content="IKIGAIプロジェクト®は、高松市を拠点に、お腹の中から最期の瞬間まで一人ひとりに寄り添う「生涯発達ヨーガ」を届ける地域実践プロジェクトです。">
 <meta name="theme-color" content="#2f6d85">
 <meta property="og:type" content="website">
-<meta property="og:title" content="IKIGAIプロジェクト® ｜ よく眠り、よく生きる">
-<meta property="og:description" content="ヨーガとマインドフルネスを通して、お腹の中から最期の瞬間まで一人ひとりのウェルビーイングを育む地域実践プロジェクト。">
+<meta property="og:title" content="IKIGAIプロジェクト® ｜ 生涯発達ヨーガ">
+<meta property="og:description" content="お腹の中から最期の瞬間まで、一人ひとりのウェルビーイングを育む生涯発達ヨーガ。">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧘</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700;900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
@@ -342,6 +342,42 @@
   .program-card .catch { font-size: 0.78rem; color: var(--gold); font-weight: 700; margin-bottom: 10px; }
   .program-card p { font-size: 0.85rem; color: var(--muted); }
 
+  .temple-panel {
+    position: relative; overflow: hidden;
+    max-width: 1080px; margin: 0 auto 44px; border-radius: 22px; box-shadow: var(--shadow-lg);
+    background: var(--white); display: grid; grid-template-columns: 1fr 1.15fr;
+  }
+  .temple-visual { position: relative; min-height: 260px; }
+  .temple-visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .temple-visual::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(150deg, rgba(47,109,133,0.15), rgba(32,75,92,0.35));
+  }
+  .temple-body { padding: 44px 40px; }
+  .temple-eyebrow {
+    display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em;
+    color: var(--gold); text-transform: uppercase; margin-bottom: 10px;
+  }
+  .temple-title {
+    font-family: 'Noto Serif JP', serif; font-size: 1.5rem; font-weight: 800; letter-spacing: 0.06em;
+    color: var(--ink); margin-bottom: 8px;
+  }
+  .temple-catch { font-size: 0.98rem; font-weight: 700; color: var(--sage-dark); margin-bottom: 18px; }
+  .temple-desc { font-size: 0.9rem; color: var(--muted); margin-bottom: 26px; }
+  .temple-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .temple-pillar {
+    background: var(--cream); border: 1px solid var(--line); border-radius: 14px; padding: 20px 18px;
+  }
+  .temple-pillar h4 { font-size: 0.9rem; color: var(--sage-dark); margin-bottom: 8px; }
+  .temple-pillar-catch {
+    font-family: 'Noto Serif JP', serif; font-size: 1.02rem; font-weight: 700; color: var(--ink);
+  }
+  @media (max-width: 780px) {
+    .temple-panel { grid-template-columns: 1fr; }
+    .temple-visual { min-height: 200px; }
+    .temple-pillars { grid-template-columns: 1fr; }
+  }
+
   .training-panel {
     position: relative; overflow: hidden;
     max-width: 1080px; margin: 44px auto 0; background: linear-gradient(150deg, var(--sage-dark), var(--sage-deep));
@@ -500,9 +536,9 @@
 <header class="hero">
   <div class="hero-bg"></div>
   <div class="hero-inner">
-    <div class="hero-tag">よく眠り、よく生きる</div>
+    <div class="hero-tag">生涯発達ヨーガ</div>
     <h1 class="hero-title">お腹の中から最期の瞬間まで、<br><em>生きる力</em>を育む場所</h1>
-    <p class="hero-sub">ヨガとマインドフルネスで、自分の人生をデザインする力を。―Well-beingな未来を―<br>IKIGAIプロジェクト®は、高松市を拠点に、子どもと大人、多世代のウェルビーイングの向上を目指す地域実践プロジェクトです。</p>
+    <p class="hero-sub">よく眠り、よく生きる。ヨガとマインドフルネスで、自分の人生をデザインする力を。―Well-beingな未来を―<br>IKIGAIプロジェクト®は、高松市を拠点に、子どもと大人、多世代のウェルビーイングの向上を目指す地域実践プロジェクトです。</p>
     <div class="hero-quote">―心の中にある力を信じて―<small>May the force be with you.</small></div>
     <div class="hero-cta">
       <a href="#program" class="btn btn-primary">プログラムを見る</a>
@@ -681,6 +717,26 @@
         <span class="program-badge">教育・介護・福祉・医療へ</span>
         <h4>研修・ワークショップ</h4>
         <p>教育・介護・福祉・医療関係者や保護者向けに、人的環境支援としての理論と実践を学べる研修を行っています。</p>
+      </div>
+    </div>
+
+    <div class="temple-panel reveal">
+      <div class="temple-visual"><img src="images/tera-yoga.jpg" alt="IKIGAI WELLNESS TEMPLE 寺ヨガの様子" loading="lazy"></div>
+      <div class="temple-body">
+        <span class="temple-eyebrow">IKIGAI WELLNESS TEMPLE</span>
+        <h3 class="temple-title">「大人が自分を取り戻す居場所」</h3>
+        <p class="temple-catch">寺ヨガ ― 整えると育てる、ふたつの入口</p>
+        <p class="temple-desc">寺ヨガは、「整える」と「育てる」を両輪にすることで、単なるヨガ教室ではなく、人生を支えるウェルネスコミュニティです。</p>
+        <div class="temple-pillars">
+          <div class="temple-pillar">
+            <h4>法泉寺｜大人の隠れ家</h4>
+            <p class="temple-pillar-catch">静けさで整える。</p>
+          </div>
+          <div class="temple-pillar">
+            <h4>西方寺｜大人の寺子屋</h4>
+            <p class="temple-pillar-catch">学びで育つ。</p>
+          </div>
+        </div>
       </div>
     </div>
 
