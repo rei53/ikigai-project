@@ -4,7 +4,8 @@
 //
 // bookingType: "internal"（このサイトのフォームで予約）/ "external"（会場に直接申し込み）
 // timeOfDay: "morning"（朝ヨガ）/ "evening"（夜ヨガ）/ null（該当なし）
-// formUrl は Google フォームの共有URL（例: https://forms.gle/xxxxxxxx）に置き換えてください。※internalのみ使用
+// amount はinternalのみ使用（表示・整合性確認用の数値。決済に使う金額の正はApps Script側のCOURSE_PRICESで、
+// 料金を変更するときは両方書き換える必要があります）
 // status: "open"（募集中）/ "few"（残りわずか）/ "closed"（締切）
 
 // 法泉寺「大人の隠れ家」の内容（複数日程で共通）
@@ -18,13 +19,14 @@ const HOSENJI_TEMPLATE = {
   scheduleText: '動くことからはじまる、心を整える60分',
   time: '9:00〜10:00',
   capacity: '定員10名',
-  price: '1回 2,000円',
+  price: '1回 1,500円',
+  amount: 1500,
+  videoAddonPrice: 1000,
   image: 'images/tera-yoga.jpg',
   catch: '動くことからはじまる、心を整える60分。',
   description: '静かな座禅堂で、呼吸に意識を向けながら身体を心地よく動かします。\n忙しい毎日でこわばった身体をゆるめ、思考を手放し、本来の自分へと還る時間。\n街なかにありながら、静寂に包まれる特別な朝を過ごしませんか。',
   items: ['体を動かすマインドフルネスヨーガ'],
   belongings: ['ヨガマット または バスタオル', '飲み物'],
-  formUrl: 'YOUR_GOOGLE_FORM_URL',
   status: 'open'
 };
 
@@ -46,12 +48,12 @@ const COURSES = [
     time: '9:00〜10:30',
     capacity: '定員10名',
     price: '1回 2,000円',
+    amount: 2000,
     image: 'images/tera-yoga.jpg',
     catch: 'お茶をいただくことからはじまる、心を整える90分。',
     description: '季節のお茶を一口いただき、心と身体をゆるやかに日常から離していきます。\n静かなご本堂で、マインドフルネス瞑想、季節の呼吸法、そして無理のないアーサナを通して、自分自身と丁寧に向き合う時間。\n学び、味わい、整える。そんな大人のための寺子屋です。',
     items: ['季節のお茶', 'マインドフルネス瞑想', '季節の呼吸法', 'やさしいアーサナ（1〜2ポーズ）'],
     belongings: ['特にありません', '着替え・ヨガマット不要', '普段着のまま、そのままお越しください'],
-    formUrl: 'YOUR_GOOGLE_FORM_URL',
     status: 'open'
   },
   {
@@ -98,38 +100,19 @@ const COURSES = [
     target: '個人向け',
     bookingType: 'external',
     timeOfDay: 'morning',
-    name: '朝のマインドフルネスヨーガ（サンサン館みき）',
-    venue: 'サンサン館みき',
-    scheduleText: '定期開催・毎週木曜日（2026年7月9日〜）',
-    nextDate: '2026-07-09',
-    nextDateText: '2026年7月9日（木）',
+    name: '朝のマインドフルネスヨーガ ～新しい自分を整える習慣～（サンサン館みき）',
+    venue: 'サンサン館みき 健康増進室（3F）',
+    scheduleText: '毎週木曜日・全11回（7月期：7/9〜9/17）',
+    nextDate: '2026-07-16',
+    nextDateText: '2026年7月16日（木）',
     time: '9:00〜10:00',
     capacity: '開催告知にてご案内',
     price: '13,310円（全11回）',
-    image: 'images/profile.jpg',
+    image: 'images/online-yoga.jpg',
     catch: '新しい自分を整える習慣',
-    description: '呼吸に意識を向けながら、ゆったりと身体を動かし、からだと心を整えていくヨガクラスです。ポーズの完成を目指すのではなく、今の自分の状態に気づき、無理なく整えていくことを大切にします。初心者の方や体力に不安のある方も安心してご参加いただけます。\n朝は、からだと心が最もリセットしやすい時間帯。この時間に整えておくことで、一日を美しい姿勢と穏やかな気持ちで過ごしやすくなります。春から、新しい朝の習慣をはじめてみませんか。',
-    facilityNote: 'サンサン館みきの窓口・予約システムより直接お申し込みください（新講座 208）。',
-    status: 'open'
-  },
-  {
-    id: 'isu-yoga-seasonal-event',
-    category: 'isu-yoga',
-    target: '個人向け',
-    bookingType: 'external',
-    venueIsFixed: false,
-    timeOfDay: null,
-    name: 'いすヨーガ 季節イベント（各地）',
-    venue: '季節ごとに会場が変わります',
-    scheduleText: '季節イベント（不定期開催・各地）',
-    nextDate: '2026-09-15',
-    nextDateText: '2026年9月15日（火・祝）※会場は開催告知にてご案内',
-    time: '開催告知にてご案内',
-    capacity: '開催告知にてご案内',
-    price: '開催告知にてご案内',
-    image: 'images/isu-yoga.png',
-    description: '「姿勢が変われば、未来が変わる」。サンサン館みきでの定期開催とは別に、季節ごとに各地で単発開催しているいすヨーガです。',
-    facilityNote: '開催会場ごとの窓口・受付にて直接お申し込みください。詳細は開催告知をご確認ください。',
+    description: '呼吸に意識を向けながら、ゆったりと身体を動かし、からだと心を整えていくヨガクラスです。ポーズの完成を目指すのではなく、今の自分の状態に気づき、無理なく整えていくことを大切にします。初心者の方や体力に不安のある方も安心してご参加いただけます。\n朝は、からだと心が最もリセットしやすい時間帯。この時間に整えておくことで、一日を美しい姿勢と穏やかな気持ちで過ごしやすくなります。新しい朝の習慣をはじめてみませんか。\n\n【7月期日程（全11回）】7/9、7/16、7/23、7/30、8/6、8/20、8/27、9/3、9/10、9/17\n【10月期日程（予定・全11回）】10/1、10/8、10/15、10/22、11/5、11/12、11/19、11/26、12/3、12/10',
+    belongings: ['運動のできる服装', 'タオル', '飲み物'],
+    facilityNote: 'サンサン館みき（TEL：<a href="tel:0878910333" style="color:var(--sage-dark); font-weight:700;">087-891-0333</a>）へ直接お申し込みください（講座No.208）。',
     status: 'open'
   },
   {
@@ -146,7 +129,7 @@ const COURSES = [
     time: '10:30〜11:30',
     capacity: '定員12名',
     price: '1回 1,500円',
-    image: 'images/profile.jpg',
+    image: 'images/online-yoga.jpg',
     description: '心身を整えるマインドフルネスを取り入れた、朝の時間のヨーガです。',
     facilityNote: 'リビングカルチャー高松の窓口・カルチャー会員申し込みより直接お申し込みください。',
     status: 'few'
@@ -165,7 +148,7 @@ const COURSES = [
     time: '19:30〜20:30',
     capacity: '定員12名',
     price: '1回 1,500円',
-    image: 'images/profile.jpg',
+    image: 'images/hero-yoga.jpg',
     description: '心身を整えるマインドフルネスを取り入れた、1日の終わりのヨーガです。',
     facilityNote: '瀬戸内フィットネスの会員申し込み・フロントより直接お申し込みください。',
     status: 'open'

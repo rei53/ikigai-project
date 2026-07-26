@@ -26,7 +26,10 @@
     -webkit-font-smoothing: antialiased;
   }
   h1, h2, h3, .serif { font-family: 'Noto Serif JP', serif; }
+  h1, h2, h3 { font-feature-settings: 'palt' 1; }
   a { color: inherit; }
+  ::selection { background: var(--sage-light); color: var(--sage-deep); }
+  :focus-visible { outline: 2px solid var(--sage); outline-offset: 3px; border-radius: 4px; }
   .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
 
   nav {
@@ -106,6 +109,52 @@
     box-shadow: var(--shadow-sm); color: var(--muted); font-size: 0.92rem;
   }
 
+  .booking-form {
+    display: flex; flex-direction: column; gap: 18px;
+    background: var(--white); border-radius: 16px; box-shadow: var(--shadow-sm); padding: 28px 26px;
+  }
+  .form-row { display: flex; flex-direction: column; gap: 6px; }
+  .form-row label { font-size: 0.86rem; font-weight: 700; color: var(--sage-dark); }
+  .form-row input, .form-row textarea {
+    font-family: inherit; font-size: 0.92rem; padding: 12px 14px; border-radius: 10px;
+    border: 1px solid var(--line); background: var(--cream); color: var(--ink); resize: vertical;
+  }
+  .form-row input:focus, .form-row textarea:focus { outline: 2px solid var(--sage-light); border-color: var(--sage-dark); }
+  .payment-options { display: flex; gap: 12px; flex-wrap: wrap; }
+  .payment-option {
+    flex: 1; min-width: 160px; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px;
+    cursor: pointer; display: flex; align-items: center; gap: 10px; background: var(--cream); font-size: 0.9rem;
+  }
+  .payment-option input { margin: 0; }
+  .payment-option:has(input:checked) { border-color: var(--sage-dark); background: var(--warm); }
+  .video-addon-option {
+    display: flex; align-items: flex-start; gap: 10px; border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px 16px; cursor: pointer; background: var(--cream); font-size: 0.88rem;
+  }
+  .video-addon-option:has(input:checked) { border-color: var(--gold); background: var(--gold-light); }
+  .video-addon-option input { margin: 3px 0 0; flex: none; }
+  .video-addon-option .addon-title { font-weight: 700; color: var(--sage-dark); display: block; margin-bottom: 3px; }
+  .video-addon-option .addon-desc { color: var(--muted); font-size: 0.84rem; }
+  .order-total {
+    display: flex; justify-content: space-between; align-items: baseline; padding: 14px 18px;
+    background: var(--warm); border-radius: 10px; font-size: 0.92rem; font-weight: 700; color: var(--sage-dark);
+  }
+  .order-total span:last-child { font-size: 1.1rem; }
+  .submit-btn {
+    border: none; cursor: pointer; padding: 15px 32px; border-radius: 28px; font-weight: 700; font-size: 0.95rem;
+    background: linear-gradient(135deg, var(--sage-dark), var(--sage-deep)); color: var(--white);
+    box-shadow: 0 10px 26px rgba(47,109,133,0.3);
+  }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  .form-error { color: #b3413a; font-size: 0.86rem; }
+  .form-status {
+    text-align: center; padding: 60px 30px; background: var(--white); border-radius: 16px; box-shadow: var(--shadow-sm);
+  }
+  .bank-instructions {
+    background: var(--warm); border-left: 4px solid var(--gold); padding: 18px 20px; border-radius: 4px;
+    font-size: 0.9rem; white-space: pre-line; text-align: left;
+  }
+
   .btn {
     display: inline-block; padding: 14px 32px; border-radius: 28px; font-weight: 700; font-size: 0.9rem;
     text-decoration: none; background: linear-gradient(135deg, var(--sage-dark), var(--sage-deep)); color: var(--white);
@@ -119,6 +168,17 @@
   footer .footer-links { margin-bottom: 12px; }
   footer .footer-links a { color: rgba(255,255,255,0.75); text-decoration: none; margin: 0 10px; }
   footer .footer-links a:hover { text-decoration: underline; }
+  .social-icons { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 16px; }
+  .social-icons a {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; border-radius: 50%; flex: none;
+    background: rgba(255,255,255,0.14); color: var(--white); border: 1px solid rgba(255,255,255,0.28);
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .social-icons a:hover { background: rgba(255,255,255,0.24); transform: translateY(-2px); }
+  .social-icons a.icon-line { background: none; border: none; }
+  .social-icons a.icon-line:hover { background: none; }
+  .social-icons a.icon-line svg { border-radius: 22%; }
 </style>
 </head>
 <body>
@@ -138,6 +198,14 @@
 </main>
 
 <footer>
+  <div class="social-icons">
+    <a href="https://www.instagram.com/ikigaiproject.yoga/" target="_blank" rel="noopener" aria-label="Instagram">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none"/></svg>
+    </a>
+    <a href="https://lin.ee/yIhfrX5" target="_blank" rel="noopener" aria-label="公式LINE" class="icon-line">
+      <svg width="28" height="28" viewBox="0 0 36 36"><rect width="36" height="36" rx="9" fill="#06C755"/><path fill="#fff" d="M18 8.2c-5.7 0-10.4 3.8-10.4 8.4 0 4.1 3.6 7.6 8.6 8.3.9.2 1.6.6 1.8 1.2.2.5.1 1.4.1 2 0 0-.1.5.2.7.3.2.6 0 .6 0 .3-.2 3.8-2.6 5.3-4.3 2.6-2.9 3.9-6 3.9-8.9 0-4.6-4.6-8.4-10.1-8.4z"/></svg>
+    </a>
+  </div>
   <div class="footer-links">
     <a href="privacy-policy.html">プライバシーポリシー</a>
     <a href="tokushoho.html">特定商取引法に基づく表記</a>
@@ -147,6 +215,11 @@
 
 <script src="data/courses.js"></script>
 <script>
+  // Apps ScriptをWebアプリとしてデプロイしたときのURLに置き換えてください（SETUP-BOOKING-SYSTEM.md参照）
+  const SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL';
+  // 迷惑メール対策：アドレスを直接書かずBase64で保持し、実行時にだけ復元する
+  const CONTACT_EMAIL = atob('eW9kYXlvZ2EyNTI1QGdtYWlsLmNvbQ==');
+
   const params = new URLSearchParams(window.location.search);
   const id = params.get('course');
   const course = COURSES.find(c => c.id === id);
@@ -154,6 +227,10 @@
 
   const statusLabel = { open: '募集中', few: '残りわずか', closed: '受付終了' };
   const timeOfDayBadge = { morning: '🌅 朝ヨガ', evening: '🌙 夜ヨガ' };
+
+  function escapeHtml(str) {
+    return String(str == null ? '' : str).replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
+  }
 
   function renderDescription(c) {
     const desc = (c.description || '').split('\n').join('<br>');
@@ -167,7 +244,12 @@
     return `${catchLine}<p class="booking-desc">${desc}</p>${itemsBlock}${belongingsBlock}`;
   }
 
-  if (!course) {
+  const paypayReturn = params.get('paypayReturn');
+  const returnBookingId = params.get('bookingId');
+
+  if (paypayReturn === '1' && returnBookingId) {
+    showPaymentStatus(returnBookingId, 0);
+  } else if (!course) {
     content.innerHTML = `
       <div class="not-found">
         <h1>講座が見つかりませんでした</h1>
@@ -201,42 +283,177 @@
             ? ''
             : `この講座は <strong style="color:var(--sage-dark);">${course.venue}</strong> が窓口となっています。<br><br>`}
           ${course.facilityNote || '会場に直接お申し込みください。'}<br><br>
-          ご不明な点はIKIGAIプロジェクト（<a href="mailto:yodayoga2525@gmail.com" style="color:var(--sage-dark); font-weight:700;">yodayoga2525@gmail.com</a>）までお気軽にご連絡ください。
+          ご不明な点はIKIGAIプロジェクト（<a href="mailto:${CONTACT_EMAIL}" style="color:var(--sage-dark); font-weight:700;">${CONTACT_EMAIL}</a>）までお気軽にご連絡ください。
         </div>
       </div>`;
   } else {
-    document.title = course.name + ' お申し込み ｜ IKIGAIプロジェクト®';
+    renderInternalBooking(course);
+  }
 
-    const hasForm = course.formUrl && course.formUrl !== 'YOUR_GOOGLE_FORM_URL';
-    const formBlock = hasForm
-      ? `<div class="form-frame-wrap"><iframe src="${course.formUrl}${course.formUrl.includes('?') ? '&' : '?'}embedded=true" title="申し込みフォーム">読み込んでいます…</iframe></div>
-         <p style="margin-top:14px;"><a class="btn" href="${course.formUrl}" target="_blank" rel="noopener">フォームが表示されない場合はこちら</a></p>`
-      : `<div class="form-placeholder">申し込みフォームは準備中です。<br>お急ぎの場合はメール（<a href="mailto:yodayoga2525@gmail.com" style="color:var(--sage-dark); font-weight:700;">yodayoga2525@gmail.com</a>）にてお問い合わせください。</div>`;
+  function renderInternalBooking(c) {
+    document.title = c.name + ' お申し込み ｜ IKIGAIプロジェクト®';
 
     content.innerHTML = `
       <div class="booking-card">
-        <div class="booking-image"><img src="${course.image}" alt="${course.name}"></div>
+        <div class="booking-image"><img src="${c.image}" alt="${c.name}"></div>
         <div class="booking-body">
-          <span class="status-badge status-${course.status}">${statusLabel[course.status] || ''}</span>${course.timeOfDay ? `<span class="time-of-day-badge">${timeOfDayBadge[course.timeOfDay]}</span>` : ''}
-          <h1 class="booking-title">${course.name}</h1>
-          ${renderDescription(course)}
+          <span class="status-badge status-${c.status}">${statusLabel[c.status] || ''}</span>${c.timeOfDay ? `<span class="time-of-day-badge">${timeOfDayBadge[c.timeOfDay]}</span>` : ''}
+          <h1 class="booking-title">${c.name}</h1>
+          ${renderDescription(c)}
           <dl class="detail-grid">
-            <div class="detail-item"><dt>次回開催日</dt><dd>${course.nextDateText}</dd></div>
-            <div class="detail-item"><dt>時間</dt><dd>${course.time}</dd></div>
-            <div class="detail-item"><dt>開催頻度</dt><dd>${course.scheduleText}</dd></div>
-            <div class="detail-item"><dt>会場</dt><dd>${course.venue}</dd></div>
-            <div class="detail-item"><dt>定員</dt><dd>${course.capacity}</dd></div>
-            <div class="detail-item"><dt>参加費</dt><dd>${course.price}</dd></div>
+            <div class="detail-item"><dt>次回開催日</dt><dd>${c.nextDateText}</dd></div>
+            <div class="detail-item"><dt>時間</dt><dd>${c.time}</dd></div>
+            <div class="detail-item"><dt>開催頻度</dt><dd>${c.scheduleText}</dd></div>
+            <div class="detail-item"><dt>会場</dt><dd>${c.venue}</dd></div>
+            <div class="detail-item"><dt>定員</dt><dd>${c.capacity}</dd></div>
+            <div class="detail-item"><dt>参加費</dt><dd>${c.price}</dd></div>
           </dl>
-          <div class="payment-note">
-            <strong>お支払いについて：</strong>お申し込み後にお送りする確認メールにて、決済方法をご案内いたします。
-          </div>
         </div>
       </div>
       <div class="form-block">
         <h2>お申し込みフォーム</h2>
-        ${formBlock}
+        <form id="booking-form" class="booking-form" novalidate>
+          <div class="form-row"><label>お名前 *</label><input type="text" name="name" required></div>
+          <div class="form-row"><label>フリガナ</label><input type="text" name="kana"></div>
+          <div class="form-row"><label>メールアドレス *</label><input type="email" name="email" required></div>
+          <div class="form-row"><label>電話番号</label><input type="tel" name="phone"></div>
+          <div class="form-row"><label>参加人数</label><input type="number" name="people" min="1" value="1"></div>
+          <div class="form-row"><label>ご要望・ご質問</label><textarea name="message" rows="3"></textarea></div>
+          ${c.videoAddonPrice ? `
+          <div class="form-row">
+            <label class="video-addon-option">
+              <input type="checkbox" name="addVideo" id="addVideoCheckbox">
+              <span>
+                <span class="addon-title">参加者特典：セルフケア動画（+${c.videoAddonPrice.toLocaleString()}円）</span>
+                <span class="addon-desc">ご自宅でも続けられるセルフケア動画をご案内します。次回のお申し込みと一緒に追加する方が多い特典です。</span>
+              </span>
+            </label>
+          </div>` : ''}
+          <div class="form-row">
+            <label>お支払い方法 *</label>
+            <div class="payment-options">
+              <label class="payment-option"><input type="radio" name="paymentMethod" value="paypay" required> PayPay（オンライン決済）</label>
+              <label class="payment-option"><input type="radio" name="paymentMethod" value="bank_transfer" required> 銀行振込</label>
+            </div>
+          </div>
+          <div class="order-total"><span>お支払い合計</span><span id="orderTotal">¥${c.amount.toLocaleString()}</span></div>
+          <div class="form-error" id="form-error" style="display:none;"></div>
+          <button type="submit" class="submit-btn" id="submit-btn">お申し込みを確定する</button>
+        </form>
       </div>`;
+
+    const videoCheckbox = document.getElementById('addVideoCheckbox');
+    if (videoCheckbox) {
+      videoCheckbox.addEventListener('change', function () {
+        const total = c.amount + (videoCheckbox.checked ? c.videoAddonPrice : 0);
+        document.getElementById('orderTotal').textContent = '¥' + total.toLocaleString();
+      });
+    }
+
+    document.getElementById('booking-form').addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      const form = ev.target;
+      const errorBox = document.getElementById('form-error');
+      const submitBtn = document.getElementById('submit-btn');
+      errorBox.style.display = 'none';
+
+      const paymentMethodInput = form.querySelector('input[name="paymentMethod"]:checked');
+      const payload = {
+        name: form.name.value.trim(),
+        kana: form.kana.value.trim(),
+        email: form.email.value.trim(),
+        phone: form.phone.value.trim(),
+        people: form.people.value,
+        message: form.message.value.trim(),
+        paymentMethod: paymentMethodInput ? paymentMethodInput.value : '',
+        addVideo: !!(form.addVideo && form.addVideo.checked),
+        courseId: c.id
+      };
+
+      if (!payload.name || !payload.email || !payload.paymentMethod) {
+        errorBox.textContent = 'お名前・メールアドレス・お支払い方法は必須です。';
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = '送信中…';
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      })
+        .then(r => r.json())
+        .then(res => {
+          if (!res.ok) {
+            errorBox.textContent = res.error || '送信に失敗しました。時間をおいて再度お試しください。';
+            errorBox.style.display = 'block';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'お申し込みを確定する';
+            return;
+          }
+          if (res.method === 'paypay' && res.checkoutUrl) {
+            window.location.href = res.checkoutUrl;
+            return;
+          }
+          content.innerHTML = `
+            <div class="form-status">
+              <h1 style="font-size:1.3rem; margin-bottom:12px;">お申し込みを受け付けました</h1>
+              <p style="color:var(--muted); margin-bottom:18px;">以下の口座へお振込みください（${escapeHtml(res.amount)}円）。</p>
+              <div class="bank-instructions">${escapeHtml(res.bankInfo)}</div>
+              <p style="color:var(--muted); margin-top:18px;">同じ内容を確認メールでもお送りしました。ご入金の確認をもちまして予約確定となります。</p>
+            </div>`;
+        })
+        .catch(() => {
+          errorBox.textContent = '通信エラーが発生しました。時間をおいて再度お試しください。';
+          errorBox.style.display = 'block';
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'お申し込みを確定する';
+        });
+    });
+  }
+
+  function showPaymentStatus(bookingId, attempt) {
+    content.innerHTML = `
+      <div class="form-status">
+        <h1 style="font-size:1.2rem; margin-bottom:12px;">決済を確認しています…</h1>
+        <p style="color:var(--muted);">画面を閉じずにそのままお待ちください。</p>
+      </div>`;
+
+    fetch(SCRIPT_URL + '?action=status&bookingId=' + encodeURIComponent(bookingId))
+      .then(r => r.json())
+      .then(res => {
+        const status = res.result && res.result.status;
+        if (status === 'paid') {
+          content.innerHTML = `
+            <div class="form-status">
+              <h1 style="font-size:1.3rem; margin-bottom:12px;">お申し込み・決済が完了しました</h1>
+              <p style="color:var(--muted);">確認メールをお送りしました。当日を楽しみにお待ちしております。</p>
+            </div>`;
+        } else if (status === 'failed') {
+          content.innerHTML = `
+            <div class="form-status">
+              <h1 style="font-size:1.3rem; margin-bottom:12px;">決済が完了しませんでした</h1>
+              <p style="color:var(--muted);">お手数ですが、もう一度お申し込みください。ご不明な点は<a href="mailto:${CONTACT_EMAIL}" style="color:var(--sage-dark); font-weight:700;">こちら</a>までご連絡ください。</p>
+            </div>`;
+        } else if (attempt < 6) {
+          setTimeout(() => showPaymentStatus(bookingId, attempt + 1), 3000);
+        } else {
+          content.innerHTML = `
+            <div class="form-status">
+              <h1 style="font-size:1.3rem; margin-bottom:12px;">確認中です</h1>
+              <p style="color:var(--muted);">決済の確認に時間がかかっています。確認が取れ次第、確認メールをお送りします。しばらく経っても届かない場合は<a href="mailto:${CONTACT_EMAIL}" style="color:var(--sage-dark); font-weight:700;">こちら</a>までご連絡ください。</p>
+            </div>`;
+        }
+      })
+      .catch(() => {
+        content.innerHTML = `
+          <div class="form-status">
+            <h1 style="font-size:1.3rem; margin-bottom:12px;">確認できませんでした</h1>
+            <p style="color:var(--muted);">通信エラーが発生しました。お手数ですが<a href="mailto:${CONTACT_EMAIL}" style="color:var(--sage-dark); font-weight:700;">こちら</a>までご連絡ください。</p>
+          </div>`;
+      });
   }
 </script>
 

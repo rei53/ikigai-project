@@ -7,7 +7,9 @@
 <title>IKIGAIプロジェクト® ｜ 生涯発達ヨーガ ― お腹の中から最期の瞬間まで</title>
 <meta name="description" content="IKIGAIプロジェクト®は、高松市を拠点に、お腹の中から最期の瞬間まで一人ひとりに寄り添う「生涯発達ヨーガ」を届ける地域実践プロジェクトです。">
 <meta name="theme-color" content="#2f6d85">
+<link rel="canonical" href="https://ikigai-prj.com/">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://ikigai-prj.com/">
 <meta property="og:title" content="IKIGAIプロジェクト® ｜ 生涯発達ヨーガ">
 <meta property="og:description" content="お腹の中から最期の瞬間まで、一人ひとりのウェルビーイングを育む生涯発達ヨーガ。">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧘</text></svg>">
@@ -50,13 +52,17 @@
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     * { transition: none !important; animation: none !important; }
-    .reveal { opacity: 1 !important; transform: none !important; }
+    .reveal, .hero-inner > * { opacity: 1 !important; transform: none !important; }
   }
 
   h1, h2, h3, .serif { font-family: 'Noto Serif JP', serif; }
-  h1, h2, h3 { letter-spacing: 0.02em; }
+  h1, h2, h3 { letter-spacing: 0.02em; font-feature-settings: 'palt' 1; }
 
   a { color: inherit; }
+
+  ::selection { background: var(--sage-light); color: var(--sage-deep); }
+
+  :focus-visible { outline: 2px solid var(--sage); outline-offset: 3px; border-radius: 4px; }
 
   .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
 
@@ -83,15 +89,20 @@
     max-width: 1080px; margin: 0 auto; padding: 16px 24px;
     display: flex; justify-content: space-between; align-items: center;
   }
-  .logo { font-family: 'Noto Serif JP', serif; font-weight: 700; font-size: 1.05rem; color: var(--sage-dark); letter-spacing: 0.03em; display: inline-flex; align-items: center; gap: 8px; }
+  .logo { font-family: 'Noto Serif JP', serif; font-weight: 700; font-size: 0.96rem; color: var(--sage-dark); letter-spacing: 0.03em; display: inline-flex; align-items: center; gap: 8px; flex: none; }
   .logo::before { content: ''; width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--sage-light), var(--sage-dark)); box-shadow: inset 0 0 0 2px rgba(255,255,255,0.5); flex: none; }
   .logo span { color: var(--gold); }
-  nav ul { display: flex; list-style: none; gap: 30px; }
-  nav ul a { text-decoration: none; color: var(--muted); font-size: 0.84rem; letter-spacing: 0.02em; transition: color 0.2s; }
+  nav ul { display: flex; list-style: none; gap: 13px; flex-wrap: nowrap; white-space: nowrap; }
+  nav ul a { text-decoration: none; color: var(--muted); font-size: 0.78rem; letter-spacing: 0.01em; transition: color 0.2s; position: relative; }
+  nav ul a:not(.nav-cta)::after {
+    content: ''; position: absolute; left: 0; right: 100%; bottom: -6px; height: 1.5px;
+    background: var(--gold); transition: right 0.28s cubic-bezier(0.22,0.61,0.36,1);
+  }
+  nav ul a:not(.nav-cta):hover::after { right: 0; }
   nav ul a:hover { color: var(--sage-dark); }
   .nav-cta {
     background: var(--sage-dark); color: var(--white) !important;
-    padding: 8px 20px; border-radius: 24px; font-weight: 700 !important;
+    padding: 7px 16px; border-radius: 24px; font-weight: 700 !important;
     white-space: nowrap;
   }
   .nav-toggle {
@@ -100,17 +111,20 @@
   }
   .nav-toggle:hover { background: rgba(47,109,133,0.08); }
   nav.scrolled { box-shadow: 0 4px 20px rgba(38,50,56,0.06); }
+  .nav-social-item { display: none; }
 
-  @media (max-width: 860px) {
+  @media (max-width: 1080px) {
     nav ul.nav-links {
-      position: fixed; top: 60px; right: -100%; width: 78%; max-width: 320px; height: calc(100vh - 60px);
+      position: fixed; top: 76px; right: -100%; width: 78%; max-width: 320px; height: calc(100vh - 76px);
       background: var(--white); flex-direction: column; padding: 34px 30px; gap: 26px;
       transition: right 0.3s ease; box-shadow: -8px 0 24px rgba(0,0,0,0.06);
     }
+    nav ul.nav-links a { font-size: 0.92rem; white-space: normal; }
     nav ul.nav-links.open { right: 0; }
     .nav-toggle { display: flex; }
+    .nav-social-item { display: block; margin-top: auto; padding-top: 10px; }
     .nav-overlay {
-      display: none; position: fixed; inset: 60px 0 0 0; background: rgba(38,50,56,0.35);
+      display: none; position: fixed; inset: 76px 0 0 0; background: rgba(38,50,56,0.35);
       z-index: 150; opacity: 0; transition: opacity 0.3s ease;
     }
     .nav-overlay.open { display: block; opacity: 1; }
@@ -143,13 +157,35 @@
   }
   .hero-tag::before { content: '✦'; color: var(--gold); }
   h1.hero-title {
-    font-size: clamp(1.95rem, 5.5vw, 3.05rem); font-weight: 900; line-height: 1.55; margin-bottom: 22px; color: var(--ink);
-    letter-spacing: 0.03em;
+    font-size: clamp(2.3rem, 6.5vw, 3.6rem); font-weight: 900; line-height: 1.4; margin-bottom: 18px; color: var(--ink);
+    letter-spacing: 0.06em;
   }
+
+  /* ヒーロー導入アニメーション（ページ読み込み時に順に浮かび上がる） */
+  .js .hero-inner > * { opacity: 0; transform: translateY(22px); animation: heroRise 0.9s cubic-bezier(0.22,0.61,0.36,1) forwards; }
+  .js .hero-inner > *:nth-child(1) { animation-delay: 0.05s; }
+  .js .hero-inner > *:nth-child(2) { animation-delay: 0.15s; }
+  .js .hero-inner > *:nth-child(3) { animation-delay: 0.28s; }
+  .js .hero-inner > *:nth-child(4) { animation-delay: 0.4s; }
+  .js .hero-inner > *:nth-child(5) { animation-delay: 0.52s; }
+  .js .hero-inner > *:nth-child(6) { animation-delay: 0.64s; }
+  .js .hero-inner > *:nth-child(7) { animation-delay: 0.76s; }
+  @keyframes heroRise { to { opacity: 1; transform: none; } }
+  /* アニメーションが動かない環境でも内容が隠れたままにならない保険 */
+  .js .hero-inner.anim-done > * { opacity: 1; transform: none; animation: none; }
   h1.hero-title em { font-style: normal; color: var(--sage-dark); position: relative; white-space: nowrap; }
   h1.hero-title em::after {
     content: ''; position: absolute; left: 0; right: 0; bottom: 0.08em; height: 0.32em;
     background: linear-gradient(transparent 60%, rgba(111,174,156,0.35) 60%); z-index: -1;
+  }
+  .hero-title-accent { color: var(--gold); }
+  .hero-tagline {
+    font-family: 'Noto Serif JP', serif; font-size: clamp(1.02rem, 2.5vw, 1.3rem);
+    color: var(--sage-dark); font-weight: 600; line-height: 1.8; margin-bottom: 22px; letter-spacing: 0.08em;
+  }
+  .hero-tagline::after {
+    content: ''; display: block; width: 54px; height: 1.5px; margin: 20px auto 0;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
   }
   .hero-sub {
     font-size: clamp(0.92rem, 2.4vw, 1.05rem); color: var(--muted); max-width: 560px; margin: 0 auto 12px;
@@ -179,6 +215,28 @@
     backdrop-filter: blur(4px); transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
   .credentials span:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+
+  /* ─── SOCIAL ICONS（Instagram / 公式LINE）汎用パーツ ─── */
+  .social-icons { display: flex; align-items: center; gap: 12px; }
+  .social-icons a {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 38px; height: 38px; border-radius: 50%; flex: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+  .social-icons-hero { margin-top: 24px; justify-content: center; }
+  .social-icons-hero a {
+    background: rgba(255,255,255,0.85); color: var(--sage-dark); border: 1px solid var(--line);
+    backdrop-filter: blur(4px); box-shadow: var(--shadow-sm);
+  }
+  .social-icons-hero a:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+  .social-icons-dark a { background: rgba(255,255,255,0.14); color: var(--white); border: 1px solid rgba(255,255,255,0.28); }
+  .social-icons-dark a:hover { background: rgba(255,255,255,0.24); transform: translateY(-3px); }
+  .social-icons-light a { background: var(--warm); color: var(--sage-dark); border: 1px solid var(--line); }
+  .social-icons-light a:hover { background: var(--sage-dark); color: var(--white); transform: translateY(-3px); }
+  .social-icons a.icon-line { background: none !important; border: none !important; box-shadow: none !important; padding: 0; }
+  .social-icons a.icon-line:hover { background: none !important; }
+  .social-icons a.icon-line svg { border-radius: 22%; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: transform 0.2s ease; }
+  .social-icons a.icon-line:hover svg { transform: translateY(-3px); }
 
   .scroll-cue {
     position: absolute; left: 50%; bottom: 30px; transform: translateX(-50%);
@@ -221,6 +279,12 @@
     font-size: 1.2rem; color: var(--sage-dark); font-weight: 600; line-height: 1.9; margin-bottom: 26px;
   }
   .about-text p { color: var(--muted); margin-bottom: 16px; font-size: 0.96rem; }
+  .about-video-wrap { max-width: 760px; margin: 64px auto 0; text-align: center; }
+  .about-video {
+    aspect-ratio: 16/9; border-radius: 18px; overflow: hidden; box-shadow: var(--shadow-lg); background: #102447;
+  }
+  .about-video iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .about-video-caption { font-size: 0.8rem; color: var(--muted); margin-top: 12px; }
   .about-panel {
     position: relative; overflow: hidden;
     background: linear-gradient(150deg, var(--sage), var(--sage-deep));
@@ -239,6 +303,12 @@
 
   /* ─── KODOMO YOGA ─── */
   .yoga-explain { background: var(--warm); }
+  .yoga-video-wrap { max-width: 760px; margin: 0 auto 54px; text-align: center; }
+  .yoga-video {
+    width: 100%; aspect-ratio: 16/9; display: block; border-radius: 18px;
+    box-shadow: var(--shadow-lg); background: #14243d; object-fit: cover;
+  }
+  .yoga-video-caption { font-size: 0.8rem; color: var(--muted); margin-top: 12px; }
   .yoga-grid {
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; max-width: 1080px; margin: 0 auto;
   }
@@ -253,6 +323,10 @@
     display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;
     font-size: 1.6rem; box-shadow: 0 6px 16px rgba(111,174,156,0.25), inset 0 0 0 1px rgba(255,255,255,0.5);
   }
+  .yoga-card-photo {
+    margin: -36px -28px 20px; aspect-ratio: 16/10; overflow: hidden; border-radius: 18px 18px 0 0;
+  }
+  .yoga-card-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .yoga-card h4 { font-size: 1.02rem; margin-bottom: 10px; color: var(--sage-dark); }
   .yoga-card p { font-size: 0.86rem; color: var(--muted); }
 
@@ -529,13 +603,34 @@
   .contact .btn-outline:hover { background: rgba(255,255,255,0.12); color: var(--white); }
 
   /* ─── FOOTER ─── */
-  footer { background: var(--ink); color: rgba(255,255,255,0.55); padding: 46px 24px; text-align: center; font-size: 0.8rem; }
-  footer .logo { color: var(--gold-light); margin-bottom: 12px; display: inline-flex; justify-content: center; }
+  footer { background: var(--ink); color: rgba(255,255,255,0.55); padding: 64px 24px 0; font-size: 0.8rem; }
+  .footer-inner {
+    max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr;
+    gap: 48px; align-items: start; padding-bottom: 44px;
+  }
+  footer .logo { color: var(--gold-light); margin-bottom: 12px; display: inline-flex; }
   footer .logo::before { background: radial-gradient(circle at 35% 30%, var(--sage-light), var(--gold)); }
-  footer .foot-tagline { opacity: 0.7; margin-bottom: 14px; font-family: 'Noto Serif JP', serif; letter-spacing: 0.06em; }
-  footer .footer-links { margin-bottom: 14px; }
-  footer .footer-links a { color: rgba(255,255,255,0.75); text-decoration: none; margin: 0 10px; font-size: 0.8rem; }
-  footer .footer-links a:hover { text-decoration: underline; }
+  footer .foot-tagline { opacity: 0.7; margin-bottom: 16px; font-family: 'Noto Serif JP', serif; letter-spacing: 0.06em; }
+  footer .foot-desc { font-size: 0.78rem; line-height: 2; opacity: 0.6; }
+  .footer-nav {
+    position: static; width: auto; z-index: auto; background: none; backdrop-filter: none; border: none;
+    display: grid; grid-template-columns: repeat(3, auto); gap: 34px; justify-content: end;
+  }
+  .footer-nav-col { display: flex; flex-direction: column; gap: 10px; }
+  .footer-nav-col h4 {
+    font-family: 'Noto Sans JP', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em;
+    color: var(--gold-light); text-transform: uppercase; margin-bottom: 4px;
+  }
+  .footer-nav-col a { color: rgba(255,255,255,0.72); text-decoration: none; font-size: 0.8rem; transition: color 0.2s; }
+  .footer-nav-col a:hover { color: var(--gold-light); }
+  .footer-bottom {
+    max-width: 1080px; margin: 0 auto; padding: 20px 0 28px; text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.1); font-size: 0.74rem; opacity: 0.65;
+  }
+  @media (max-width: 720px) {
+    .footer-inner { grid-template-columns: 1fr; gap: 34px; }
+    .footer-nav { justify-content: start; gap: 26px; grid-template-columns: repeat(2, auto); }
+  }
 
   @media (max-width: 860px) {
     .about-grid, .profile-grid { grid-template-columns: 1fr; }
@@ -567,6 +662,16 @@
       <li><a href="#schedule">スケジュール</a></li>
       <li><a href="#profile">プロフィール</a></li>
       <li><a href="#contact" class="nav-cta">お問い合わせ</a></li>
+      <li class="nav-social-item">
+        <div class="social-icons social-icons-light">
+          <a href="https://www.instagram.com/ikigaiproject.yoga/" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="https://lin.ee/yIhfrX5" target="_blank" rel="noopener" aria-label="公式LINE" class="icon-line">
+            <svg width="30" height="30" viewBox="0 0 36 36"><rect width="36" height="36" rx="9" fill="#06C755"/><path fill="#fff" d="M18 8.2c-5.7 0-10.4 3.8-10.4 8.4 0 4.1 3.6 7.6 8.6 8.3.9.2 1.6.6 1.8 1.2.2.5.1 1.4.1 2 0 0-.1.5.2.7.3.2.6 0 .6 0 .3-.2 3.8-2.6 5.3-4.3 2.6-2.9 3.9-6 3.9-8.9 0-4.6-4.6-8.4-10.1-8.4z"/></svg>
+          </a>
+        </div>
+      </li>
     </ul>
     <button class="nav-toggle" id="navToggle" aria-label="メニュー" aria-expanded="false">☰</button>
   </div>
@@ -576,9 +681,10 @@
 <header class="hero">
   <div class="hero-bg"></div>
   <div class="hero-inner">
-    <div class="hero-tag">生涯発達ヨーガ</div>
-    <h1 class="hero-title">お腹の中から最期の瞬間まで、<br><em>生きる力</em>を育む場所</h1>
-    <p class="hero-sub">よく眠り、よく生きる。ヨガとマインドフルネスで、自分の人生をデザインする力を。―Well-beingな未来を―<br>IKIGAIプロジェクト®は、高松市を拠点に、子どもと大人、多世代のウェルビーイングの向上を目指す地域実践プロジェクトです。</p>
+    <div class="hero-tag">Lifespan Wellness &amp; Education</div>
+    <h1 class="hero-title">IKIGAI<span class="hero-title-accent">プロジェクト®</span></h1>
+    <p class="hero-tagline">お腹の中から人生の最期まで。<br>よく眠り、よく生きる。</p>
+    <p class="hero-sub">マインドフルネスと生涯発達の視点から、一人ひとりの「よく眠り、よく生きる」を支えます。<br>IKIGAIプロジェクト®は、高松市を拠点に、子どもと大人、多世代のウェルビーイングの向上を目指す地域実践プロジェクトです。</p>
     <div class="hero-quote">―心の中にある力を信じて―<small>May the force be with you.</small></div>
     <div class="hero-cta">
       <a href="#program" class="btn btn-primary">プログラムを見る</a>
@@ -588,8 +694,17 @@
       <span>こどもヨーガ専門士®上級</span>
       <span>日本ヨーガ道友協会認定講師</span>
       <span>TASS公認指導者</span>
+      <span>放課後児童支援員</span>
       <span>幼稚園教諭・小学校教員免許</span>
       <span>MBSR・MBCT修了</span>
+    </div>
+    <div class="social-icons social-icons-hero">
+      <a href="https://www.instagram.com/ikigaiproject.yoga/" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="https://lin.ee/yIhfrX5" target="_blank" rel="noopener" aria-label="公式LINE" class="icon-line">
+        <svg width="32" height="32" viewBox="0 0 36 36"><rect width="36" height="36" rx="9" fill="#06C755"/><path fill="#fff" d="M18 8.2c-5.7 0-10.4 3.8-10.4 8.4 0 4.1 3.6 7.6 8.6 8.3.9.2 1.6.6 1.8 1.2.2.5.1 1.4.1 2 0 0-.1.5.2.7.3.2.6 0 .6 0 .3-.2 3.8-2.6 5.3-4.3 2.6-2.9 3.9-6 3.9-8.9 0-4.6-4.6-8.4-10.1-8.4z"/></svg>
+      </a>
     </div>
   </div>
   <div class="scroll-cue">Scroll<span></span></div>
@@ -619,6 +734,14 @@
       </ul>
     </div>
   </div>
+  <div class="wrap">
+    <div class="about-video-wrap reveal">
+      <div class="about-video">
+        <iframe src="https://www.youtube-nocookie.com/embed/2mS3rCaRfKk" title="生涯発達ヨーガのご紹介（ふらっと高松）" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+      <p class="about-video-caption">動画でみる「生涯発達ヨーガ」 ― ふらっと高松にてご紹介いただきました</p>
+    </div>
+  </div>
 </section>
 
 <section class="yoga-explain" id="kodomoyoga">
@@ -628,19 +751,26 @@
       <h2 class="section-title center">こどもヨーガとは</h2>
       <p class="section-lead center">こどもと、こどもを取り巻く大人へのマインドフルネスを尊重したヨーガです。単にポーズをとるだけのヨガではなく、保育・教育・福祉・心理などの学問的な裏付けをベースに、子どもの健全な心身の育成を目指したプログラムをお届けしています。</p>
     </div>
+    <div class="yoga-video-wrap reveal">
+      <video class="yoga-video" controls playsinline preload="none" poster="images/kodomo-yoga-poster.jpg">
+        <source src="videos/kodomo-yoga.mp4" type="video/mp4">
+        お使いのブラウザは動画再生に対応していません。
+      </video>
+      <p class="yoga-video-caption">こどもヨーガの様子（約25秒）</p>
+    </div>
     <div class="yoga-grid reveal-grid">
       <div class="yoga-card">
-        <div class="icon">🧒</div>
+        <div class="yoga-card-photo"><img src="images/kodomo-yoga.jpg" alt="こどもヨーガで両手を上げる子どもたち" loading="lazy"></div>
         <h4>子ども向け</h4>
         <p>こどもヨーガ・おやこヨーガを通して、子どもが「自分を感じる」時間と生きる力を育みます。</p>
       </div>
       <div class="yoga-card">
-        <div class="icon">🧘</div>
+        <div class="yoga-card-photo"><img src="images/hero-yoga.jpg" alt="大人向けヨーガの様子" loading="lazy"></div>
         <h4>大人向け</h4>
         <p>マインドフルネスヨーガやいすヨーガで、大人自身の心身も整えます。</p>
       </div>
       <div class="yoga-card">
-        <div class="icon">🤝</div>
+        <div class="yoga-card-photo"><img src="images/oyako-yoga.jpg" alt="親子で取り組むヨーガの様子" loading="lazy"></div>
         <h4>子どもを取り巻く大人へ</h4>
         <p>保護者や教育・福祉関係者など、子どもを支える「人的環境」への研修も行います。</p>
       </div>
@@ -690,7 +820,7 @@
     <div class="field-grid reveal-grid">
       <a class="field-item field-item-link" href="#schedule">お寺<br><small>法泉寺・西方寺</small></a>
       <a class="field-item field-item-link" href="#schedule">カルチャーセンター<br><small>リビングカルチャー高松</small></a>
-      <div class="field-item">地域コミュニティ</div>
+      <div class="field-item">地域コミュニティ<br><small>サンサン館みき ほか</small></div>
       <a class="field-item field-item-link" href="#schedule">フィットネス<br><small>瀬戸内フィットネス</small></a>
       <div class="field-item">放課後児童健全育成事業（学童）</div>
       <div class="field-item">少年院</div>
@@ -707,9 +837,9 @@
     </div>
     <div class="target-grid reveal-grid">
       <div class="target-card">
-        <span class="target-label">BtoB向け</span>
+        <span class="target-label">法人・団体向け</span>
         <h3>行政・こどもの教育施設・福祉</h3>
-        <p class="target-desc">行政、こどもの教育施設、福祉分野へ。利用者と支援者、両面にプログラムを提供します。</p>
+        <p class="target-desc">行政、こどもの教育施設、福祉分野へ。利用者と支援者、両面にプログラムを提供します。いすヨーガの出張開催など、各種イベント・研修のご依頼にも応じています。</p>
         <p class="target-catch">五感を活かし、心・身体・社会のウェルビーイングを育むプログラム</p>
       </div>
       <div class="target-card">
@@ -773,20 +903,33 @@
         <p>法泉寺（毎月第3日曜）、西方寺（偶数月・第1土曜）にて開催。静かな本堂で心身を整えます。</p>
       </div>
       <div class="program-card">
-        <div class="program-img"><img src="images/tera-yoga.jpg" alt="こどもヨーガの様子" loading="lazy"></div>
+        <div class="program-img"><img src="images/kodomo-yoga.jpg" alt="こどもヨーガで両手を上げる子どもたち" loading="lazy"></div>
         <span class="program-badge">子ども向け</span>
-        <h4>こどもヨーガ（おやこヨーガを含む）</h4>
+        <h4>こどもヨーガ</h4>
         <p>発達段階に応じた内容で、子どもが「自分を感じる」時間と生きる力を育みます。</p>
+      </div>
+      <div class="program-card">
+        <div class="program-img"><img src="images/oyako-yoga.jpg" alt="おやこヨーガの様子" loading="lazy"></div>
+        <span class="program-badge">親子向け</span>
+        <h4>おやこヨーガ</h4>
+        <p>親子でふれあいながら、いっしょに呼吸し、いっしょに整う時間。子育て世代のリフレッシュにも。</p>
+      </div>
+      <div class="program-card">
+        <div class="program-img"><img src="images/online-yoga.jpg" alt="オンライン朝ヨガの様子" loading="lazy"></div>
+        <span class="program-badge">オンデマンド</span>
+        <h4>オンライン朝ヨガ（10分セルフケア）</h4>
+        <p class="catch">おうちで整うセルフケア</p>
+        <p>1回10分、おうちで気軽に取り組めるオンラインのセルフケアヨーガです。</p>
       </div>
       <div class="program-card">
         <div class="program-img"><img src="images/isu-yoga.png" alt="いすヨーガの様子" loading="lazy"></div>
         <span class="program-badge">大人向け</span>
         <h4>いすヨーガ</h4>
         <p class="catch">「ずっと歩けるカラダへ。姿勢が変われば、未来が変わる」</p>
-        <p>一人ひとりの悩みに応じて無理なく身体を整えます。椅子に座ったまま行えます。</p>
+        <p>一人ひとりの悩みに応じて無理なく身体を整えます。椅子に座ったまま行えます。サンサン館みきでの定期開催のほか、季節イベントとしてご依頼に応じて各地で開催しています。お気軽にお問い合わせください。</p>
       </div>
       <div class="program-card">
-        <div class="program-img"><img src="images/profile.jpg" alt="マインドフルネスヨーガの様子" loading="lazy"></div>
+        <div class="program-img"><img src="images/online-yoga.jpg" alt="マインドフルネスヨーガの様子" loading="lazy"></div>
         <span class="program-badge">大人向け</span>
         <h4>マインドフルネスヨーガ</h4>
         <p>リビングカルチャー高松、サンサン館三木、瀬戸内フィットネスなどで開催。心身を整えるマインドフルネスを取り入れたヨーガです。</p>
@@ -799,7 +942,7 @@
     </div>
 
     <div class="temple-panel reveal">
-      <div class="temple-visual"><img src="images/tera-yoga.jpg" alt="IKIGAI WELLNESS TEMPLE 寺ヨガの様子" loading="lazy"></div>
+      <div class="temple-visual"><img src="images/hosenji-sotetsu.jpg" alt="法泉寺 樹齢四百年の大蘇鉄" loading="lazy"></div>
       <div class="temple-body">
         <span class="temple-eyebrow">IKIGAI WELLNESS TEMPLE</span>
         <h3 class="temple-title">「大人が自分を取り戻す居場所」</h3>
@@ -881,6 +1024,7 @@
         <span>こどもヨーガ専門士®上級</span>
         <span>日本ヨーガ道友協会認定講師</span>
         <span>TASS公認指導者</span>
+        <span>放課後児童支援員</span>
         <span>幼稚園教諭免許</span>
         <span>小学校教員免許</span>
         <span>MBSR修了</span>
@@ -900,20 +1044,56 @@
     <h2>お気軽にお問い合わせください</h2>
     <p class="lead">こどもヨーガ・おやこヨーガの体験、研修・ワークショップのご依頼、その他ご相談はこちらから承っております。</p>
     <div class="hero-cta">
-      <a href="mailto:yodayoga2525@gmail.com" class="btn btn-primary">メールで問い合わせる</a>
-      <a href="#" class="btn btn-outline">Instagramを見る</a>
+      <a href="#" class="btn btn-primary js-mail" data-mail="eW9kYXlvZ2EyNTI1QGdtYWlsLmNvbQ==">メールで問い合わせる</a>
+      <a href="https://lin.ee/yIhfrX5" class="btn btn-outline" target="_blank" rel="noopener">公式LINEで問い合わせる</a>
+    </div>
+    <div class="social-icons social-icons-dark" style="margin-top:30px; justify-content:center;">
+      <a href="https://www.instagram.com/ikigaiproject.yoga/" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none"/></svg>
+      </a>
+      <a href="https://lin.ee/yIhfrX5" target="_blank" rel="noopener" aria-label="公式LINE" class="icon-line">
+        <svg width="32" height="32" viewBox="0 0 36 36"><rect width="36" height="36" rx="9" fill="#06C755"/><path fill="#fff" d="M18 8.2c-5.7 0-10.4 3.8-10.4 8.4 0 4.1 3.6 7.6 8.6 8.3.9.2 1.6.6 1.8 1.2.2.5.1 1.4.1 2 0 0-.1.5.2.7.3.2.6 0 .6 0 .3-.2 3.8-2.6 5.3-4.3 2.6-2.9 3.9-6 3.9-8.9 0-4.6-4.6-8.4-10.1-8.4z"/></svg>
+      </a>
     </div>
   </div>
 </section>
 
 <footer>
-  <span class="logo serif">IKIGAI<span>プロジェクト®</span></span>
-  <div class="foot-tagline">よく眠り、よく生きる ― May the force be with you.</div>
-  <div class="footer-links">
-    <a href="privacy-policy.html">プライバシーポリシー</a>
-    <a href="tokushoho.html">特定商取引法に基づく表記</a>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="logo serif">IKIGAI<span>プロジェクト®</span></span>
+      <div class="foot-tagline">よく眠り、よく生きる ― May the force be with you.</div>
+      <p class="foot-desc">香川県高松市を拠点に、お腹の中から人生の最期まで、<br>多世代のウェルビーイングを支える地域実践プロジェクトです。</p>
+      <div class="social-icons social-icons-dark" style="margin-top:16px;">
+        <a href="https://www.instagram.com/ikigaiproject.yoga/" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="https://lin.ee/yIhfrX5" target="_blank" rel="noopener" aria-label="公式LINE" class="icon-line">
+          <svg width="30" height="30" viewBox="0 0 36 36"><rect width="36" height="36" rx="9" fill="#06C755"/><path fill="#fff" d="M18 8.2c-5.7 0-10.4 3.8-10.4 8.4 0 4.1 3.6 7.6 8.6 8.3.9.2 1.6.6 1.8 1.2.2.5.1 1.4.1 2 0 0-.1.5.2.7.3.2.6 0 .6 0 .3-.2 3.8-2.6 5.3-4.3 2.6-2.9 3.9-6 3.9-8.9 0-4.6-4.6-8.4-10.1-8.4z"/></svg>
+        </a>
+      </div>
+    </div>
+    <nav class="footer-nav" aria-label="フッターナビゲーション">
+      <div class="footer-nav-col">
+        <h4>プロジェクト</h4>
+        <a href="#about">プロジェクトについて</a>
+        <a href="#kodomoyoga">こどもヨーガとは</a>
+        <a href="#profile">プロフィール</a>
+      </div>
+      <div class="footer-nav-col">
+        <h4>プログラム</h4>
+        <a href="#program">プログラム一覧</a>
+        <a href="#schedule">スケジュール</a>
+        <a href="#contact">お問い合わせ</a>
+      </div>
+      <div class="footer-nav-col">
+        <h4>規約</h4>
+        <a href="privacy-policy.html">プライバシーポリシー</a>
+        <a href="tokushoho.html">特定商取引法に基づく表記</a>
+      </div>
+    </nav>
   </div>
-  &copy; 2026 IKIGAI Project. All rights reserved.
+  <div class="footer-bottom">&copy; 2026 IKIGAI Project. All rights reserved.</div>
 </footer>
 
 <script src="data/courses.js"></script>
@@ -972,6 +1152,13 @@
   navOverlay.addEventListener('click', closeMenu);
   navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
 
+  // 迷惑メール対策：アドレスをHTMLに直接書かず、実行時にBase64から復元してhrefへ設定する
+  document.querySelectorAll('.js-mail').forEach(el => {
+    const addr = atob(el.dataset.mail);
+    el.href = 'mailto:' + addr;
+    if (el.dataset.mailText) el.textContent = addr;
+  });
+
   const nav = document.querySelector('nav');
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 10);
@@ -1006,6 +1193,12 @@
   } else {
     showAll();
   }
+
+  // Same safety net for the hero entrance animation.
+  setTimeout(() => {
+    const heroInner = document.querySelector('.hero-inner');
+    if (heroInner) heroInner.classList.add('anim-done');
+  }, 2500);
 </script>
 
 </body>
