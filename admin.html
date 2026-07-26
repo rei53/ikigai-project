@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>申し込み管理 ｜ IKIGAIプロジェクト®</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#2f6d85">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧘</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700;900&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --sage: #4d8fa6; --sage-light: #a9d3de; --sage-dark: #2f6d85; --sage-deep: #204b5c;
+    --cream: #f7fafc; --warm: #eaf4f7; --gold: #6fae9c; --gold-light: #cdeae0;
+    --ink: #263238; --muted: #5f6b72; --line: rgba(47,109,133,0.14); --white: #ffffff;
+    --shadow-sm: 0 2px 8px rgba(38,50,56,0.04), 0 8px 24px rgba(38,50,56,0.05);
+    --shadow-md: 0 6px 16px rgba(38,50,56,0.06), 0 18px 40px rgba(38,50,56,0.08);
+    --shadow-lg: 0 12px 28px rgba(38,50,56,0.08), 0 28px 60px rgba(38,50,56,0.12);
+  }
+  body {
+    font-family: 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+    background: var(--cream); color: var(--ink); line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, .serif { font-family: 'Noto Serif JP', serif; }
+  a { color: inherit; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  nav {
+    position: sticky; top: 0; width: 100%; z-index: 200;
+    background: rgba(247,250,252,0.94); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(47,109,133,0.12);
+  }
+  .nav-inner { max-width: 1100px; margin: 0 auto; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+  .logo { font-family: 'Noto Serif JP', serif; font-weight: 700; font-size: 1.05rem; color: var(--sage-dark); display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
+  .logo::before { content: ''; width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--sage-light), var(--sage-dark)); flex: none; }
+  .logo span { color: var(--gold); }
+  .back-link { font-size: 0.84rem; color: var(--sage-dark); text-decoration: none; font-weight: 700; }
+
+  main { padding: 44px 24px 100px; }
+
+  /* ログイン */
+  .login-card {
+    max-width: 420px; margin: 60px auto; background: var(--white); border-radius: 22px;
+    box-shadow: var(--shadow-lg); padding: 40px 34px; text-align: center;
+  }
+  .login-card h1 { font-size: 1.3rem; margin-bottom: 8px; }
+  .login-card p { font-size: 0.86rem; color: var(--muted); margin-bottom: 22px; }
+  .login-card input {
+    width: 100%; font-family: inherit; font-size: 0.94rem; padding: 12px 14px; border-radius: 10px;
+    border: 1px solid var(--line); background: var(--cream); color: var(--ink); margin-bottom: 14px;
+  }
+  .login-card .btn { width: 100%; }
+  .login-error { color: #b3413a; font-size: 0.84rem; margin-top: 12px; display: none; }
+
+  .btn {
+    display: inline-block; padding: 13px 28px; border-radius: 26px; font-weight: 700; font-size: 0.9rem;
+    text-decoration: none; background: linear-gradient(135deg, var(--sage-dark), var(--sage-deep)); color: var(--white);
+    border: none; cursor: pointer; box-shadow: 0 10px 26px rgba(47,109,133,0.3);
+  }
+  .btn-outline { background: transparent; color: var(--sage-dark); border: 1.5px solid var(--sage-dark); box-shadow: none; }
+
+  /* ダッシュボード */
+  #dashboard { display: none; }
+  .dash-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 26px; }
+  .dash-header h1 { font-size: 1.4rem; }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-bottom: 30px; }
+  .stat-card { background: var(--white); border-radius: 14px; padding: 18px 20px; box-shadow: var(--shadow-sm); }
+  .stat-card .stat-label { font-size: 0.74rem; color: var(--sage-dark); font-weight: 700; letter-spacing: 0.04em; margin-bottom: 6px; }
+  .stat-card .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--ink); }
+
+  .filter-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+  .filter-row input, .filter-row select {
+    font-family: inherit; font-size: 0.88rem; padding: 10px 14px; border-radius: 10px;
+    border: 1px solid var(--line); background: var(--white); color: var(--ink);
+  }
+  .filter-row input { flex: 1; min-width: 200px; }
+
+  .table-wrap { overflow-x: auto; background: var(--white); border-radius: 16px; box-shadow: var(--shadow-sm); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.82rem; white-space: nowrap; }
+  th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+  th { color: var(--sage-dark); font-size: 0.7rem; letter-spacing: 0.05em; text-transform: uppercase; background: var(--cream); position: sticky; top: 0; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--warm); }
+
+  .badge { display: inline-block; font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 10px; }
+  .badge-paid { background: var(--gold-light); color: var(--sage-deep); }
+  .badge-pending_payment, .badge-pending_bank_transfer { background: #fde8d0; color: #8a5a1e; }
+  .badge-failed { background: #f6d9d6; color: #9b3a32; }
+
+  .loading, .empty { text-align: center; color: var(--muted); padding: 40px; }
+
+  footer { background: var(--ink); color: rgba(255,255,255,0.5); padding: 30px 24px; text-align: center; font-size: 0.78rem; }
+
+  @media (max-width: 640px) {
+    .dash-header { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="index.html">IKIGAI<span>プロジェクト®</span></a>
+    <a class="back-link" href="index.html">← トップページに戻る</a>
+  </div>
+</nav>
+
+<main>
+  <div class="wrap">
+
+    <div class="login-card" id="loginCard">
+      <h1>申し込み管理</h1>
+      <p>管理者キーを入力してください。</p>
+      <input type="password" id="adminKeyInput" placeholder="管理者キー" autocomplete="off">
+      <button class="btn" id="loginBtn">ログイン</button>
+      <div class="login-error" id="loginError">管理者キーが正しくありません。</div>
+    </div>
+
+    <div id="dashboard">
+      <div class="dash-header">
+        <h1>申し込み管理</h1>
+        <div>
+          <button class="btn btn-outline" id="refreshBtn">更新</button>
+          <button class="btn btn-outline" id="logoutBtn">ログアウト</button>
+        </div>
+      </div>
+
+      <div class="stat-grid" id="statGrid"></div>
+
+      <div class="filter-row">
+        <input type="text" id="searchInput" placeholder="お名前・メールアドレスで検索">
+        <select id="statusFilter">
+          <option value="">すべての状態</option>
+          <option value="paid">決済済み</option>
+          <option value="pending_payment">決済待ち（PayPay）</option>
+          <option value="pending_bank_transfer">振込待ち</option>
+          <option value="failed">失敗</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <table id="bookingTable">
+          <thead>
+            <tr>
+              <th>申込日時</th><th>お名前</th><th>連絡先</th><th>講座</th>
+              <th>人数</th><th>特典</th><th>支払方法</th><th>金額</th><th>状態</th>
+            </tr>
+          </thead>
+          <tbody id="bookingTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>&copy; 2026 IKIGAI Project. Internal use only.</footer>
+
+<script>
+  const SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL';
+  const STATUS_LABEL = {
+    paid: '決済済み',
+    pending_payment: '決済待ち（PayPay）',
+    pending_bank_transfer: '振込待ち',
+    failed: '失敗'
+  };
+
+  const loginCard = document.getElementById('loginCard');
+  const dashboard = document.getElementById('dashboard');
+  const adminKeyInput = document.getElementById('adminKeyInput');
+  const loginBtn = document.getElementById('loginBtn');
+  const loginError = document.getElementById('loginError');
+
+  let allBookings = [];
+
+  function escapeHtml(str) {
+    return String(str == null ? '' : str).replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
+  }
+
+  function formatDateTime(iso) {
+    if (!iso) return '';
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return String(iso);
+    return d.toLocaleString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+  }
+
+  function loadBookings(key) {
+    loginError.style.display = 'none';
+    loginBtn.disabled = true;
+    loginBtn.textContent = '確認中…';
+
+    fetch(SCRIPT_URL + '?action=admin&key=' + encodeURIComponent(key))
+      .then(r => r.json())
+      .then(res => {
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'ログイン';
+        if (!res.ok) {
+          loginError.textContent = res.error || '管理者キーが正しくありません。';
+          loginError.style.display = 'block';
+          sessionStorage.removeItem('ikigaiAdminKey');
+          return;
+        }
+        sessionStorage.setItem('ikigaiAdminKey', key);
+        allBookings = res.bookings || [];
+        loginCard.style.display = 'none';
+        dashboard.style.display = 'block';
+        renderStats();
+        renderTable();
+      })
+      .catch(() => {
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'ログイン';
+        loginError.textContent = '通信エラーが発生しました。時間をおいて再度お試しください。';
+        loginError.style.display = 'block';
+      });
+  }
+
+  function renderStats() {
+    const paid = allBookings.filter(b => b.status === 'paid');
+    const pending = allBookings.filter(b => b.status === 'pending_payment' || b.status === 'pending_bank_transfer');
+    const revenue = paid.reduce((sum, b) => sum + (Number(b.amount) || 0), 0);
+
+    document.getElementById('statGrid').innerHTML = `
+      <div class="stat-card"><div class="stat-label">総申し込み件数</div><div class="stat-value">${allBookings.length}</div></div>
+      <div class="stat-card"><div class="stat-label">決済済み</div><div class="stat-value">${paid.length}</div></div>
+      <div class="stat-card"><div class="stat-label">保留中</div><div class="stat-value">${pending.length}</div></div>
+      <div class="stat-card"><div class="stat-label">決済済み売上合計</div><div class="stat-value">¥${revenue.toLocaleString()}</div></div>
+    `;
+  }
+
+  function renderTable() {
+    const search = document.getElementById('searchInput').value.trim().toLowerCase();
+    const statusFilter = document.getElementById('statusFilter').value;
+
+    const filtered = allBookings.filter(b => {
+      if (statusFilter && b.status !== statusFilter) return false;
+      if (search) {
+        const haystack = (String(b.name || '') + ' ' + String(b.email || '')).toLowerCase();
+        if (haystack.indexOf(search) === -1) return false;
+      }
+      return true;
+    });
+
+    const tbody = document.getElementById('bookingTableBody');
+    if (!filtered.length) {
+      tbody.innerHTML = '<tr><td colspan="9" class="empty">該当する申し込みがありません。</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(b => `
+      <tr>
+        <td>${formatDateTime(b.timestamp)}</td>
+        <td>${escapeHtml(b.name)}${b.kana ? '<br><span style="color:var(--muted); font-size:0.76rem;">' + escapeHtml(b.kana) + '</span>' : ''}</td>
+        <td>${escapeHtml(b.email)}${b.phone ? '<br><span style="color:var(--muted); font-size:0.76rem;">' + escapeHtml(b.phone) + '</span>' : ''}</td>
+        <td>${escapeHtml(b.courseName)}</td>
+        <td>${escapeHtml(b.people)}</td>
+        <td>${b.addVideo ? 'セルフケア動画' : ''}</td>
+        <td>${b.paymentMethod === 'paypay' ? 'PayPay' : '銀行振込'}</td>
+        <td>¥${(Number(b.amount) || 0).toLocaleString()}</td>
+        <td><span class="badge badge-${b.status}">${STATUS_LABEL[b.status] || b.status}</span></td>
+      </tr>
+    `).join('');
+  }
+
+  loginBtn.addEventListener('click', () => {
+    const key = adminKeyInput.value.trim();
+    if (!key) return;
+    loadBookings(key);
+  });
+  adminKeyInput.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Enter') loginBtn.click();
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    sessionStorage.removeItem('ikigaiAdminKey');
+    allBookings = [];
+    dashboard.style.display = 'none';
+    loginCard.style.display = 'block';
+    adminKeyInput.value = '';
+  });
+
+  document.getElementById('refreshBtn').addEventListener('click', () => {
+    const key = sessionStorage.getItem('ikigaiAdminKey');
+    if (key) loadBookings(key);
+  });
+
+  document.getElementById('searchInput').addEventListener('input', renderTable);
+  document.getElementById('statusFilter').addEventListener('change', renderTable);
+
+  // このタブを開いている間だけキーを保持し、次に来たときは自動ログインする（sessionStorageはタブを閉じると消える）
+  const savedKey = sessionStorage.getItem('ikigaiAdminKey');
+  if (savedKey && SCRIPT_URL !== 'YOUR_APPS_SCRIPT_WEB_APP_URL') {
+    loadBookings(savedKey);
+  }
+</script>
+
+</body>
+</html>

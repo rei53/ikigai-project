@@ -32,6 +32,13 @@ function doGet(e) {
       const result = reconcilePayment_(bookingId);
       return jsonResponse_({ ok: true, result: result });
     }
+    if (action === 'instagram') {
+      return jsonResponse_({ ok: true, result: getInstagramFeed_() });
+    }
+    if (action === 'admin') {
+      const key = e.parameter.key || '';
+      return jsonResponse_(getAllBookingsForAdmin_(key));
+    }
     return jsonResponse_({ ok: false, error: '不明なリクエストです。' });
   } catch (err) {
     sendErrorAlert_('doGet', err);
@@ -50,6 +57,15 @@ function setupTriggers() {
     .timeBased()
     .everyDays(1)
     .atHour(9)
+    .create();
+  ScriptApp.newTrigger('refreshInstagramCache')
+    .timeBased()
+    .everyHours(6)
+    .create();
+  ScriptApp.newTrigger('refreshInstagramToken')
+    .timeBased()
+    .everyDays(1)
+    .atHour(4)
     .create();
   Logger.log('トリガーの設定が完了しました。');
 }

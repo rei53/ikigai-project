@@ -233,6 +233,29 @@
   .social-icons-dark a:hover { background: rgba(255,255,255,0.24); transform: translateY(-3px); }
   .social-icons-light a { background: var(--warm); color: var(--sage-dark); border: 1px solid var(--line); }
   .social-icons-light a:hover { background: var(--sage-dark); color: var(--white); transform: translateY(-3px); }
+
+  /* ─── INSTAGRAM FEED ─── */
+  .instagram { background: var(--white); }
+  .insta-feed-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px;
+    max-width: 1000px; margin: 0 auto 34px;
+  }
+  .insta-post {
+    position: relative; display: block; aspect-ratio: 1/1; border-radius: 14px; overflow: hidden;
+    background: var(--cream); box-shadow: var(--shadow-sm); transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .insta-post:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .insta-post img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .insta-post .insta-overlay {
+    position: absolute; inset: 0; background: rgba(38,50,56,0.55); opacity: 0; transition: opacity 0.25s ease;
+    display: flex; align-items: center; justify-content: center; padding: 14px;
+    color: var(--white); font-size: 0.76rem; text-align: center; line-height: 1.5;
+  }
+  .insta-post:hover .insta-overlay { opacity: 1; }
+  .insta-feed-empty, .insta-feed-loading {
+    text-align: center; color: var(--muted); font-size: 0.86rem; padding: 30px; grid-column: 1 / -1;
+  }
+  .insta-feed-cta { text-align: center; }
   .social-icons a.icon-line { background: none !important; border: none !important; box-shadow: none !important; padding: 0; }
   .social-icons a.icon-line:hover { background: none !important; }
   .social-icons a.icon-line svg { border-radius: 22%; box-shadow: 0 2px 6px rgba(0,0,0,0.15); transition: transform 0.2s ease; }
@@ -672,6 +695,7 @@
       <li><a href="#program">プログラム</a></li>
       <li><a href="#schedule">スケジュール</a></li>
       <li><a href="#profile">プロフィール</a></li>
+      <li><a href="#instagram">Instagram</a></li>
       <li><a href="#contact" class="nav-cta">お問い合わせ</a></li>
       <li class="nav-social-item">
         <div class="social-icons social-icons-light">
@@ -1107,6 +1131,22 @@
   </div>
 </section>
 
+<section class="instagram" id="instagram">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="section-tag center">Instagram</span>
+      <h2 class="section-title center">最新の投稿</h2>
+      <p class="section-lead center">日々の活動の様子をInstagramで発信しています。</p>
+    </div>
+    <div class="insta-feed-grid reveal-grid" id="instaFeedGrid">
+      <div class="insta-feed-loading">読み込み中…</div>
+    </div>
+    <div class="insta-feed-cta">
+      <a href="https://www.instagram.com/ikigaiproject.yoga/" target="_blank" rel="noopener" class="btn btn-outline">Instagramでもっと見る</a>
+    </div>
+  </div>
+</section>
+
 <section class="contact" id="contact">
   <div class="wrap reveal">
     <span class="section-tag">Contact</span>
@@ -1167,6 +1207,36 @@
 
 <script src="data/courses.js"></script>
 <script>
+  // 予約システムと同じApps ScriptのWebアプリURL（SETUP-BOOKING-SYSTEM.md参照）
+  const SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL';
+
+  (function loadInstagramFeed() {
+    const grid = document.getElementById('instaFeedGrid');
+    if (!grid || !SCRIPT_URL || SCRIPT_URL === 'YOUR_APPS_SCRIPT_WEB_APP_URL') {
+      if (grid) grid.innerHTML = '<div class="insta-feed-empty">準備中です。しばらくお待ちください。</div>';
+      return;
+    }
+
+    fetch(SCRIPT_URL + '?action=instagram')
+      .then(r => r.json())
+      .then(res => {
+        const items = res.ok && res.result && res.result.items ? res.result.items : [];
+        if (!items.length) {
+          grid.innerHTML = '<div class="insta-feed-empty">現在、投稿を読み込めませんでした。</div>';
+          return;
+        }
+        grid.innerHTML = items.map(p => `
+          <a class="insta-post" href="${p.permalink}" target="_blank" rel="noopener">
+            <img src="${p.imageUrl}" alt="Instagram投稿" loading="lazy">
+            <span class="insta-overlay">${(p.caption || '').replace(/</g, '&lt;')}</span>
+          </a>
+        `).join('');
+      })
+      .catch(() => {
+        grid.innerHTML = '<div class="insta-feed-empty">現在、投稿を読み込めませんでした。</div>';
+      });
+  })();
+
   const statusLabel = { open: '募集中', few: '残りわずか', closed: '受付終了' };
   const timeOfDayBadge = { morning: '🌅 朝ヨガ', evening: '🌙 夜ヨガ' };
 
