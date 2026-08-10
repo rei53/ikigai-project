@@ -476,6 +476,12 @@
   .program-card h4 { color: var(--sage-dark); font-size: 1rem; margin-bottom: 4px; }
   .program-card .catch { font-size: 0.78rem; color: var(--gold); font-weight: 700; margin-bottom: 10px; }
   .program-card p { font-size: 0.85rem; color: var(--muted); }
+  .program-link {
+    display: inline-block; margin-top: 12px; font-size: 0.8rem; font-weight: 700;
+    color: var(--sage-dark); text-decoration: none; border-bottom: 1px solid var(--gold);
+    padding-bottom: 2px; transition: color 0.2s ease;
+  }
+  .program-link:hover { color: var(--sage-deep); }
 
   .temple-panel {
     position: relative; overflow: hidden;
@@ -550,6 +556,91 @@
   .training-shift .before { opacity: 0.75; }
   .training-shift .arrow { color: var(--gold-light); font-weight: 700; }
   .training-shift .after { font-weight: 700; color: var(--gold-light); }
+
+  /* ─── GAKUDO ─── */
+  .gakudo { background: var(--warm); }
+  .gakudo-panel {
+    max-width: 1080px; margin: 0 auto 44px; border-radius: 22px; overflow: hidden;
+    background: var(--white); box-shadow: var(--shadow-lg);
+    display: grid; grid-template-columns: 1fr 1.15fr;
+  }
+  .gakudo-visual { position: relative; min-height: 260px; }
+  .gakudo-visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .gakudo-visual::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(150deg, rgba(111,174,156,0.14), rgba(32,75,92,0.32));
+  }
+  .gakudo-body { padding: 44px 40px; }
+  .gakudo-eyebrow {
+    display: inline-block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em;
+    color: var(--gold); text-transform: uppercase; margin-bottom: 10px;
+  }
+  .gakudo-title {
+    font-family: 'Noto Serif JP', serif; font-size: 1.4rem; font-weight: 800; letter-spacing: 0.04em;
+    color: var(--ink); margin-bottom: 10px;
+  }
+  .gakudo-quote {
+    font-size: 0.98rem; font-weight: 700; color: var(--sage-dark); margin-bottom: 16px;
+    padding-left: 14px; border-left: 3px solid var(--gold);
+  }
+  .gakudo-desc { font-size: 0.9rem; color: var(--muted); margin-bottom: 24px; }
+  .gakudo-steps { list-style: none; display: grid; gap: 10px; }
+  .gakudo-steps li {
+    display: grid; grid-template-columns: auto 1fr; gap: 12px; align-items: center;
+    background: var(--cream); border: 1px solid var(--line); border-radius: 12px;
+    padding: 12px 16px; font-size: 0.85rem; color: var(--ink); line-height: 1.7;
+  }
+  .gakudo-steps .step-label {
+    font-size: 0.72rem; font-weight: 700; color: var(--sage-deep); background: var(--gold-light);
+    border-radius: 9px; padding: 3px 12px; white-space: nowrap;
+  }
+
+  .gakudo-cards {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;
+    max-width: 1080px; margin: 0 auto 44px;
+  }
+  .gakudo-card {
+    background: var(--white); border: 1px solid var(--line); border-radius: 18px;
+    padding: 30px 26px; box-shadow: var(--shadow-sm);
+  }
+  .gakudo-card .gakudo-card-tag {
+    display: inline-block; font-size: 0.7rem; font-weight: 700; color: var(--sage-dark);
+    background: var(--warm); padding: 4px 12px; border-radius: 12px; margin-bottom: 12px;
+  }
+  .gakudo-card h4 { font-size: 1rem; color: var(--sage-dark); margin-bottom: 8px; }
+  .gakudo-card p { font-size: 0.85rem; color: var(--muted); }
+
+  .boulder-panel {
+    position: relative; overflow: hidden; max-width: 1080px; margin: 0 auto;
+    background: linear-gradient(150deg, var(--sage-dark), var(--sage-deep));
+    border-radius: 22px; padding: 46px 42px; color: var(--white); box-shadow: var(--shadow-lg);
+  }
+  .boulder-panel::before {
+    content: ''; position: absolute; top: -70px; right: -50px; width: 240px; height: 240px;
+    border-radius: 50%; background: rgba(255,255,255,0.05);
+  }
+  .boulder-panel > * { position: relative; }
+  .boulder-panel .gakudo-eyebrow { color: var(--gold-light); }
+  .boulder-panel h3 { font-size: 1.2rem; margin-bottom: 6px; }
+  .boulder-panel .catch { display: block; font-size: 0.85rem; color: var(--gold-light); font-weight: 700; margin-bottom: 16px; }
+  .boulder-panel p { font-size: 0.9rem; opacity: 0.95; margin-bottom: 22px; max-width: 720px; }
+  .boulder-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+  .boulder-grid div {
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 12px; padding: 16px 18px; font-size: 0.82rem; line-height: 1.7;
+  }
+  .boulder-grid strong { display: block; font-size: 0.86rem; color: var(--gold-light); margin-bottom: 4px; }
+  .boulder-panel .boulder-note { font-size: 0.78rem; opacity: 0.8; margin: 20px 0 0; }
+  @media (max-width: 780px) {
+    .gakudo-panel { grid-template-columns: 1fr; }
+    .gakudo-visual { min-height: 200px; }
+  }
+  @media (max-width: 640px) {
+    .gakudo-body { padding: 32px 24px; }
+    .boulder-panel { padding: 34px 24px; }
+    .gakudo-steps li { grid-template-columns: 1fr; gap: 6px; }
+    .gakudo-steps .step-label { justify-self: start; }
+  }
 
   /* ─── SCHEDULE ─── */
   .schedule { background: var(--white); }
@@ -857,7 +948,7 @@
       <a class="field-item field-item-link" href="#schedule">カルチャーセンター<br><small>リビングカルチャー高松</small></a>
       <div class="field-item">地域コミュニティ<br><small>サンサン館みき ほか</small></div>
       <a class="field-item field-item-link" href="#schedule">フィットネス<br><small>瀬戸内フィットネス</small></a>
-      <div class="field-item">放課後児童健全育成事業（学童）</div>
+      <a class="field-item field-item-link" href="#gakudo">放課後児童健全育成事業（学童）<br><small>学童ヨガ</small></a>
       <div class="field-item">少年院</div>
     </div>
   </div>
@@ -1002,6 +1093,14 @@
         <p>発達段階に応じた内容で、子どもが「自分を感じる」時間と生きる力を育みます。</p>
       </div>
       <div class="program-card">
+        <div class="program-img"><img src="images/kodomo-yoga-poster.jpg" alt="学童でヨーガに取り組む子どもたち" loading="lazy"></div>
+        <span class="program-badge">学童・放課後児童クラブ</span>
+        <h4>学童ヨガ</h4>
+        <p class="catch">ペアポーズで、相手の気持ちを考える</p>
+        <p>放課後児童クラブへの出張プログラム。ふたりで支え合うペアポーズや、からだの土台を育てるポーズを通して、思いやりと生きる力を育みます。</p>
+        <a class="program-link" href="#gakudo">学童ヨガをくわしく見る →</a>
+      </div>
+      <div class="program-card">
         <div class="program-img"><img src="images/oyako-yoga.jpg" alt="おやこヨーガの様子" loading="lazy"></div>
         <span class="program-badge">親子向け</span>
         <h4>おやこヨーガ</h4>
@@ -1078,6 +1177,66 @@
         <div><span class="before">予測可能な経験</span><span class="arrow">→</span><span class="after">新鮮な経験</span></div>
         <div><span class="before">エクササイズ</span><span class="arrow">→</span><span class="after">アクティビティ</span></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="gakudo" id="gakudo">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="section-tag center">Gakudo Yoga</span>
+      <h2 class="section-title center">学童でヨガ</h2>
+      <p class="section-lead center">放課後児童クラブ（学童）は、子どもたちが放課後の長い時間を過ごす「もうひとつの生活の場」。放課後児童支援員としての現場経験をいかし、宿題とおやつと自由あそびのあいだに、からだと心をととのえるヨーガの時間をお届けします。特別な道具も広い場所も必要ありません。</p>
+    </div>
+
+    <div class="gakudo-panel reveal">
+      <div class="gakudo-visual"><img src="images/oyako-yoga.jpg" alt="ふたり一組でポーズをとる様子" loading="lazy"></div>
+      <div class="gakudo-body">
+        <span class="gakudo-eyebrow">Pair Pose</span>
+        <h3 class="gakudo-title">ペアポーズ ― 相手の気持ちを考える</h3>
+        <p class="gakudo-quote">「これ以上たおしたら、いたいかな？」<br>手のひらからつたわる相手の気持ちに、気づく時間。</p>
+        <p class="gakudo-desc">ペアポーズは、ふたりで支え合ってはじめて形になるポーズです。うまくいくかどうかは、自分がどれだけがんばるかではなく、相手をどれだけ感じ取れるかで決まります。強く押せば相手は痛い。遠慮しすぎれば形にならない。子どもたちは言葉より先に、手のひらの感触と相手の呼吸から「ちょうどいい」を探しはじめます。相手の気持ちを想像する力は、教わるものではなく、こうした関わりの中で育っていくものです。</p>
+        <ul class="gakudo-steps">
+          <li><span class="step-label">きく</span><span>はじめる前に「どこまでたおしていい？」とたずねる。いやなときは「ストップ」と言っていい、を約束にします。</span></li>
+          <li><span class="step-label">かんじる</span><span>相手の呼吸、力の入り方、表情。言葉になっていないサインに気づきます。</span></li>
+          <li><span class="step-label">あわせる</span><span>自分のペースではなく、ふたりのペースへ。息を合わせると、ポーズは自然と安定します。</span></li>
+          <li><span class="step-label">つたえる</span><span>終わったら「どうだった？」を言葉に。感じたことを伝え合って、ふりかえります。</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="gakudo-cards reveal-grid">
+      <div class="gakudo-card">
+        <span class="gakudo-card-tag">つながる力</span>
+        <h4>相手の気持ちを考える</h4>
+        <p>ペアポーズや、みんなでつくるグループポーズを通して、相手を思いやりながら関わる練習をします。勝ち負けのない活動なので、学年や運動の得意・不得意をこえて一緒に取り組めます。</p>
+      </div>
+      <div class="gakudo-card">
+        <span class="gakudo-card-tag">からだの力</span>
+        <h4>からだの土台が育つ</h4>
+        <p>体幹の安定、股関節や肩まわりの可動域、片足で立つバランス感覚。遊びの中で自然に使う力を、ポーズを通してていねいに育てます。ボルダリングや外遊びにも生きてきます。</p>
+      </div>
+      <div class="gakudo-card">
+        <span class="gakudo-card-tag">自分にもどる力</span>
+        <h4>自分を感じる時間</h4>
+        <p>集中力・自己コントロール力・穏やかな心。刺激の多い毎日の中で、呼吸に意識を向け、自分の状態に気づく時間をつくります。にぎやかな放課後に、ひと呼吸の静けさを。</p>
+      </div>
+    </div>
+
+    <div class="boulder-panel reveal">
+      <span class="gakudo-eyebrow">Bouldering</span>
+      <h3>ヨガをすると、ボルダリングが上手くなる</h3>
+      <span class="catch">壁をのぼる力は、腕の力だけではありません。</span>
+      <p>ボルダリングウォールのある学童も増えてきました。実は、ヨーガで育つからだの使い方は、そのまま壁の上で生きてきます。「腕の力が足りないから登れない」と思っていた子が、足の置き方と呼吸を変えるだけで、ひとつ上のホールドに手が届く。その瞬間の顔を、何度も見てきました。</p>
+      <div class="boulder-grid">
+        <div><strong>体幹が安定する</strong>お腹と背中を支える力が育つと、壁に近い姿勢を保てるようになり、腕だけに頼らずに登れます。</div>
+        <div><strong>股関節がひらく</strong>足を高い位置に置けるかどうかで、次の一手が変わります。開脚や前屈のポーズが可動域を広げます。</div>
+        <div><strong>足裏の感覚が育つ</strong>片足立ちのポーズで、足裏のどこに体重をのせるかを感じ取る力が育ちます。小さなホールドに乗る感覚に直結します。</div>
+        <div><strong>呼吸を止めない</strong>力を入れるときほど息を止めがち。呼吸を続けたまま動く練習が、途中でバテない粘りにつながります。</div>
+        <div><strong>落ちついて次を見る</strong>あせらず一手先を観察する。マインドフルネスで育つ「立ち止まる力」が、ムダな動きを減らします。</div>
+        <div><strong>こわさと付き合う</strong>高いところは、こわい。その気持ちを打ち消すのではなく、感じたまま認めることから始めます。</div>
+      </div>
+      <p class="boulder-note">※ ボルダリング設備のある施設では、活動前のウォームアップとしてのプログラム構成もご相談いただけます。</p>
     </div>
   </div>
 </section>
@@ -1192,6 +1351,7 @@
       <div class="footer-nav-col">
         <h4>プログラム</h4>
         <a href="#program">プログラム一覧</a>
+        <a href="#gakudo">学童ヨガ</a>
         <a href="#schedule">スケジュール</a>
         <a href="#contact">お問い合わせ</a>
       </div>
