@@ -173,6 +173,25 @@ const COURSES = [
     description: '心身を整えるマインドフルネスを取り入れた、1日の終わりのヨーガです。\n\n【開催日】10/1、10/8、10/15、10/22、11/5、11/12、11/19、11/26、12/3、12/10、12/17、12/24、1/7、1/14、1/21、1/28\n※月初・月末は施設休館のためお休みの場合があります。詳しくは瀬戸内フィットネスへご確認ください。',
     facilityNote: '瀬戸内フィットネスの会員申し込み・フロントより直接お申し込みください。',
     status: 'open'
+  },
+  {
+    id: 'mindfulness-takamatsu-school',
+    category: 'mindfulness-yoga',
+    target: '個人向け',
+    bookingType: 'external',
+    timeOfDay: 'morning',
+    name: 'マインドフルネス・ヨーガ（高松校・本講座）',
+    venue: '高松校',
+    scheduleText: '第1・3・5週月曜開催（祝日・休館日を除く）・全6回',
+    nextDate: '2026-11-02',
+    nextDateText: '2026年11月2日（月）〜 次回クール',
+    time: '10:30〜12:00',
+    capacity: '開催告知にてご案内',
+    price: '開催告知にてご案内',
+    image: 'images/online-yoga.jpg',
+    description: '本講座（全6回）。第1・3・5週の月曜日に開催（祝日・休館日を除く）。\n\n【現行クール（全6回）】7/6、8/3、8/31、9/7、10/5、10/19\n【次回クール】11/2〜',
+    facilityNote: '高松校（講座No.7630）へ直接お申し込みください。',
+    status: 'open'
   }
 ];
 
