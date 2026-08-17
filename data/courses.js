@@ -116,6 +116,27 @@ const COURSES = [
     status: 'open'
   },
   {
+    id: 'mindfulness-sansan-evening',
+    category: 'mindfulness-yoga',
+    target: '個人向け',
+    bookingType: 'external',
+    timeOfDay: 'evening',
+    name: '夜のマインドフルネスヨーガ（サンサン館みき）',
+    venue: 'サンサン館みき',
+    scheduleText: '体験教室ののち、隔週・第1/3月曜日開催予定',
+    nextDate: '2026-09-14',
+    nextDateText: '2026年9月14日（月）体験教室',
+    time: '18:00〜19:00',
+    capacity: '開催告知にてご案内',
+    price: '体験教室 1,210円／本講座 8,470円（全7回）',
+    image: 'images/profile.jpg',
+    catch: '新月を過ぎた静かな夜に。リセットから始まる、新しい自分',
+    description: '新月を過ぎて月が満ち始め、新しいことをスタートさせるのに最適なタイミング。夏の間に溜まった疲れや緊張を一度リセットし、心と体に心地よい習慣を取り入れてみませんか？マインドフルネスヨーガはやさしい呼吸と動きで脳の緊張をゆるめ、心地よい深い睡眠へと導きます。\n\nこの体験教室を経て、秋から本講座「夜のマインドフルネスヨーガ ～週の始まりを軽やかに。ぐっすり眠れるカラダへ～」がスタート予定です。一週間の始まりにたまった心とからだの緊張を、心地よい動きと呼吸でやさしくゆるめます。隔週開催（第1・3月曜日）で、初めての方も安心してご参加いただけます。',
+    items: ['体験教室：9/14（月）18:00〜19:00・1,210円（講座No.T-94）', '本講座：隔週・第1/3月曜日 18:00〜19:00・8,470円（全7回・講座No.212）'],
+    facilityNote: 'サンサン館みき（TEL：<a href="tel:0878910333" style="color:var(--sage-dark); font-weight:700;">087-891-0333</a>）へ直接お申し込みください。',
+    status: 'open'
+  },
+  {
     id: 'mindfulness-living-culture',
     category: 'mindfulness-yoga',
     target: '個人向け',
