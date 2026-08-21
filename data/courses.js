@@ -31,7 +31,6 @@ const HOSENJI_TEMPLATE = {
 };
 
 const COURSES = [
-  { ...HOSENJI_TEMPLATE, id: 'tera-yoga-hosenji-0719', nextDate: '2026-07-19', nextDateText: '2026年7月19日（日）' },
   { ...HOSENJI_TEMPLATE, id: 'tera-yoga-hosenji-0823', nextDate: '2026-08-23', nextDateText: '2026年8月23日（日）' },
   { ...HOSENJI_TEMPLATE, id: 'tera-yoga-hosenji-0913', nextDate: '2026-09-13', nextDateText: '2026年9月13日（日）' },
   {
