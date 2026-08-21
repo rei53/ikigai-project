@@ -1252,7 +1252,7 @@
         </div>
         <h4>${c.name}</h4>
         <div class="open-course-date">${c.nextDateText}　${c.time}</div>
-        <div class="open-course-meta">${c.venue}／${c.capacity}／${c.price}</div>
+        <div class="open-course-meta">${[c.venue, c.capacity, c.price].filter((v, i, arr) => arr.indexOf(v) === i).join('／')}</div>
         ${c.bookingType === 'internal'
           ? `<a class="btn-sm" href="booking.html?course=${c.id}">申し込む →</a>`
           : `<a class="btn-sm btn-sm-outline" href="booking.html?course=${c.id}">会場に申し込む →</a>`}
