@@ -24,7 +24,8 @@ const SITE_BOOKING_URL = 'https://ikigai-prj.com/booking.html';
 const BANK_TRANSFER_INFO = `
 ゆうちょ銀行
 記号：16130　番号：19673021
-口座名義：よだれいこ
+（普通：六一八店 1967302）
+口座名義：ヨダ レイコ
 ※恐れ入りますが振込手数料はご負担ください
 `.trim();
 
