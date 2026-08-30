@@ -135,6 +135,16 @@
   .payment-reference p {
     font-size: 0.78rem; color: var(--muted); margin-top: 6px;
   }
+  .bank-info {
+    margin-top: 12px; padding: 14px 16px; border-radius: 10px;
+    background: var(--warm); border-left: 4px solid var(--gold);
+    font-size: 0.88rem; line-height: 1.9; color: var(--ink);
+  }
+  .bank-info-title {
+    display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em;
+    color: var(--gold); margin-bottom: 4px;
+  }
+  .bank-info-note { font-size: 0.76rem; color: var(--muted); }
   .video-addon-option {
     display: flex; align-items: flex-start; gap: 10px; border: 1px solid var(--line); border-radius: 12px;
     padding: 14px 16px; cursor: pointer; background: var(--cream); font-size: 0.88rem;
@@ -345,6 +355,14 @@
             </div>
             <div class="payment-reference">
               <img src="images/payment-methods.png" alt="お支払い方法（ゆうちょ振込・PayPay）のご案内">
+              <div class="bank-info">
+                <span class="bank-info-title">振込先</span>
+                ゆうちょ銀行<br>
+                記号：16130　番号：19673021<br>
+                （普通：六一八店 1967302）<br>
+                口座名義：ヨダ レイコ<br>
+                <span class="bank-info-note">※恐れ入りますが振込手数料はご負担ください</span>
+              </div>
               <p>※PayPayはこのままお申し込みいただくとオンライン決済画面に進みます。ゆうちょ振込の場合は、お振込み後にお申し込み確認メールへ「振り込み完了」とご返信ください。支払い画面のスクリーンショット（写メ）は、<a href="https://lin.ee/61XYyrz" target="_blank" rel="noopener" style="color:var(--sage-dark); font-weight:700;">公式LINE</a>にお名前を添えてお送りください。</p>
             </div>
           </div>
