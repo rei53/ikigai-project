@@ -20,11 +20,11 @@ const OWNER_EMAIL = 'yodayoga2525@gmail.com';
 // このサイトの予約ページURL（PayPay決済完了後にお客様を戻す先）
 const SITE_BOOKING_URL = 'https://ikigai-prj.com/booking.html';
 
-// 銀行振込の案内文（実際の振込先に書き換えてください）
+// 銀行振込の案内文
 const BANK_TRANSFER_INFO = `
 ゆうちょ銀行
-記号：◯◯◯◯◯　番号：◯◯◯◯◯◯◯
-口座名義：ヨダ ヨガ（ヨダヨガ）
+記号：16130　番号：19673021
+口座名義：よだれいこ
 ※恐れ入りますが振込手数料はご負担ください
 `.trim();
 

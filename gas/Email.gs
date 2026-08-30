@@ -34,6 +34,7 @@ function sendBankTransferInstructions_(email, name, courseName, amount, addVideo
       '以下の口座へお振込みください。\n\n' +
       '【お支払い金額】' + amount + '円\n\n' +
       '【振込先】\n' + BANK_TRANSFER_INFO + '\n\n' +
+      'お振込み後、お手数ですがこのメールに「振り込み完了」とご返信ください。\n' +
       'ご入金の確認をもちまして予約確定となります。\n' +
       videoGuidanceBlock_(addVideo) + '\n' +
       'ご不明な点がございましたら、このメールにご返信ください。\n\n' +
