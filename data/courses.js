@@ -14,6 +14,7 @@ const HOSENJI_TEMPLATE = {
   target: '個人向け',
   bookingType: 'internal',
   timeOfDay: null,
+  oneOff: true,
   name: '寺ヨガ（法泉寺・大人の隠れ家）',
   venue: '法泉寺 座禅堂',
   scheduleText: '動くことからはじまる、心を整える60分',
@@ -39,6 +40,7 @@ const COURSES = [
     target: '個人向け',
     bookingType: 'internal',
     timeOfDay: null,
+    oneOff: true,
     name: '寺ヨガ（西方寺・大人の寺子屋）',
     venue: '西方寺 ご本堂',
     scheduleText: 'お茶をいただくことからはじまる、心を整える90分',
@@ -61,6 +63,7 @@ const COURSES = [
     target: '個人向け',
     bookingType: 'external',
     timeOfDay: 'morning',
+    oneOff: true,
     name: 'こどもヨーガ「大きなカブ劇場」（サンサン館みき）',
     venue: 'サンサン館みき 和室大広間（7F）',
     scheduleText: '単発イベント（不定期開催）',
@@ -81,6 +84,7 @@ const COURSES = [
     target: '個人向け',
     bookingType: 'external',
     timeOfDay: 'morning',
+    oneOff: true,
     name: 'いすヨーガ（サンサン館みき）季節イベント',
     venue: 'サンサン館みき',
     scheduleText: '季節イベント（単発開催）',
@@ -198,3 +202,15 @@ const COURSES = [
 
 // 日付が近い順に並び替え
 COURSES.sort((a, b) => new Date(a.nextDate) - new Date(b.nextDate));
+
+// oneOff（単発開催）の講座は、開催日を過ぎたら自動的にスケジュールから外す
+// （毎週／隔週などの継続講座は nextDate が「次回の目安日」でしかないため対象外）
+(function removeEndedOneOffCourses() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  for (let i = COURSES.length - 1; i >= 0; i--) {
+    if (COURSES[i].oneOff && new Date(COURSES[i].nextDate) < today) {
+      COURSES.splice(i, 1);
+    }
+  }
+})();
