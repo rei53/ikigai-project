@@ -353,8 +353,11 @@
               <label class="payment-option"><input type="radio" name="paymentMethod" value="paypay" required> PayPay（オンライン決済）</label>
               <label class="payment-option"><input type="radio" name="paymentMethod" value="bank_transfer" required> 銀行振込</label>
             </div>
-            <div class="payment-reference">
-              <img src="images/payment-methods.png" alt="お支払い方法（ゆうちょ振込・PayPay）のご案内">
+            <div class="payment-reference" id="paypayInfo" hidden>
+              <img src="images/payment-paypay.png" alt="PayPayのお支払い用QRコード">
+              <p>金額を入力してお支払いのうえ、支払い画面のスクリーンショット（写メ）を、<a href="https://lin.ee/61XYyrz" target="_blank" rel="noopener" style="color:var(--sage-dark); font-weight:700;">公式LINE</a>にお名前を添えてお送りください。</p>
+            </div>
+            <div class="payment-reference" id="bankInfo" hidden>
               <div class="bank-info">
                 <span class="bank-info-title">振込先</span>
                 ゆうちょ銀行<br>
@@ -363,7 +366,7 @@
                 口座名義：ヨダ レイコ<br>
                 <span class="bank-info-note">※恐れ入りますが振込手数料はご負担ください</span>
               </div>
-              <p>※PayPayはこのままお申し込みいただくとオンライン決済画面に進みます。ゆうちょ振込の場合は、お振込み後にお申し込み確認メールへ「振り込み完了」とご返信ください。支払い画面のスクリーンショット（写メ）は、<a href="https://lin.ee/61XYyrz" target="_blank" rel="noopener" style="color:var(--sage-dark); font-weight:700;">公式LINE</a>にお名前を添えてお送りください。</p>
+              <p>お振込み後、<a href="https://lin.ee/61XYyrz" target="_blank" rel="noopener" style="color:var(--sage-dark); font-weight:700;">公式LINE</a>にお名前を添えて「振り込み完了」とお送りください。</p>
             </div>
           </div>
           <div class="order-total"><span>お支払い合計</span><span id="orderTotal">¥${c.amount.toLocaleString()}</span></div>
@@ -371,6 +374,16 @@
           <button type="submit" class="submit-btn" id="submit-btn">お申し込みを確定する</button>
         </form>
       </div>`;
+
+    // 選んだお支払い方法に応じて、PayPayのQRか振込先のどちらかだけを表示する
+    const paypayInfo = document.getElementById('paypayInfo');
+    const bankInfo = document.getElementById('bankInfo');
+    document.querySelectorAll('input[name="paymentMethod"]').forEach(function (radio) {
+      radio.addEventListener('change', function () {
+        paypayInfo.hidden = radio.value !== 'paypay';
+        bankInfo.hidden = radio.value !== 'bank_transfer';
+      });
+    });
 
     const videoCheckbox = document.getElementById('addVideoCheckbox');
     if (videoCheckbox) {
