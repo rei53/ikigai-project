@@ -23,8 +23,9 @@ function sendTwoDaysBeforeReminders() {
     const courseId = row[COL.COURSE_ID - 1];
     const reminderSent = row[COL.REMINDER_SENT - 1];
 
-    // 確定済み（PayPay決済完了）または振込案内済みの予約のみ対象。キャンセル・失敗は対象外。
-    if (status !== 'paid' && status !== 'pending_bank_transfer') return;
+    // 入金確認は手動でタイムラグがあるため、申し込み済みの方すべてに送る。
+    // キャンセル（cancelled）など、それ以外のステータスは対象外。
+    if (status !== 'paid' && status !== 'pending_payment' && status !== 'pending_bank_transfer') return;
     if (reminderSent === 'sent') return;
 
     const eventDate = COURSE_DATES[courseId];

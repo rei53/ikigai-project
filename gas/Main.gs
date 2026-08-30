@@ -5,16 +5,6 @@
 function doPost(e) {
   try {
     const payload = JSON.parse(e.postData.contents);
-
-    // PayPay Webhookとフォーム送信を、届いたデータの形で振り分ける。
-    // Webhookはmerchantpaymentid（bookingId）だけを合図として使い、
-    // 中身は信用せず必ずreconcilePayment_でPayPayに確認しにいく。
-    const webhookBookingId = payload.merchantPaymentId || (payload.data && payload.data.merchant_payment_id);
-    if (webhookBookingId && !payload.name) {
-      const result = reconcilePayment_(webhookBookingId);
-      return jsonResponse_({ ok: true, result: result });
-    }
-
     const result = handleBookingSubmission_(payload);
     return jsonResponse_(result);
   } catch (err) {
@@ -26,12 +16,6 @@ function doPost(e) {
 function doGet(e) {
   try {
     const action = e.parameter.action;
-    if (action === 'status') {
-      const bookingId = e.parameter.bookingId;
-      if (!bookingId) return jsonResponse_({ ok: false, error: 'bookingIdが必要です。' });
-      const result = reconcilePayment_(bookingId);
-      return jsonResponse_({ ok: true, result: result });
-    }
     if (action === 'instagram') {
       return jsonResponse_({ ok: true, result: getInstagramFeed_() });
     }
@@ -46,10 +30,10 @@ function doGet(e) {
   }
 }
 
-// 初回に一度だけ実行する設定用関数：時限トリガー（放置決済の掃除・2日前リマインダー）を設定する
+// 初回に一度だけ実行する設定用関数：時限トリガー（入金確定メール・2日前リマインダー・Instagram更新）を設定する
 function setupTriggers() {
   ScriptApp.getProjectTriggers().forEach(function (t) { ScriptApp.deleteTrigger(t); });
-  ScriptApp.newTrigger('sweepPendingPayments')
+  ScriptApp.newTrigger('sendConfirmationsForNewlyPaid')
     .timeBased()
     .everyMinutes(30)
     .create();

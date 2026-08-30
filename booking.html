@@ -262,12 +262,7 @@
     return `${catchLine}<p class="booking-desc">${desc}</p>${itemsBlock}${belongingsBlock}`;
   }
 
-  const paypayReturn = params.get('paypayReturn');
-  const returnBookingId = params.get('bookingId');
-
-  if (paypayReturn === '1' && returnBookingId) {
-    showPaymentStatus(returnBookingId, 0);
-  } else if (!course) {
+  if (!course) {
     content.innerHTML = `
       <div class="not-found">
         <h1>講座が見つかりませんでした</h1>
@@ -435,16 +430,21 @@
             submitBtn.textContent = 'お申し込みを確定する';
             return;
           }
-          if (res.method === 'paypay' && res.checkoutUrl) {
-            window.location.href = res.checkoutUrl;
-            return;
-          }
+          const payBlock = res.method === 'paypay'
+            ? `<img src="images/payment-paypay.png" alt="PayPayのお支払い用QRコード" style="display:block; max-width:220px; width:100%; margin:0 auto; border-radius:12px;">`
+            : `<div class="bank-instructions">ゆうちょ銀行
+記号：16130　番号：19673021
+（普通：六一八店 1967302）
+口座名義：ヨダ レイコ
+※恐れ入りますが振込手数料はご負担ください</div>`;
+
           content.innerHTML = `
             <div class="form-status">
               <h1 style="font-size:1.3rem; margin-bottom:12px;">お申し込みを受け付けました</h1>
-              <p style="color:var(--muted); margin-bottom:18px;">以下の口座へお振込みください（${escapeHtml(res.amount)}円）。</p>
-              <div class="bank-instructions">${escapeHtml(res.bankInfo)}</div>
-              <p style="color:var(--muted); margin-top:18px;">同じ内容を確認メールでもお送りしました。ご入金の確認をもちまして予約確定となります。</p>
+              <p style="color:var(--muted); margin-bottom:18px;">お支払い金額は <strong>${escapeHtml(res.amount)}円</strong> です。</p>
+              ${payBlock}
+              <p style="color:var(--muted); margin-top:18px;">お支払い後、<a href="https://lin.ee/61XYyrz" target="_blank" rel="noopener" style="color:var(--sage-dark); font-weight:700;">公式LINE</a>にお名前を添えて、お支払い画面のスクリーンショットをお送りください。ご入金の確認をもちまして予約確定となります。</p>
+              <p style="color:var(--muted); margin-top:12px; font-size:0.86rem;">同じ内容を確認メールでもお送りしました。</p>
             </div>`;
         })
         .catch(() => {
@@ -456,47 +456,6 @@
     });
   }
 
-  function showPaymentStatus(bookingId, attempt) {
-    content.innerHTML = `
-      <div class="form-status">
-        <h1 style="font-size:1.2rem; margin-bottom:12px;">決済を確認しています…</h1>
-        <p style="color:var(--muted);">画面を閉じずにそのままお待ちください。</p>
-      </div>`;
-
-    fetch(SCRIPT_URL + '?action=status&bookingId=' + encodeURIComponent(bookingId))
-      .then(r => r.json())
-      .then(res => {
-        const status = res.result && res.result.status;
-        if (status === 'paid') {
-          content.innerHTML = `
-            <div class="form-status">
-              <h1 style="font-size:1.3rem; margin-bottom:12px;">お申し込み・決済が完了しました</h1>
-              <p style="color:var(--muted);">確認メールをお送りしました。当日を楽しみにお待ちしております。</p>
-            </div>`;
-        } else if (status === 'failed') {
-          content.innerHTML = `
-            <div class="form-status">
-              <h1 style="font-size:1.3rem; margin-bottom:12px;">決済が完了しませんでした</h1>
-              <p style="color:var(--muted);">お手数ですが、もう一度お申し込みください。ご不明な点は<a href="mailto:${CONTACT_EMAIL}" style="color:var(--sage-dark); font-weight:700;">こちら</a>までご連絡ください。</p>
-            </div>`;
-        } else if (attempt < 6) {
-          setTimeout(() => showPaymentStatus(bookingId, attempt + 1), 3000);
-        } else {
-          content.innerHTML = `
-            <div class="form-status">
-              <h1 style="font-size:1.3rem; margin-bottom:12px;">確認中です</h1>
-              <p style="color:var(--muted);">決済の確認に時間がかかっています。確認が取れ次第、確認メールをお送りします。しばらく経っても届かない場合は<a href="mailto:${CONTACT_EMAIL}" style="color:var(--sage-dark); font-weight:700;">こちら</a>までご連絡ください。</p>
-            </div>`;
-        }
-      })
-      .catch(() => {
-        content.innerHTML = `
-          <div class="form-status">
-            <h1 style="font-size:1.3rem; margin-bottom:12px;">確認できませんでした</h1>
-            <p style="color:var(--muted);">通信エラーが発生しました。お手数ですが<a href="mailto:${CONTACT_EMAIL}" style="color:var(--sage-dark); font-weight:700;">こちら</a>までご連絡ください。</p>
-          </div>`;
-      });
-  }
 </script>
 
 </body>

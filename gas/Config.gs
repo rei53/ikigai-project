@@ -1,24 +1,25 @@
 /**
  * 設定ファイル
  *
- * PayPayのAPI Key / Secret / Merchant IDはこのファイルに直接書かず、
- * Apps Scriptエディタの「プロジェクトの設定」→「スクリプト プロパティ」に登録してください。
- * プロパティ名: PAYPAY_API_KEY / PAYPAY_API_SECRET / PAYPAY_MERCHANT_ID
+ * お支払いは PayPayのQRコード／ゆうちょ振込 のどちらも「手動確認」です。
+ * お客様にお支払いいただいたあと、公式LINEに届くスクリーンショットを確認して、
+ * スプレッドシートのstatus列を手作業で paid に変更してください。
  * 手順は SETUP-BOOKING-SYSTEM.md を参照。
  */
-
-// 本番のPayPayに切り替えるときだけ true にする（最初はfalseのままSandboxでテストする）
-const PAYPAY_PRODUCTION = false;
-
-const PAYPAY_HOST = PAYPAY_PRODUCTION ? 'apigw.paypay.ne.jp' : 'apigw.sandbox.paypay.ne.jp';
 
 // お客様への確認メール・主催者への通知メールの送信元表示名／返信先
 const SENDER_NAME = 'IKIGAIプロジェクト®';
 const REPLY_TO = 'yodayoga2525@gmail.com';
 const OWNER_EMAIL = 'yodayoga2525@gmail.com';
 
-// このサイトの予約ページURL（PayPay決済完了後にお客様を戻す先）
-const SITE_BOOKING_URL = 'https://ikigai-prj.com/booking.html';
+// お支払い用の公式LINE（お支払い後のスクリーンショット送付先）
+const LINE_URL = 'https://lin.ee/61XYyrz';
+
+// PayPayの案内文（QRコードは申し込みページに掲載）
+const PAYPAY_INFO = `
+PayPayアプリでQRコードを読み取り、金額をご入力のうえお支払いください。
+QRコードは申し込みページに掲載しています。
+`.trim();
 
 // 銀行振込の案内文
 const BANK_TRANSFER_INFO = `
@@ -92,15 +93,4 @@ function getSheet_() {
     throw new Error('シート "' + SHEET_NAME + '" が見つかりません。SETUP-BOOKING-SYSTEM.md の手順を確認してください。');
   }
   return sheet;
-}
-
-function getPayPayCredentials_() {
-  const props = PropertiesService.getScriptProperties();
-  const apiKey = props.getProperty('PAYPAY_API_KEY');
-  const apiSecret = props.getProperty('PAYPAY_API_SECRET');
-  const merchantId = props.getProperty('PAYPAY_MERCHANT_ID');
-  if (!apiKey || !apiSecret || !merchantId) {
-    throw new Error('PayPayのAPI Key/Secret/Merchant Idがスクリプトプロパティに設定されていません。');
-  }
-  return { apiKey: apiKey, apiSecret: apiSecret, merchantId: merchantId };
 }

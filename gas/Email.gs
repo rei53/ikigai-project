@@ -24,17 +24,24 @@ function sendCustomerConfirmation_(email, name, courseName, addVideo) {
   });
 }
 
-function sendBankTransferInstructions_(email, name, courseName, amount, addVideo) {
+// お支払い方法（PayPayのQR／ゆうちょ振込）に応じた案内メール。
+// どちらも入金確認は手動のため、お支払い後にLINEへスクリーンショットを送っていただく。
+function sendPaymentInstructions_(email, name, courseName, amount, paymentMethod, addVideo) {
   if (!email) return;
+  const payBlock = paymentMethod === 'paypay'
+    ? '【お支払い方法：PayPay】\n' + PAYPAY_INFO
+    : '【お支払い方法：ゆうちょ振込】\n' + BANK_TRANSFER_INFO;
+
   MailApp.sendEmail({
     to: email,
     subject: '【' + SENDER_NAME + '】' + courseName + ' お申し込みありがとうございます',
     body: name + ' 様\n\n' +
       '「' + courseName + '」にお申し込みいただき、ありがとうございます。\n' +
-      '以下の口座へお振込みください。\n\n' +
+      '下記のとおりお支払いをお願いいたします。\n\n' +
       '【お支払い金額】' + amount + '円\n\n' +
-      '【振込先】\n' + BANK_TRANSFER_INFO + '\n\n' +
-      'お振込み後、お手数ですがこのメールに「振り込み完了」とご返信ください。\n' +
+      payBlock + '\n\n' +
+      'お支払い後、公式LINEにお名前を添えて、お支払い画面のスクリーンショットをお送りください。\n' +
+      LINE_URL + '\n\n' +
       'ご入金の確認をもちまして予約確定となります。\n' +
       videoGuidanceBlock_(addVideo) + '\n' +
       'ご不明な点がございましたら、このメールにご返信ください。\n\n' +
@@ -60,7 +67,7 @@ function sendReminderEmail_(email, name, courseName, dateText) {
 }
 
 function sendOwnerNotification_(name, courseName, amount, paymentMethod, status) {
-  const methodLabel = paymentMethod === 'paypay' ? 'PayPay' : '銀行振込';
+  const methodLabel = paymentMethod === 'paypay' ? 'PayPay（QRコード）' : 'ゆうちょ振込';
   MailApp.sendEmail({
     to: OWNER_EMAIL,
     subject: '【新規予約】' + courseName + '（' + methodLabel + '）',
@@ -68,7 +75,8 @@ function sendOwnerNotification_(name, courseName, amount, paymentMethod, status)
       '講座: ' + courseName + '\n' +
       '金額: ' + amount + '円\n' +
       '支払い方法: ' + methodLabel + '\n' +
-      'ステータス: ' + status,
+      'ステータス: ' + status + '\n\n' +
+      '※入金を確認したら、スプレッドシートのstatus列を paid に変更してください。',
     name: SENDER_NAME
   });
 }

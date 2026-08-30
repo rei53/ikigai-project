@@ -39,6 +39,8 @@ function handleBookingSubmission_(payload) {
   const sheet = getSheet_();
 
   return withBookingLock_(function () {
+    // PayPay（QRコード）・ゆうちょ振込のどちらも、入金確認は主催者が手作業で行う。
+    // ここでは申し込みを受け付けて、お支払い方法の案内メールを送るところまで。
     const status = paymentMethod === 'paypay' ? 'pending_payment' : 'pending_bank_transfer';
 
     sheet.appendRow([
@@ -52,28 +54,43 @@ function handleBookingSubmission_(payload) {
       ''
     ]);
 
-    if (paymentMethod === 'bank_transfer') {
-      sendBankTransferInstructions_(email, name, courseName, amount, addVideo);
-      sendOwnerNotification_(name, courseName, amount, 'bank_transfer', 'pending_bank_transfer');
-      return { ok: true, method: 'bank_transfer', amount: amount, bankInfo: BANK_TRANSFER_INFO };
-    }
+    sendPaymentInstructions_(email, name, courseName, amount, paymentMethod, addVideo);
+    sendOwnerNotification_(name, courseName, amount, paymentMethod, status);
 
-    try {
-      const code = createPayPayCode_(bookingId, amount, courseName);
-      return { ok: true, method: 'paypay', checkoutUrl: code.url, bookingId: bookingId };
-    } catch (err) {
-      updateRowStatus_(sheet, bookingId, 'failed', String(err));
-      sendErrorAlert_('PayPay決済コード作成 (bookingId=' + bookingId + ')', err);
-      return { ok: false, error: '決済の準備に失敗しました。時間をおいて再度お試しください。' };
-    }
+    return { ok: true, method: paymentMethod, amount: amount, bookingId: bookingId };
   });
 }
 
-function updateRowStatus_(sheet, bookingId, status, lastError) {
-  const row = findRowByBookingId_(sheet, bookingId);
-  if (row === -1) return;
-  sheet.getRange(row, COL.STATUS).setValue(status);
-  if (lastError !== undefined) {
-    sheet.getRange(row, COL.LAST_ERROR).setValue(lastError);
-  }
+/**
+ * 入金確認後の「予約確定メール」を自動送信する（時限トリガーで定期実行）
+ *
+ * 運用：LINEに届いたスクリーンショットで入金を確認したら、
+ * スプレッドシートのstatus列を手作業で「paid」に変更するだけ。
+ * あとはこの関数が確定メールを送り、paidAt列に日時を記録します。
+ * paidAtが空の行だけを対象にするので、二重送信は起きません。
+ */
+function sendConfirmationsForNewlyPaid() {
+  const sheet = getSheet_();
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return;
+
+  const data = sheet.getRange(2, 1, lastRow - 1, COL.REMINDER_SENT).getValues();
+
+  data.forEach(function (row, i) {
+    const rowNum = i + 2;
+    if (row[COL.STATUS - 1] !== 'paid') return;
+    if (row[COL.PAID_AT - 1]) return; // 送信済み
+
+    const email = row[COL.EMAIL - 1];
+    const name = row[COL.NAME - 1];
+    const courseName = row[COL.COURSE_NAME - 1];
+    const addVideo = row[COL.ADD_VIDEO - 1] === 'yes';
+
+    try {
+      sendCustomerConfirmation_(email, name, courseName, addVideo);
+      sheet.getRange(rowNum, COL.PAID_AT).setValue(new Date());
+    } catch (err) {
+      sendErrorAlert_('sendConfirmationsForNewlyPaid (row=' + rowNum + ')', err);
+    }
+  });
 }
