@@ -22,7 +22,8 @@ const SITE_BOOKING_URL = 'https://ikigai-prj.com/booking.html';
 
 // 銀行振込の案内文（実際の振込先に書き換えてください）
 const BANK_TRANSFER_INFO = `
-◯◯銀行 ◯◯支店 普通 1234567
+ゆうちょ銀行
+記号：◯◯◯◯◯　番号：◯◯◯◯◯◯◯
 口座名義：ヨダ ヨガ（ヨダヨガ）
 ※恐れ入りますが振込手数料はご負担ください
 `.trim();
@@ -45,7 +46,7 @@ const COURSE_NAMES = {
   'tera-yoga-saihoji-0905': '寺ヨガ（西方寺・大人の寺子屋）2026年9月5日'
 };
 
-// 講座ID → 開催日（YYYY-MM-DD）。前日リマインダーの日付照合に使う。
+// 講座ID → 開催日（YYYY-MM-DD）。2日前リマインダーの日付照合に使う。
 // data/courses.js の nextDate と合わせてください。
 const COURSE_DATES = {
   'tera-yoga-hosenji-0719': '2026-07-19',

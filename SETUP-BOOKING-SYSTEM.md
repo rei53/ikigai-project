@@ -96,13 +96,13 @@ const SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL';
 
 （このシステムはWebhookの中身を信用せず、届いたら必ずPayPayに直接問い合わせて確認する設計になっているため、Webhookが多少遅れたり届かなくても、30分ごとの自動チェックでフォローされます。）
 
-## 7. 時限トリガーを設定する（放置決済の自動チェック・前日リマインダー）
+## 7. 時限トリガーを設定する（放置決済の自動チェック・2日前リマインダー）
 
 1. Apps Scriptエディタ上部の関数選択で `setupTriggers` を選び、▷実行ボタンを押す
 2. 初回は権限確認が出るので手順4と同様に許可する
 3. これで、以下が自動化されます
    - 支払いが30分以上「保留中」のままの予約を自動的に再チェック（`sweepPendingPayments`）
-   - 開催日の前日、朝9時に確定済み（`paid` または `pending_bank_transfer`）の予約者へリマインドメールを自動送信（`sendDayBeforeReminders`）。一度送った予約には `reminderSent` に `sent` と記録され、二重送信はされません
+   - 開催日の2日前、朝9時に確定済み（`paid` または `pending_bank_transfer`）の予約者へリマインドメールを自動送信（`sendTwoDaysBeforeReminders`）。一度送った予約には `reminderSent` に `sent` と記録され、二重送信はされません
    - （Instagram連携を設定した場合）6時間ごとに最新投稿を取得してキャッシュを更新（`refreshInstagramCache`）、毎日アクセストークンの延長を試みる（`refreshInstagramToken`）
 
 ## 8. Sandboxでテストする
@@ -113,7 +113,7 @@ const SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL';
 4. サイトに戻り、「決済を確認しています…」→最終的に「お申し込み・決済が完了しました」の表示になることを確認する
 5. Google Sheetの該当行の `status` が `paid` になっていること、`paidAt` に時刻が入っていること、動画を選んだ場合は `addVideo` に `yes` が入っていることを確認する
 6. 主催者宛て（yodayoga2525@gmail.com）とお客様宛てのメールが届いていること、動画を選んだ場合はメール本文に視聴案内が入っていることを確認する
-7. リマインダーをテストしたい場合は、Google Sheet上でテスト行の `courseId` に対応する日付（`Config.gs` の `COURSE_DATES`）を明日の日付に一時的に変更し、Apps Scriptエディタで `sendDayBeforeReminders` を手動実行してメールが届くか確認する（テスト後は値を元に戻してください）
+7. リマインダーをテストしたい場合は、Google Sheet上でテスト行の `courseId` に対応する日付（`Config.gs` の `COURSE_DATES`）を2日後の日付に一時的に変更し、Apps Scriptエディタで `sendTwoDaysBeforeReminders` を手動実行してメールが届くか確認する（テスト後は値を元に戻してください）
 8. 支払い方法を「銀行振込」にして同様に送信し、その場で振込案内が表示されること、Sheetに `pending_bank_transfer` として記録され、案内メールが届くことを確認する
 
 エラーが出た場合は、Apps Scriptエディタの「実行数」（左側の時計アイコン）からログを確認できます。エラー内容を教えていただければ一緒に調査します。

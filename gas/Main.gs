@@ -46,14 +46,14 @@ function doGet(e) {
   }
 }
 
-// 初回に一度だけ実行する設定用関数：時限トリガー（放置決済の掃除・前日リマインダー）を設定する
+// 初回に一度だけ実行する設定用関数：時限トリガー（放置決済の掃除・2日前リマインダー）を設定する
 function setupTriggers() {
   ScriptApp.getProjectTriggers().forEach(function (t) { ScriptApp.deleteTrigger(t); });
   ScriptApp.newTrigger('sweepPendingPayments')
     .timeBased()
     .everyMinutes(30)
     .create();
-  ScriptApp.newTrigger('sendDayBeforeReminders')
+  ScriptApp.newTrigger('sendTwoDaysBeforeReminders')
     .timeBased()
     .everyDays(1)
     .atHour(9)

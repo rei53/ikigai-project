@@ -47,9 +47,9 @@ function sendReminderEmail_(email, name, courseName, dateText) {
   if (!email) return;
   MailApp.sendEmail({
     to: email,
-    subject: '【' + SENDER_NAME + '】明日は「' + courseName + '」です',
+    subject: '【' + SENDER_NAME + '】まもなく「' + courseName + '」です',
     body: name + ' 様\n\n' +
-      '明日、' + dateText + 'はいよいよ「' + courseName + '」の開催日です。\n' +
+      dateText + 'はいよいよ「' + courseName + '」の開催日です。\n' +
       'お気をつけてお越しください。\n\n' +
       'ご不明な点がございましたら、このメールにご返信ください。\n\n' +
       SENDER_NAME + '\n' + REPLY_TO,
