@@ -127,6 +127,14 @@
   }
   .payment-option input { margin: 0; }
   .payment-option:has(input:checked) { border-color: var(--sage-dark); background: var(--warm); }
+  .payment-reference { margin-top: 4px; }
+  .payment-reference img {
+    display: block; max-width: 220px; width: 100%; border-radius: 12px;
+    box-shadow: var(--shadow-sm); border: 1px solid var(--line);
+  }
+  .payment-reference p {
+    font-size: 0.78rem; color: var(--muted); margin-top: 6px;
+  }
   .video-addon-option {
     display: flex; align-items: flex-start; gap: 10px; border: 1px solid var(--line); border-radius: 12px;
     padding: 14px 16px; cursor: pointer; background: var(--cream); font-size: 0.88rem;
@@ -334,6 +342,10 @@
             <div class="payment-options">
               <label class="payment-option"><input type="radio" name="paymentMethod" value="paypay" required> PayPay（オンライン決済）</label>
               <label class="payment-option"><input type="radio" name="paymentMethod" value="bank_transfer" required> 銀行振込</label>
+            </div>
+            <div class="payment-reference">
+              <img src="images/payment-methods.png" alt="お支払い方法（ゆうちょ振込・PayPay）のご案内">
+              <p>※PayPayはこのままお申し込みいただくとオンライン決済画面に進みます。ゆうちょ振込の場合は、お振込み後にお申し込み確認メールへ「振り込み完了」とご返信ください。</p>
             </div>
           </div>
           <div class="order-total"><span>お支払い合計</span><span id="orderTotal">¥${c.amount.toLocaleString()}</span></div>
