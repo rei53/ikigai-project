@@ -2,10 +2,13 @@
  * メール送信
  */
 
+// 参加者特典の動画は、入金確認後に公式LINEから個別にURLと注意事項をお送りする運用。
+// そのためメールにはURLを載せず、LINEでご案内する旨だけを伝える。
 function videoGuidanceBlock_(addVideo) {
   if (!addVideo) return '';
   return '\n【参加者特典：' + SELF_CARE_VIDEO_NAME + '】\n' +
-    'こちらから視聴いただけます。\n' + SELF_CARE_VIDEO_URL + '\n';
+    '視聴URLと注意事項は、ご入金の確認後に公式LINEよりお送りします。\n' +
+    '公式LINEのご登録がまだの場合は、こちらからご登録をお願いします。\n' + LINE_URL + '\n';
 }
 
 function sendCustomerConfirmation_(email, name, courseName, addVideo) {

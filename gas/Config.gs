@@ -69,8 +69,8 @@ const COURSE_DATES = {
 const SELF_CARE_VIDEO_ELIGIBLE_COURSES = ['tera-yoga-hosenji-0719', 'tera-yoga-hosenji-0823', 'tera-yoga-hosenji-0913'];
 const SELF_CARE_VIDEO_PRICE = 1000;
 const SELF_CARE_VIDEO_NAME = 'セルフケア動画';
-// 動画の視聴案内（URLが決まったら書き換えてください）
-const SELF_CARE_VIDEO_URL = 'YOUR_SELF_CARE_VIDEO_URL';
+// 動画の視聴URLはメールには載せず、入金確認後に公式LINEから個別にお送りする運用のため、
+// ここでURLを設定する必要はありません。
 
 const SHEET_NAME = 'Bookings';
 
