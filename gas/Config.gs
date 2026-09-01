@@ -15,11 +15,18 @@ const OWNER_EMAIL = 'yodayoga2525@gmail.com';
 // お支払い用の公式LINE（お支払い後のスクリーンショット送付先）
 const LINE_URL = 'https://lin.ee/61XYyrz';
 
-// PayPayの案内文（QRコードは申し込みページに掲載）
+// このサイトの予約ページURL（メールでご案内するときのリンク先）
+const SITE_BOOKING_URL = 'https://ikigai-prj.com/booking.html';
+
+// PayPayの案内文
 const PAYPAY_INFO = `
-PayPayアプリでQRコードを読み取り、金額をご入力のうえお支払いください。
-QRコードは申し込みページに掲載しています。
+PayPayアプリで下のQRコードを読み取り、金額をご入力のうえお支払いください。
 `.trim();
+
+// 案内メールに添付するPayPayのQRコード画像。
+// サイトと同じ画像をGitHubから直接取得する（独自ドメイン側の証明書状態に左右されないURL）。
+// 画像を差し替えたときは images/payment-paypay.png を置き換えるだけでよい。
+const PAYPAY_QR_IMAGE_URL = 'https://raw.githubusercontent.com/rei53/ikigai-project/main/images/payment-paypay.png';
 
 // 銀行振込の案内文
 const BANK_TRANSFER_INFO = `

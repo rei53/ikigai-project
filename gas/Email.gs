@@ -24,31 +24,86 @@ function sendCustomerConfirmation_(email, name, courseName, addVideo) {
   });
 }
 
+function htmlEscape_(text) {
+  return String(text)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+// 改行をHTMLの<br>に変換する（メール本文のテキスト版とHTML版で同じ文面を使い回すため）
+function nl2br_(text) {
+  return htmlEscape_(text).replace(/\n/g, '<br>');
+}
+
 // お支払い方法（PayPayのQR／ゆうちょ振込）に応じた案内メール。
 // どちらも入金確認は手動のため、お支払い後にLINEへスクリーンショットを送っていただく。
+// PayPayの場合は、サイトに載せているものと同じQRコード画像をメール本文に埋め込む。
 function sendPaymentInstructions_(email, name, courseName, amount, paymentMethod, addVideo) {
   if (!email) return;
-  const payBlock = paymentMethod === 'paypay'
-    ? '【お支払い方法：PayPay】\n' + PAYPAY_INFO
+  const isPayPay = paymentMethod === 'paypay';
+
+  const payBlockText = isPayPay
+    ? '【お支払い方法：PayPay】\n' + PAYPAY_INFO + '\n※QRコードはこのメールに添付しています。'
     : '【お支払い方法：ゆうちょ振込】\n' + BANK_TRANSFER_INFO;
 
-  MailApp.sendEmail({
+  const textBody = name + ' 様\n\n' +
+    '「' + courseName + '」にお申し込みいただき、ありがとうございます。\n' +
+    '下記のとおりお支払いをお願いいたします。\n\n' +
+    '【お支払い金額】' + amount + '円\n\n' +
+    payBlockText + '\n\n' +
+    'お支払い後、公式LINEにお名前を添えて、お支払い画面のスクリーンショットをお送りください。\n' +
+    LINE_URL + '\n\n' +
+    'ご入金の確認をもちまして予約確定となります。\n' +
+    videoGuidanceBlock_(addVideo) + '\n' +
+    'ご不明な点がございましたら、このメールにご返信ください。\n\n' +
+    SENDER_NAME + '\n' + REPLY_TO;
+
+  // QRコード画像を取得する。取得できなかった場合でも案内メール自体は必ず送る。
+  let qrBlob = null;
+  if (isPayPay) {
+    try {
+      qrBlob = UrlFetchApp.fetch(PAYPAY_QR_IMAGE_URL).getBlob().setName('paypay-qr.png');
+    } catch (err) {
+      sendErrorAlert_('PayPay QRコード画像の取得', err);
+    }
+  }
+
+  const payBlockHtml = isPayPay
+    ? '<p><strong>【お支払い方法：PayPay】</strong><br>' + nl2br_(PAYPAY_INFO) + '</p>' +
+      (qrBlob
+        ? '<p><img src="cid:paypayQr" alt="PayPayのお支払い用QRコード" style="max-width:240px; width:100%; border:1px solid #ddd; border-radius:8px;"></p>'
+        : '<p>QRコードは<a href="' + SITE_BOOKING_URL + '">お申し込みページ</a>に掲載しています。</p>')
+    : '<p><strong>【お支払い方法：ゆうちょ振込】</strong><br>' + nl2br_(BANK_TRANSFER_INFO) + '</p>';
+
+  const htmlBody =
+    '<div style="font-family:sans-serif; font-size:14px; line-height:1.8; color:#333;">' +
+    '<p>' + htmlEscape_(name) + ' 様</p>' +
+    '<p>「' + htmlEscape_(courseName) + '」にお申し込みいただき、ありがとうございます。<br>' +
+    '下記のとおりお支払いをお願いいたします。</p>' +
+    '<p><strong>【お支払い金額】' + amount + '円</strong></p>' +
+    payBlockHtml +
+    '<p>お支払い後、公式LINEにお名前を添えて、お支払い画面のスクリーンショットをお送りください。<br>' +
+    '<a href="' + LINE_URL + '">' + LINE_URL + '</a></p>' +
+    '<p>ご入金の確認をもちまして予約確定となります。</p>' +
+    nl2br_(videoGuidanceBlock_(addVideo)) +
+    '<p>ご不明な点がございましたら、このメールにご返信ください。</p>' +
+    '<p>' + htmlEscape_(SENDER_NAME) + '<br>' + htmlEscape_(REPLY_TO) + '</p>' +
+    '</div>';
+
+  const options = {
     to: email,
     subject: '【' + SENDER_NAME + '】' + courseName + ' お申し込みありがとうございます',
-    body: name + ' 様\n\n' +
-      '「' + courseName + '」にお申し込みいただき、ありがとうございます。\n' +
-      '下記のとおりお支払いをお願いいたします。\n\n' +
-      '【お支払い金額】' + amount + '円\n\n' +
-      payBlock + '\n\n' +
-      'お支払い後、公式LINEにお名前を添えて、お支払い画面のスクリーンショットをお送りください。\n' +
-      LINE_URL + '\n\n' +
-      'ご入金の確認をもちまして予約確定となります。\n' +
-      videoGuidanceBlock_(addVideo) + '\n' +
-      'ご不明な点がございましたら、このメールにご返信ください。\n\n' +
-      SENDER_NAME + '\n' + REPLY_TO,
+    body: textBody,
+    htmlBody: htmlBody,
     replyTo: REPLY_TO,
     name: SENDER_NAME
-  });
+  };
+  if (qrBlob) {
+    options.inlineImages = { paypayQr: qrBlob };
+  }
+
+  MailApp.sendEmail(options);
 }
 
 function sendReminderEmail_(email, name, courseName, dateText) {
