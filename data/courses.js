@@ -201,8 +201,44 @@ const COURSES = [
   }
 ];
 
-// 日付が近い順に並び替え
-COURSES.sort((a, b) => new Date(a.nextDate) - new Date(b.nextDate));
+// セルフケア動画の単独お申し込み。
+// standalone: true は日付を持たない商品の目印。スケジュール表と募集中カードからは外し、
+// トップページの専用セクションと予約ページからのみ申し込めるようにしている。
+// priceTiers の金額は表示用で、決済に使う金額の正は Apps Script側の SELF_CARE_VIDEO_TIERS。
+COURSES.push({
+  id: 'self-care-video',
+  category: 'self-care-video',
+  target: '個人向け',
+  bookingType: 'internal',
+  standalone: true,
+  timeOfDay: null,
+  name: 'セルフケア動画',
+  venue: 'オンライン（動画視聴）',
+  scheduleText: 'いつでもお申し込みいただけます',
+  nextDate: null,
+  nextDateText: 'いつでもお申し込みいただけます',
+  time: '視聴期間 4週間',
+  capacity: '定員なし',
+  price: '1,000円〜2,500円（受講状況により異なります）',
+  priceTiers: [
+    { id: 'tera', label: '寺ヨガ（法泉寺・西方寺）を受講中の方', amount: 1000, note: '参加者特典価格' },
+    { id: 'other', label: 'その他のレッスンを受講中の方', amount: 1500 },
+    { id: 'none', label: 'レッスンを受講していない方', amount: 2500 }
+  ],
+  image: 'images/mindfulness-yoga.jpg',
+  catch: 'ご自宅で、いつでも整える',
+  description: 'レッスンで行っているセルフケアを、ご自宅でも続けていただけるようまとめた動画です。\n短い時間でも、日々の習慣にすることで身体は変わっていきます。\n\n視聴期間は4週間です。終了日はお申し込み時期にかかわらず全員共通ですので、お早めにご視聴ください。\n視聴URLと注意事項は、ご入金の確認後に公式LINEよりお送りします。',
+  items: ['セルフケア動画（視聴期間4週間）'],
+  belongings: ['ヨガマット または バスタオル（お持ちの方）'],
+  status: 'open'
+});
+
+// 日付が近い順に並び替え（日付を持たない単独申し込みは末尾へ）
+COURSES.sort((a, b) => {
+  if (!a.nextDate) return 1;
+  if (!b.nextDate) return -1;
+  return new Date(a.nextDate) - new Date(b.nextDate);
+});
 
 // oneOff（単発開催）の講座は、開催日を過ぎたら自動的にスケジュールから外す
 // （毎週／隔週などの継続講座は nextDate が「次回の目安日」でしかないため対象外）

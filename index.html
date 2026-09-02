@@ -556,6 +556,38 @@
   .schedule-subhead { font-size: 1.1rem; font-weight: 800; margin: 0 0 22px; color: var(--sage-dark); }
   .schedule-note { font-size: 0.78rem; color: var(--muted); margin-bottom: 30px; }
 
+  /* 日付を持たない単独申し込み（セルフケア動画）の紹介枠 */
+  .standalone-card {
+    display: grid; grid-template-columns: 260px 1fr; gap: 0;
+    background: var(--white); border-radius: 16px; overflow: hidden;
+    box-shadow: var(--shadow-md); border: 1px solid var(--line);
+  }
+  .standalone-img { overflow: hidden; }
+  .standalone-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .standalone-body { padding: 28px 30px; }
+  .standalone-body h4 { font-family: 'Noto Serif JP', serif; font-size: 1.15rem; color: var(--sage-dark); margin-bottom: 6px; }
+  .standalone-catch { font-size: 0.92rem; color: var(--gold); font-weight: 700; margin-bottom: 10px; }
+  .standalone-desc { font-size: 0.9rem; color: var(--muted); margin-bottom: 18px; }
+  .standalone-tiers { list-style: none; margin: 0 0 16px; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  .standalone-tiers li {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+    padding: 10px 14px; background: var(--cream); border-radius: 8px; font-size: 0.88rem;
+  }
+  .tier-label { color: var(--ink); }
+  .tier-amount { font-weight: 700; color: var(--sage-dark); white-space: nowrap; }
+  .tier-note {
+    display: block; font-size: 0.7rem; font-weight: 400; color: var(--gold);
+    text-align: right; margin-top: 2px;
+  }
+  .standalone-note { font-size: 0.78rem; color: var(--muted); margin-bottom: 18px; }
+  @media (max-width: 720px) {
+    .standalone-card { grid-template-columns: 1fr; }
+    .standalone-img { aspect-ratio: 16/9; }
+    .standalone-body { padding: 24px 22px; }
+    .standalone-tiers li { flex-direction: column; gap: 2px; }
+    .tier-note { text-align: left; }
+  }
+
   .open-course-grid {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; margin-bottom: 60px;
   }
@@ -1103,6 +1135,8 @@
       </table>
     </div>
     <p class="schedule-note">※日程は変更になる場合があります。最新の情報は各講座の詳細ページでご確認ください。</p>
+
+    <div id="standaloneSection"></div>
   </div>
 </section>
 
@@ -1241,7 +1275,8 @@
   const timeOfDayBadge = { morning: '🌅 朝ヨガ', evening: '🌙 夜ヨガ' };
 
   const openGrid = document.getElementById('openCourseGrid');
-  const openCourses = COURSES.filter(c => c.target === '個人向け' && c.status !== 'closed');
+  // standalone（日付を持たない単独申し込み）は専用セクションで扱うため、ここでは除く
+  const openCourses = COURSES.filter(c => c.target === '個人向け' && c.status !== 'closed' && !c.standalone);
   openGrid.innerHTML = openCourses.map(c => `
     <div class="open-course-card">
       <div class="open-course-img"><img src="${c.image}" alt="${c.name}" loading="lazy"></div>
@@ -1261,7 +1296,7 @@
   `).join('');
 
   const scheduleBody = document.getElementById('scheduleTableBody');
-  scheduleBody.innerHTML = COURSES.map(c => `
+  scheduleBody.innerHTML = COURSES.filter(c => !c.standalone).map(c => `
     <tr>
       <td>${c.name}${c.timeOfDay ? `<br><span class="time-of-day-badge">${timeOfDayBadge[c.timeOfDay]}</span>` : ''}</td>
       <td>${c.venue}</td>
@@ -1272,6 +1307,35 @@
       </a></td>
     </tr>
   `).join('');
+
+  // 日付を持たない単独申し込み（セルフケア動画）は、日程一覧になじまないため専用の枠で紹介する
+  const standaloneSection = document.getElementById('standaloneSection');
+  const standaloneCourses = COURSES.filter(c => c.standalone && c.status !== 'closed');
+  if (standaloneSection && standaloneCourses.length) {
+    standaloneSection.innerHTML = `
+      <h3 class="schedule-subhead">いつでもお申し込みいただけます</h3>
+      ${standaloneCourses.map(c => `
+        <div class="standalone-card reveal">
+          <div class="standalone-img"><img src="${c.image}" alt="${c.name}" loading="lazy"></div>
+          <div class="standalone-body">
+            <h4>${c.name}</h4>
+            <p class="standalone-catch">${c.catch}</p>
+            <p class="standalone-desc">${c.description.split('\n')[0]}</p>
+            <ul class="standalone-tiers">
+              ${c.priceTiers.map(t => `
+                <li>
+                  <span class="tier-label">${t.label}</span>
+                  <span class="tier-amount">${t.amount.toLocaleString()}円${t.note ? `<span class="tier-note">${t.note}</span>` : ''}</span>
+                </li>
+              `).join('')}
+            </ul>
+            <p class="standalone-note">視聴期間は4週間です。終了日はお申し込み時期にかかわらず全員共通です。</p>
+            <a class="btn-sm" href="booking.html?course=${c.id}">申し込む →</a>
+          </div>
+        </div>
+      `).join('')}
+    `;
+  }
 
   const navToggle = document.getElementById('navToggle');
   const navLinks = document.getElementById('navLinks');

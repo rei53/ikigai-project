@@ -69,6 +69,16 @@ const COURSE_DATES = {
 const SELF_CARE_VIDEO_ELIGIBLE_COURSES = ['tera-yoga-hosenji-0719', 'tera-yoga-hosenji-0823', 'tera-yoga-hosenji-0913', 'tera-yoga-saihoji-0905'];
 const SELF_CARE_VIDEO_PRICE = 1000;
 const SELF_CARE_VIDEO_NAME = 'セルフケア動画';
+
+// セルフケア動画の単独お申し込み。
+// ご受講状況によって金額が変わるため、COURSE_PRICES ではなくこちらを使う。
+// ここが決済に使う「本当の金額」です。data/courses.js の priceTiers は表示用にすぎません。
+const SELF_CARE_VIDEO_COURSE_ID = 'self-care-video';
+const SELF_CARE_VIDEO_TIERS = {
+  'tera':  { amount: 1000, label: '寺ヨガ受講中' },
+  'other': { amount: 1500, label: '他レッスン受講中' },
+  'none':  { amount: 2500, label: 'レッスン受講なし' }
+};
 // 動画の視聴URLはメールには載せず、入金確認後に公式LINEから個別にお送りする運用のため、
 // ここでURLを設定する必要はありません。
 

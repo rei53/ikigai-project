@@ -150,6 +150,19 @@
     padding: 14px 16px; cursor: pointer; background: var(--cream); font-size: 0.88rem;
   }
   .video-addon-option:has(input:checked) { border-color: var(--gold); background: var(--gold-light); }
+
+  /* 受講状況で金額が変わる講座（セルフケア動画）の選択肢 */
+  .tier-options { display: flex; flex-direction: column; gap: 8px; }
+  .tier-option {
+    display: flex; align-items: flex-start; gap: 10px; cursor: pointer;
+    border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px;
+    background: var(--cream); font-size: 0.9rem;
+  }
+  .tier-option input { margin: 3px 0 0; flex-shrink: 0; }
+  .tier-option:has(input:checked) { border-color: var(--sage-dark); background: var(--warm); }
+  .tier-option-label { display: block; }
+  .tier-option-amount { display: block; font-weight: 700; color: var(--sage-dark); margin-top: 2px; }
+  .tier-hint { font-size: 0.78rem; color: var(--muted); margin-top: 8px; }
   .video-addon-option input { margin: 3px 0 0; flex: none; }
   .video-addon-option .addon-title { font-weight: 700; color: var(--sage-dark); display: block; margin-bottom: 3px; }
   .video-addon-option .addon-desc { color: var(--muted); font-size: 0.84rem; }
@@ -330,7 +343,23 @@
           <div class="form-row"><label>フリガナ</label><input type="text" name="kana"></div>
           <div class="form-row"><label>メールアドレス *</label><input type="email" name="email" required></div>
           <div class="form-row"><label>電話番号</label><input type="tel" name="phone"></div>
-          <div class="form-row"><label>参加人数</label><input type="number" name="people" min="1" value="1"></div>
+          ${c.priceTiers ? '' : `<div class="form-row"><label>参加人数</label><input type="number" name="people" min="1" value="1"></div>`}
+          ${c.priceTiers ? `
+          <div class="form-row">
+            <label>ご受講状況 *</label>
+            <div class="tier-options">
+              ${c.priceTiers.map((t, i) => `
+                <label class="tier-option">
+                  <input type="radio" name="priceTier" value="${t.id}" data-amount="${t.amount}"${i === 0 ? ' checked' : ''} required>
+                  <span>
+                    <span class="tier-option-label">${t.label}</span>
+                    <span class="tier-option-amount">${t.amount.toLocaleString()}円${t.note ? `（${t.note}）` : ''}</span>
+                  </span>
+                </label>
+              `).join('')}
+            </div>
+            <p class="tier-hint">お申し込み後、ご入金の確認とあわせて受講状況を確認させていただきます。</p>
+          </div>` : ''}
           <div class="form-row"><label>ご要望・ご質問</label><textarea name="message" rows="3"></textarea></div>
           ${c.videoAddonPrice ? `
           <div class="form-row">
@@ -363,7 +392,7 @@
               </div>
             </div>
           </div>
-          <div class="order-total"><span>お支払い合計</span><span id="orderTotal">¥${c.amount.toLocaleString()}</span></div>
+          <div class="order-total"><span>お支払い合計</span><span id="orderTotal">¥${(c.priceTiers ? c.priceTiers[0].amount : c.amount).toLocaleString()}</span></div>
           <div class="form-error" id="form-error" style="display:none;"></div>
           <button type="submit" class="submit-btn" id="submit-btn">お申し込みを確定する</button>
         </form>
@@ -387,6 +416,14 @@
       });
     }
 
+    // 受講状況で金額が変わる講座（セルフケア動画）は、選択に応じて合計を出し直す
+    document.querySelectorAll('input[name="priceTier"]').forEach(function (radio) {
+      radio.addEventListener('change', function () {
+        document.getElementById('orderTotal').textContent =
+          '¥' + Number(radio.dataset.amount).toLocaleString();
+      });
+    });
+
     document.getElementById('booking-form').addEventListener('submit', function (ev) {
       ev.preventDefault();
       const form = ev.target;
@@ -395,20 +432,28 @@
       errorBox.style.display = 'none';
 
       const paymentMethodInput = form.querySelector('input[name="paymentMethod"]:checked');
+      const priceTierInput = form.querySelector('input[name="priceTier"]:checked');
       const payload = {
         name: form.name.value.trim(),
         kana: form.kana.value.trim(),
         email: form.email.value.trim(),
         phone: form.phone.value.trim(),
-        people: form.people.value,
+        people: form.people ? form.people.value : '1',
         message: form.message.value.trim(),
         paymentMethod: paymentMethodInput ? paymentMethodInput.value : '',
         addVideo: !!(form.addVideo && form.addVideo.checked),
+        priceTier: priceTierInput ? priceTierInput.value : '',
         courseId: c.id
       };
 
       if (!payload.name || !payload.email || !payload.paymentMethod) {
         errorBox.textContent = 'お名前・メールアドレス・お支払い方法は必須です。';
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      if (c.priceTiers && !payload.priceTier) {
+        errorBox.textContent = 'ご受講状況を選択してください。';
         errorBox.style.display = 'block';
         return;
       }

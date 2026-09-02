@@ -11,8 +11,10 @@ function handleBookingSubmission_(payload) {
   const people = String(payload.people || '').trim();
   const message = String(payload.message || '').trim();
   const paymentMethod = String(payload.paymentMethod || '').trim();
+  const priceTier = String(payload.priceTier || '').trim();
   // 「セルフケア動画」を希望していても、対象外の講座からのリクエストなら無視する
   const addVideo = payload.addVideo === true && SELF_CARE_VIDEO_ELIGIBLE_COURSES.indexOf(courseId) !== -1;
+  const isVideoCourse = courseId === SELF_CARE_VIDEO_COURSE_ID;
 
   if (!name || !email || !courseId) {
     return { ok: false, error: 'お名前・メールアドレス・講座は必須です。' };
@@ -25,15 +27,33 @@ function handleBookingSubmission_(payload) {
   }
 
   // 金額と講座名はクライアントから送られた値を信用せず、サーバー側のマップから取得する
-  const baseAmount = COURSE_PRICES[courseId];
-  let courseName = COURSE_NAMES[courseId];
+  let baseAmount;
+  let courseName;
+
+  if (isVideoCourse) {
+    // セルフケア動画の単独申し込みは、選ばれた受講状況で金額が決まる
+    const tier = SELF_CARE_VIDEO_TIERS[priceTier];
+    if (!tier) {
+      return { ok: false, error: 'ご受講状況を選択してください。' };
+    }
+    baseAmount = tier.amount;
+    courseName = SELF_CARE_VIDEO_NAME + '（' + tier.label + '）';
+  } else {
+    baseAmount = COURSE_PRICES[courseId];
+    courseName = COURSE_NAMES[courseId];
+  }
+
   if (!baseAmount || !courseName) {
     return { ok: false, error: '講座が見つかりません。' };
   }
+
   const amount = addVideo ? baseAmount + SELF_CARE_VIDEO_PRICE : baseAmount;
   if (addVideo) {
     courseName += '＋' + SELF_CARE_VIDEO_NAME;
   }
+
+  // 動画の視聴案内は、特典として追加した場合と単独で申し込んだ場合の両方で必要
+  const showVideoGuidance = addVideo || isVideoCourse;
 
   const bookingId = Utilities.getUuid();
   const sheet = getSheet_();
@@ -50,11 +70,11 @@ function handleBookingSubmission_(payload) {
       courseId, courseName, people, message,
       paymentMethod, amount, status,
       '', '',
-      addVideo ? 'yes' : '',
+      showVideoGuidance ? 'yes' : '',
       ''
     ]);
 
-    sendPaymentInstructions_(email, name, courseName, amount, paymentMethod, addVideo);
+    sendPaymentInstructions_(email, name, courseName, amount, paymentMethod, showVideoGuidance);
     sendOwnerNotification_(name, courseName, amount, paymentMethod, status);
 
     return { ok: true, method: paymentMethod, amount: amount, bookingId: bookingId };
