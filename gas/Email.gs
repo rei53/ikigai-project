@@ -2,7 +2,7 @@
  * メール送信
  */
 
-// 参加者特典の動画は、入金確認後に公式LINEから個別にURLと注意事項をお送りする運用。
+// セルフケア動画は、入金確認後に公式LINEから個別にURLと注意事項をお送りする運用。
 // そのためメールにはURLを載せず、LINEでご案内する旨だけを伝える。
 // 入金前（案内メール）と入金後（確定メール）で時系列が変わるので、isConfirmedで文面を切り替える。
 function videoGuidanceBlock_(addVideo, isConfirmed) {
@@ -10,7 +10,7 @@ function videoGuidanceBlock_(addVideo, isConfirmed) {
   const timing = isConfirmed
     ? '視聴URLと注意事項は、このあと公式LINEよりお送りします。'
     : '視聴URLと注意事項は、ご入金の確認後に公式LINEよりお送りします。';
-  return '\n【参加者特典：' + SELF_CARE_VIDEO_NAME + '】\n' +
+  return '\n【' + SELF_CARE_VIDEO_NAME + '】\n' +
     timing + '\n' +
     '視聴期間は4週間ほどです。終了日はお申し込み時期にかかわらず全員共通ですので、お早めにご視聴ください。\n' +
     '公式LINEのご登録がまだの場合は、こちらからご登録のうえ、お申し込み時のお名前をお送りください。\n' + LINE_URL + '\n';
@@ -45,7 +45,8 @@ function nl2br_(text) {
 }
 
 // お支払い方法（PayPayのQR／ゆうちょ振込）に応じた案内メール。
-// どちらも入金確認は手動のため、お支払い後にLINEへスクリーンショットを送っていただく。
+// PayPayは入金の記録が手元に残らないため、お支払い画面のスクリーンショットをLINEへ
+// 送っていただく。ゆうちょ振込は口座の入金履歴で確認できるので、その依頼はしない。
 // PayPayの場合は、サイトに載せているものと同じQRコード画像をメール本文に埋め込む。
 function sendPaymentInstructions_(email, name, courseName, amount, paymentMethod, addVideo) {
   if (!email) return;
@@ -60,10 +61,12 @@ function sendPaymentInstructions_(email, name, courseName, amount, paymentMethod
     '下記のとおりお支払いをお願いいたします。\n\n' +
     '【お支払い金額】' + amount + '円\n\n' +
     payBlockText + '\n\n' +
-    'お支払い後、公式LINEへお支払い画面のスクリーンショットをお送りください。\n' +
-    'その際、お申し込み時のお名前も一緒にお送りください。\n' +
-    '初めて友だち追加された方は、LINEのお名前だけではどなたか分からないためです。\n' +
-    LINE_URL + '\n\n' +
+    (isPayPay
+      ? 'お支払い後、公式LINEへお支払い画面のスクリーンショットをお送りください。\n' +
+        'その際、お申し込み時のお名前も一緒にお送りください。\n' +
+        '初めて友だち追加された方は、LINEのお名前だけではどなたか分からないためです。\n' +
+        LINE_URL + '\n\n'
+      : '') +
     'ご入金の確認をもちまして予約確定となります。\n' +
     videoGuidanceBlock_(addVideo, false) + '\n' +
     'ご不明な点がございましたら、このメールにご返信ください。\n\n' +
@@ -93,10 +96,12 @@ function sendPaymentInstructions_(email, name, courseName, amount, paymentMethod
     '下記のとおりお支払いをお願いいたします。</p>' +
     '<p><strong>【お支払い金額】' + amount + '円</strong></p>' +
     payBlockHtml +
-    '<p>お支払い後、公式LINEへお支払い画面のスクリーンショットをお送りください。<br>' +
-    'その際、<strong>お申し込み時のお名前も一緒にお送りください。</strong><br>' +
-    '初めて友だち追加された方は、LINEのお名前だけではどなたか分からないためです。<br>' +
-    '<a href="' + LINE_URL + '">' + LINE_URL + '</a></p>' +
+    (isPayPay
+      ? '<p>お支払い後、公式LINEへお支払い画面のスクリーンショットをお送りください。<br>' +
+        'その際、<strong>お申し込み時のお名前も一緒にお送りください。</strong><br>' +
+        '初めて友だち追加された方は、LINEのお名前だけではどなたか分からないためです。<br>' +
+        '<a href="' + LINE_URL + '">' + LINE_URL + '</a></p>'
+      : '') +
     '<p>ご入金の確認をもちまして予約確定となります。</p>' +
     nl2br_(videoGuidanceBlock_(addVideo, false)) +
     '<p>ご不明な点がございましたら、このメールにご返信ください。</p>' +

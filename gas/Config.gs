@@ -64,7 +64,7 @@ const COURSE_DATES = {
   'tera-yoga-saihoji-0905': '2026-09-05'
 };
 
-// 参加者特典：セルフケア動画（次回申し込みと同時に追加できるオプション）
+// セルフケア動画（寺ヨガの申し込みと同時に追加できるオプション）
 // 対象講座IDのみ SELF_CARE_VIDEO_PRICE が加算される。data/courses.js の videoAddonPrice と合わせてください。
 const SELF_CARE_VIDEO_ELIGIBLE_COURSES = ['tera-yoga-hosenji-0719', 'tera-yoga-hosenji-0823', 'tera-yoga-hosenji-0913', 'tera-yoga-saihoji-0905'];
 const SELF_CARE_VIDEO_PRICE = 1000;

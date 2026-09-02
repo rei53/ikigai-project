@@ -221,7 +221,7 @@ COURSES.push({
   capacity: '定員なし',
   price: '1,000円〜2,500円（受講状況により異なります）',
   priceTiers: [
-    { id: 'tera', label: '寺ヨガ（法泉寺・西方寺）を受講中の方', amount: 1000, note: '参加者特典価格' },
+    { id: 'tera', label: '寺ヨガ（法泉寺・西方寺）を受講中の方', amount: 1000, note: '受講者価格' },
     { id: 'other', label: 'その他のレッスンを受講中の方', amount: 1500 },
     { id: 'none', label: 'レッスンを受講していない方', amount: 2500 }
   ],
