@@ -12,7 +12,7 @@ function videoGuidanceBlock_(addVideo, isConfirmed) {
     : '視聴URLと注意事項は、ご入金の確認後に公式LINEよりお送りします。';
   return '\n【参加者特典：' + SELF_CARE_VIDEO_NAME + '】\n' +
     timing + '\n' +
-    '公式LINEのご登録がまだの場合は、こちらからご登録をお願いします。\n' + LINE_URL + '\n';
+    '公式LINEのご登録がまだの場合は、こちらからご登録のうえ、お申し込み時のお名前をお送りください。\n' + LINE_URL + '\n';
 }
 
 function sendCustomerConfirmation_(email, name, courseName, addVideo) {
@@ -59,7 +59,9 @@ function sendPaymentInstructions_(email, name, courseName, amount, paymentMethod
     '下記のとおりお支払いをお願いいたします。\n\n' +
     '【お支払い金額】' + amount + '円\n\n' +
     payBlockText + '\n\n' +
-    'お支払い後、公式LINEにお名前を添えて、お支払い画面のスクリーンショットをお送りください。\n' +
+    'お支払い後、公式LINEへお支払い画面のスクリーンショットをお送りください。\n' +
+    'その際、お申し込み時のお名前も一緒にお送りください。\n' +
+    '初めて友だち追加された方は、LINEのお名前だけではどなたか分からないためです。\n' +
     LINE_URL + '\n\n' +
     'ご入金の確認をもちまして予約確定となります。\n' +
     videoGuidanceBlock_(addVideo, false) + '\n' +
@@ -90,7 +92,9 @@ function sendPaymentInstructions_(email, name, courseName, amount, paymentMethod
     '下記のとおりお支払いをお願いいたします。</p>' +
     '<p><strong>【お支払い金額】' + amount + '円</strong></p>' +
     payBlockHtml +
-    '<p>お支払い後、公式LINEにお名前を添えて、お支払い画面のスクリーンショットをお送りください。<br>' +
+    '<p>お支払い後、公式LINEへお支払い画面のスクリーンショットをお送りください。<br>' +
+    'その際、<strong>お申し込み時のお名前も一緒にお送りください。</strong><br>' +
+    '初めて友だち追加された方は、LINEのお名前だけではどなたか分からないためです。<br>' +
     '<a href="' + LINE_URL + '">' + LINE_URL + '</a></p>' +
     '<p>ご入金の確認をもちまして予約確定となります。</p>' +
     nl2br_(videoGuidanceBlock_(addVideo, false)) +
