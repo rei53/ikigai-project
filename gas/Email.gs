@@ -4,10 +4,14 @@
 
 // 参加者特典の動画は、入金確認後に公式LINEから個別にURLと注意事項をお送りする運用。
 // そのためメールにはURLを載せず、LINEでご案内する旨だけを伝える。
-function videoGuidanceBlock_(addVideo) {
+// 入金前（案内メール）と入金後（確定メール）で時系列が変わるので、isConfirmedで文面を切り替える。
+function videoGuidanceBlock_(addVideo, isConfirmed) {
   if (!addVideo) return '';
+  const timing = isConfirmed
+    ? '視聴URLと注意事項は、このあと公式LINEよりお送りします。'
+    : '視聴URLと注意事項は、ご入金の確認後に公式LINEよりお送りします。';
   return '\n【参加者特典：' + SELF_CARE_VIDEO_NAME + '】\n' +
-    '視聴URLと注意事項は、ご入金の確認後に公式LINEよりお送りします。\n' +
+    timing + '\n' +
     '公式LINEのご登録がまだの場合は、こちらからご登録をお願いします。\n' + LINE_URL + '\n';
 }
 
@@ -15,11 +19,11 @@ function sendCustomerConfirmation_(email, name, courseName, addVideo) {
   if (!email) return;
   MailApp.sendEmail({
     to: email,
-    subject: '【' + SENDER_NAME + '】' + courseName + ' お申し込み・決済が完了しました',
+    subject: '【' + SENDER_NAME + '】' + courseName + ' ご予約が確定しました',
     body: name + ' 様\n\n' +
-      '「' + courseName + '」のお申し込みと決済が完了しました。\n' +
-      '当日を楽しみにお待ちしております。\n' +
-      videoGuidanceBlock_(addVideo) + '\n' +
+      '「' + courseName + '」のご入金を確認しました。\n' +
+      'ご予約が確定しましたので、当日を楽しみにお待ちしております。\n' +
+      videoGuidanceBlock_(addVideo, true) + '\n' +
       'ご不明な点がございましたら、このメールにご返信ください。\n\n' +
       SENDER_NAME + '\n' + REPLY_TO,
     replyTo: REPLY_TO,
@@ -58,7 +62,7 @@ function sendPaymentInstructions_(email, name, courseName, amount, paymentMethod
     'お支払い後、公式LINEにお名前を添えて、お支払い画面のスクリーンショットをお送りください。\n' +
     LINE_URL + '\n\n' +
     'ご入金の確認をもちまして予約確定となります。\n' +
-    videoGuidanceBlock_(addVideo) + '\n' +
+    videoGuidanceBlock_(addVideo, false) + '\n' +
     'ご不明な点がございましたら、このメールにご返信ください。\n\n' +
     SENDER_NAME + '\n' + REPLY_TO;
 
@@ -89,7 +93,7 @@ function sendPaymentInstructions_(email, name, courseName, amount, paymentMethod
     '<p>お支払い後、公式LINEにお名前を添えて、お支払い画面のスクリーンショットをお送りください。<br>' +
     '<a href="' + LINE_URL + '">' + LINE_URL + '</a></p>' +
     '<p>ご入金の確認をもちまして予約確定となります。</p>' +
-    nl2br_(videoGuidanceBlock_(addVideo)) +
+    nl2br_(videoGuidanceBlock_(addVideo, false)) +
     '<p>ご不明な点がございましたら、このメールにご返信ください。</p>' +
     '<p>' + htmlEscape_(SENDER_NAME) + '<br>' + htmlEscape_(REPLY_TO) + '</p>' +
     '</div>';
