@@ -12,6 +12,7 @@ function videoGuidanceBlock_(addVideo, isConfirmed) {
     : '視聴URLと注意事項は、ご入金の確認後に公式LINEよりお送りします。';
   return '\n【参加者特典：' + SELF_CARE_VIDEO_NAME + '】\n' +
     timing + '\n' +
+    '視聴期間は4週間です。終了日はお申し込み時期にかかわらず全員共通ですので、お早めにご視聴ください。\n' +
     '公式LINEのご登録がまだの場合は、こちらからご登録のうえ、お申し込み時のお名前をお送りください。\n' + LINE_URL + '\n';
 }
 
