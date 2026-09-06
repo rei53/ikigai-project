@@ -44,7 +44,8 @@ const COURSE_PRICES = {
   'tera-yoga-hosenji-0719': 1500,
   'tera-yoga-hosenji-0823': 1500,
   'tera-yoga-hosenji-0913': 1500,
-  'tera-yoga-saihoji-0905': 2000
+  'tera-yoga-saihoji-0905': 2000,
+  'tera-yoga-saihoji-1107': 2000
 };
 
 // 講座ID → メール文面用の表示名（data/courses.jsのnameと合わせてください）
@@ -52,7 +53,8 @@ const COURSE_NAMES = {
   'tera-yoga-hosenji-0719': '寺ヨガ（法泉寺・大人の隠れ家）2026年7月19日',
   'tera-yoga-hosenji-0823': '寺ヨガ（法泉寺・大人の隠れ家）2026年8月23日',
   'tera-yoga-hosenji-0913': '寺ヨガ（法泉寺・大人の隠れ家）2026年9月13日',
-  'tera-yoga-saihoji-0905': '寺ヨガ（西方寺・大人の寺子屋）2026年9月5日'
+  'tera-yoga-saihoji-0905': '寺ヨガ（西方寺・大人の寺子屋）2026年9月5日',
+  'tera-yoga-saihoji-1107': '寺ヨガ（西方寺・大人の寺子屋）2026年11月7日'
 };
 
 // 講座ID → 開催日（YYYY-MM-DD）。2日前リマインダーの日付照合に使う。
@@ -61,12 +63,13 @@ const COURSE_DATES = {
   'tera-yoga-hosenji-0719': '2026-07-19',
   'tera-yoga-hosenji-0823': '2026-08-23',
   'tera-yoga-hosenji-0913': '2026-09-13',
-  'tera-yoga-saihoji-0905': '2026-09-05'
+  'tera-yoga-saihoji-0905': '2026-09-05',
+  'tera-yoga-saihoji-1107': '2026-11-07'
 };
 
 // セルフケア動画（寺ヨガの申し込みと同時に追加できるオプション）
 // 対象講座IDのみ SELF_CARE_VIDEO_PRICE が加算される。data/courses.js の videoAddonPrice と合わせてください。
-const SELF_CARE_VIDEO_ELIGIBLE_COURSES = ['tera-yoga-hosenji-0719', 'tera-yoga-hosenji-0823', 'tera-yoga-hosenji-0913', 'tera-yoga-saihoji-0905'];
+const SELF_CARE_VIDEO_ELIGIBLE_COURSES = ['tera-yoga-hosenji-0719', 'tera-yoga-hosenji-0823', 'tera-yoga-hosenji-0913', 'tera-yoga-saihoji-0905', 'tera-yoga-saihoji-1107'];
 const SELF_CARE_VIDEO_PRICE = 1000;
 const SELF_CARE_VIDEO_NAME = 'セルフケア動画';
 

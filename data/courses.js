@@ -31,33 +31,35 @@ const HOSENJI_TEMPLATE = {
   status: 'open'
 };
 
+// 西方寺「大人の寺子屋」の内容（複数日程で共通）。開催時刻は回によって変わるため、
+// 違う場合は日程の行で time を上書きする。
+const SAIHOJI_TEMPLATE = {
+  category: 'tera-yoga',
+  target: '個人向け',
+  bookingType: 'internal',
+  timeOfDay: null,
+  oneOff: true,
+  name: '寺ヨガ（西方寺・大人の寺子屋）',
+  venue: '西方寺 ご本堂',
+  scheduleText: 'お茶をいただくことからはじまる、心を整える90分',
+  time: '9:30〜11:00',
+  capacity: '定員10名',
+  price: '1回 2,000円',
+  amount: 2000,
+  videoAddonPrice: 1000,
+  image: 'images/saihoji-class.jpg',
+  catch: 'お茶をいただくことからはじまる、心を整える90分。',
+  description: '季節のお茶を一口いただき、心と身体をゆるやかに日常から離していきます。\n静かなご本堂で、マインドフルネス瞑想、季節の呼吸法、そして無理のないアーサナを通して、自分自身と丁寧に向き合う時間。\n学び、味わい、整える。そんな大人のための寺子屋です。',
+  items: ['季節のお茶', 'マインドフルネス瞑想', '季節の呼吸法', 'やさしいアーサナ（1〜2ポーズ）'],
+  belongings: ['特にありません', '着替え・ヨガマット不要', '普段着のまま、そのままお越しください'],
+  status: 'open'
+};
+
 const COURSES = [
   { ...HOSENJI_TEMPLATE, id: 'tera-yoga-hosenji-0823', nextDate: '2026-08-23', nextDateText: '2026年8月23日（日）' },
   { ...HOSENJI_TEMPLATE, id: 'tera-yoga-hosenji-0913', nextDate: '2026-09-13', nextDateText: '2026年9月13日（日）' },
-  {
-    id: 'tera-yoga-saihoji-0905',
-    category: 'tera-yoga',
-    target: '個人向け',
-    bookingType: 'internal',
-    timeOfDay: null,
-    oneOff: true,
-    name: '寺ヨガ（西方寺・大人の寺子屋）',
-    venue: '西方寺 ご本堂',
-    scheduleText: 'お茶をいただくことからはじまる、心を整える90分',
-    nextDate: '2026-09-05',
-    nextDateText: '2026年9月5日（土）',
-    time: '9:00〜10:30',
-    capacity: '定員10名',
-    price: '1回 2,000円',
-    amount: 2000,
-    videoAddonPrice: 1000,
-    image: 'images/saihoji-class.jpg',
-    catch: 'お茶をいただくことからはじまる、心を整える90分。',
-    description: '季節のお茶を一口いただき、心と身体をゆるやかに日常から離していきます。\n静かなご本堂で、マインドフルネス瞑想、季節の呼吸法、そして無理のないアーサナを通して、自分自身と丁寧に向き合う時間。\n学び、味わい、整える。そんな大人のための寺子屋です。',
-    items: ['季節のお茶', 'マインドフルネス瞑想', '季節の呼吸法', 'やさしいアーサナ（1〜2ポーズ）'],
-    belongings: ['特にありません', '着替え・ヨガマット不要', '普段着のまま、そのままお越しください'],
-    status: 'open'
-  },
+  { ...SAIHOJI_TEMPLATE, id: 'tera-yoga-saihoji-0905', nextDate: '2026-09-05', nextDateText: '2026年9月5日（土）', time: '9:00〜10:30' },
+  { ...SAIHOJI_TEMPLATE, id: 'tera-yoga-saihoji-1107', nextDate: '2026-11-07', nextDateText: '2026年11月7日（土）' },
   {
     id: 'kodomo-yoga-event-summer',
     category: 'kodomo-yoga',
