@@ -659,13 +659,35 @@
   }
   .contact .wrap { position: relative; }
   .contact .section-tag { color: var(--gold-light); justify-content: center; }
-  /* mailto: はパソコンでWebメールを使う方の環境では反応しないため、アドレスも併記する */
-  .contact-mail-fallback { margin-top: 18px; font-size: 0.82rem; color: rgba(255,255,255,0.75); line-height: 2; }
-  .contact-mail-address {
-    color: var(--white); font-weight: 700; letter-spacing: 0.02em;
-    text-decoration: underline; text-underline-offset: 4px; word-break: break-all;
+  /* mailto: はパソコンでWebメールを使う方の環境では開かないため、フォームで直接受け取る */
+  .contact-form {
+    max-width: 560px; margin: 30px auto 0; text-align: left;
+    display: flex; flex-direction: column; gap: 16px;
   }
-  .contact-mail-address:hover { color: var(--gold-light); }
+  .contact-row { display: flex; flex-direction: column; gap: 6px; }
+  .contact-row label { font-size: 0.84rem; font-weight: 700; color: var(--white); }
+  .contact-row .req {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em;
+    background: var(--gold-light); color: var(--sage-deep);
+    border-radius: 3px; padding: 1px 6px; margin-left: 6px; vertical-align: 1px;
+  }
+  .contact-row input, .contact-row select, .contact-row textarea {
+    font-family: inherit; font-size: 0.95rem; padding: 12px 14px;
+    border: 1px solid rgba(255,255,255,0.35); border-radius: 10px;
+    background: rgba(255,255,255,0.94); color: var(--ink); resize: vertical;
+  }
+  .contact-row input:focus, .contact-row select:focus, .contact-row textarea:focus {
+    outline: 2px solid var(--gold-light); border-color: transparent;
+  }
+  .contact-submit { margin-top: 4px; align-self: center; min-width: 200px; }
+  .contact-submit[disabled] { opacity: 0.6; cursor: default; }
+  .contact-error {
+    background: rgba(0,0,0,0.25); border-left: 3px solid var(--gold-light);
+    border-radius: 4px; padding: 10px 14px; font-size: 0.85rem; color: var(--white);
+  }
+  .contact-done { max-width: 560px; margin: 30px auto 0; font-size: 0.95rem; line-height: 2; }
+  .contact-done strong { display: block; font-size: 1.1rem; margin-bottom: 8px; }
+  .contact-alt { margin-top: 34px; font-size: 0.84rem; color: rgba(255,255,255,0.75); line-height: 2.4; }
   .contact .section-tag::before, .contact .section-tag::after { background: var(--gold-light); }
   .contact h2 { color: var(--white); font-size: clamp(1.6rem, 4vw, 2.1rem); margin-bottom: 16px; }
   .contact p.lead { max-width: 560px; margin: 0 auto 38px; opacity: 0.9; }
@@ -1193,13 +1215,39 @@
     <span class="section-tag">Contact</span>
     <h2>お気軽にお問い合わせください</h2>
     <p class="lead">こどもヨーガ・おやこヨーガの体験、研修・ワークショップのご依頼、その他ご相談はこちらから承っております。</p>
-    <div class="hero-cta">
-      <a href="#" class="btn btn-primary js-mail" data-mail="eW9kYXlvZ2EyNTI1QGdtYWlsLmNvbQ==">メールで問い合わせる</a>
+    <form id="contactForm" class="contact-form">
+      <div class="contact-row">
+        <label for="cf-name">お名前 <span class="req">必須</span></label>
+        <input type="text" id="cf-name" name="name" required autocomplete="name">
+      </div>
+      <div class="contact-row">
+        <label for="cf-email">メールアドレス <span class="req">必須</span></label>
+        <input type="email" id="cf-email" name="email" required autocomplete="email">
+      </div>
+      <div class="contact-row">
+        <label for="cf-phone">電話番号</label>
+        <input type="tel" id="cf-phone" name="phone" autocomplete="tel">
+      </div>
+      <div class="contact-row">
+        <label for="cf-category">お問い合わせの種類</label>
+        <select id="cf-category" name="category">
+          <option value="lesson">レッスン・体験について</option>
+          <option value="workshop">研修・ワークショップのご依頼</option>
+          <option value="video">セルフケア動画について</option>
+          <option value="other">その他</option>
+        </select>
+      </div>
+      <div class="contact-row">
+        <label for="cf-message">お問い合わせ内容 <span class="req">必須</span></label>
+        <textarea id="cf-message" name="message" rows="5" required></textarea>
+      </div>
+      <p class="contact-error" id="contactError" hidden></p>
+      <button type="submit" class="btn btn-primary contact-submit" id="contactSubmit">送信する</button>
+    </form>
+
+    <p class="contact-alt">
+      LINEでのご連絡も承っています<br>
       <a href="https://lin.ee/yIhfrX5" class="btn btn-outline" target="_blank" rel="noopener">公式LINEで問い合わせる</a>
-    </div>
-    <p class="contact-mail-fallback">
-      メールソフトが開かない場合は、こちらのアドレスへお送りください<br>
-      <a href="#" class="js-mail contact-mail-address" data-mail="eW9kYXlvZ2EyNTI1QGdtYWlsLmNvbQ==" data-mail-text="1"></a>
     </p>
     <div class="social-icons social-icons-dark" style="margin-top:30px; justify-content:center;">
       <a href="https://www.instagram.com/ikigaiproject.yoga/" target="_blank" rel="noopener" aria-label="Instagram">
@@ -1372,6 +1420,63 @@
     el.href = 'mailto:' + addr;
     if (el.dataset.mailText) el.textContent = addr;
   });
+
+  // お問い合わせフォーム。予約と同じApps Scriptへ、type: 'contact' で送る。
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    contactForm.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      const errorBox = document.getElementById('contactError');
+      const submitBtn = document.getElementById('contactSubmit');
+      errorBox.hidden = true;
+
+      const payload = {
+        type: 'contact',
+        name: contactForm.name.value.trim(),
+        email: contactForm.email.value.trim(),
+        phone: contactForm.phone.value.trim(),
+        category: contactForm.category.value,
+        message: contactForm.message.value.trim()
+      };
+
+      if (!payload.name || !payload.email || !payload.message) {
+        errorBox.textContent = 'お名前・メールアドレス・お問い合わせ内容をご入力ください。';
+        errorBox.hidden = false;
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = '送信中…';
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(payload)
+      })
+        .then(r => r.json())
+        .then(res => {
+          if (!res.ok) {
+            errorBox.textContent = res.error || '送信に失敗しました。時間をおいて再度お試しください。';
+            errorBox.hidden = false;
+            submitBtn.disabled = false;
+            submitBtn.textContent = '送信する';
+            return;
+          }
+          contactForm.outerHTML = `
+            <div class="contact-done">
+              <strong>お問い合わせを受け付けました</strong>
+              確認のメールをお送りしました。内容を確認のうえ、数日以内にご返信いたします。<br>
+              お急ぎの場合は、下記の公式LINEからご連絡ください。
+            </div>`;
+        })
+        .catch(() => {
+          errorBox.textContent = '通信エラーが発生しました。時間をおいて再度お試しください。';
+          errorBox.hidden = false;
+          submitBtn.disabled = false;
+          submitBtn.textContent = '送信する';
+        });
+    });
+  }
 
   const nav = document.querySelector('nav');
   window.addEventListener('scroll', () => {

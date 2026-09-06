@@ -153,6 +153,38 @@ function sendOwnerNotification_(name, courseName, amount, paymentMethod, status)
   });
 }
 
+// お問い合わせが届いたことを主催者へ知らせる。返信できるよう replyTo にお客様のアドレスを入れる。
+function sendContactNotification_(name, email, phone, categoryLabel, message) {
+  MailApp.sendEmail({
+    to: OWNER_EMAIL,
+    subject: '【お問い合わせ】' + categoryLabel + '（' + name + ' 様）',
+    body: 'お名前: ' + name + '\n' +
+      'メール: ' + email + '\n' +
+      '電話: ' + (phone || '（未記入）') + '\n' +
+      '種別: ' + categoryLabel + '\n\n' +
+      '【お問い合わせ内容】\n' + message + '\n\n' +
+      '※このメールに返信すると、お客様へ直接返信できます。',
+    replyTo: email,
+    name: SENDER_NAME
+  });
+}
+
+// お客様へ「受け付けました」を自動返信する。届いたか不安にさせないため。
+function sendContactAutoReply_(email, name) {
+  MailApp.sendEmail({
+    to: email,
+    subject: '【' + SENDER_NAME + '】お問い合わせを受け付けました',
+    body: name + ' 様\n\n' +
+      'お問い合わせいただき、ありがとうございます。\n' +
+      '内容を確認のうえ、数日以内にご返信いたします。\n\n' +
+      'お急ぎの場合は、公式LINEからもご連絡いただけます。\n' +
+      LINE_URL + '\n\n' +
+      SENDER_NAME + '\n' + REPLY_TO,
+    replyTo: REPLY_TO,
+    name: SENDER_NAME
+  });
+}
+
 function sendErrorAlert_(context, err) {
   MailApp.sendEmail({
     to: OWNER_EMAIL,

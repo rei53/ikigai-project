@@ -5,7 +5,10 @@
 function doPost(e) {
   try {
     const payload = JSON.parse(e.postData.contents);
-    const result = handleBookingSubmission_(payload);
+    // 予約とお問い合わせを type で振り分ける。type が無いものは従来どおり予約として扱う。
+    const result = payload.type === 'contact'
+      ? handleContactSubmission_(payload)
+      : handleBookingSubmission_(payload);
     return jsonResponse_(result);
   } catch (err) {
     sendErrorAlert_('doPost', err);
