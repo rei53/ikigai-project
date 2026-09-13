@@ -18,7 +18,7 @@ const HOSENJI_TEMPLATE = {
   name: '寺ヨガ（法泉寺・大人の隠れ家）',
   venue: '法泉寺 座禅堂',
   scheduleText: '動くことからはじまる、心を整える60分',
-  time: '9:00〜10:00',
+  time: '9:30〜10:30',
   capacity: '定員10名',
   price: '1回 1,500円',
   amount: 1500,
@@ -56,8 +56,11 @@ const SAIHOJI_TEMPLATE = {
 };
 
 const COURSES = [
-  { ...HOSENJI_TEMPLATE, id: 'tera-yoga-hosenji-0823', nextDate: '2026-08-23', nextDateText: '2026年8月23日（日）' },
-  { ...HOSENJI_TEMPLATE, id: 'tera-yoga-hosenji-0913', nextDate: '2026-09-13', nextDateText: '2026年9月13日（日）' },
+  { ...HOSENJI_TEMPLATE, id: 'tera-yoga-hosenji-0823', nextDate: '2026-08-23', nextDateText: '2026年8月23日（日）', time: '9:00〜10:00' },
+  { ...HOSENJI_TEMPLATE, id: 'tera-yoga-hosenji-0913', nextDate: '2026-09-13', nextDateText: '2026年9月13日（日）', time: '9:00〜10:00' },
+  { ...HOSENJI_TEMPLATE, id: 'tera-yoga-hosenji-1018', nextDate: '2026-10-18', nextDateText: '2026年10月18日（日）' },
+  { ...HOSENJI_TEMPLATE, id: 'tera-yoga-hosenji-1115', nextDate: '2026-11-15', nextDateText: '2026年11月15日（日）' },
+  { ...HOSENJI_TEMPLATE, id: 'tera-yoga-hosenji-1220', nextDate: '2026-12-20', nextDateText: '2026年12月20日（日）' },
   { ...SAIHOJI_TEMPLATE, id: 'tera-yoga-saihoji-0905', nextDate: '2026-09-05', nextDateText: '2026年9月5日（土）', time: '9:00〜10:30' },
   { ...SAIHOJI_TEMPLATE, id: 'tera-yoga-saihoji-1107', nextDate: '2026-11-07', nextDateText: '2026年11月7日（土）' },
   {
