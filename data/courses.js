@@ -55,14 +55,8 @@ const SAIHOJI_TEMPLATE = {
   status: 'open'
 };
 
+// 寺ヨガ（法泉寺・西方寺）の日程はここには書かない。スプレッドシートの「日程」タブから読み込む（下の loadCourses）。
 const COURSES = [
-  { ...HOSENJI_TEMPLATE, id: 'tera-yoga-hosenji-0823', nextDate: '2026-08-23', nextDateText: '2026年8月23日（日）', time: '9:00〜10:00' },
-  { ...HOSENJI_TEMPLATE, id: 'tera-yoga-hosenji-0913', nextDate: '2026-09-13', nextDateText: '2026年9月13日（日）', time: '9:00〜10:00' },
-  { ...HOSENJI_TEMPLATE, id: 'tera-yoga-hosenji-1018', nextDate: '2026-10-18', nextDateText: '2026年10月18日（日）' },
-  { ...HOSENJI_TEMPLATE, id: 'tera-yoga-hosenji-1115', nextDate: '2026-11-15', nextDateText: '2026年11月15日（日）' },
-  { ...HOSENJI_TEMPLATE, id: 'tera-yoga-hosenji-1220', nextDate: '2026-12-20', nextDateText: '2026年12月20日（日）' },
-  { ...SAIHOJI_TEMPLATE, id: 'tera-yoga-saihoji-0905', nextDate: '2026-09-05', nextDateText: '2026年9月5日（土）', time: '9:00〜10:30' },
-  { ...SAIHOJI_TEMPLATE, id: 'tera-yoga-saihoji-1107', nextDate: '2026-11-07', nextDateText: '2026年11月7日（土）' },
   {
     id: 'kodomo-yoga-event-summer',
     category: 'kodomo-yoga',
@@ -238,21 +232,59 @@ COURSES.push({
   status: 'open'
 });
 
-// 日付が近い順に並び替え（日付を持たない単独申し込みは末尾へ）
-COURSES.sort((a, b) => {
-  if (!a.nextDate) return 1;
-  if (!b.nextDate) return -1;
-  return new Date(a.nextDate) - new Date(b.nextDate);
-});
+// 寺ヨガ（法泉寺・西方寺）の日程は、予約システムのスプレッドシート「日程」タブで管理している。
+// Apps Scriptから今日以降の日程を受け取り、会場ごとのテンプレートと組み合わせて COURSES に加える。
+const TERA_YOGA_TEMPLATES = { hosenji: HOSENJI_TEMPLATE, saihoji: SAIHOJI_TEMPLATE };
 
-// oneOff（単発開催）の講座は、開催日を過ぎたら自動的にスケジュールから外す
-// （毎週／隔週などの継続講座は nextDate が「次回の目安日」でしかないため対象外）
-(function removeEndedOneOffCourses() {
+function formatNextDateText(date) {
+  const [y, m, d] = date.split('-').map(Number);
+  const week = ['日', '月', '火', '水', '木', '金', '土'][new Date(y, m - 1, d).getDay()];
+  return `${y}年${m}月${d}日（${week}）`;
+}
+
+// 日程を読み込んで COURSES を完成させる。読み込めなかった場合も寺ヨガ以外の講座は表示できるよう、
+// 失敗を投げずに { scheduleLoaded: false } を返す。
+function loadCourses(scriptUrl) {
+  return fetch(scriptUrl + '?action=schedule')
+    .then(r => r.json())
+    .then(res => {
+      if (!res.ok || !Array.isArray(res.result)) throw new Error('schedule');
+      res.result.forEach(item => {
+        const template = TERA_YOGA_TEMPLATES[item.venue];
+        if (!template) return;
+        COURSES.push({
+          ...template,
+          id: item.id,
+          nextDate: item.date,
+          nextDateText: formatNextDateText(item.date),
+          time: item.time || template.time,
+          status: item.status || template.status
+        });
+      });
+      return true;
+    })
+    .catch(() => false)
+    .then(scheduleLoaded => {
+      finalizeCourses();
+      return { scheduleLoaded };
+    });
+}
+
+function finalizeCourses() {
+  // 日付が近い順に並び替え（日付を持たない単独申し込みは末尾へ）
+  COURSES.sort((a, b) => {
+    if (!a.nextDate) return 1;
+    if (!b.nextDate) return -1;
+    return new Date(a.nextDate) - new Date(b.nextDate);
+  });
+
+  // oneOff（単発開催）の講座は、開催日を過ぎたら自動的にスケジュールから外す
+  // （毎週／隔週などの継続講座は nextDate が「次回の目安日」でしかないため対象外）
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   for (let i = COURSES.length - 1; i >= 0; i--) {
-    if (COURSES[i].oneOff && new Date(COURSES[i].nextDate) < today) {
+    if (COURSES[i].oneOff && new Date(COURSES[i].nextDate + 'T00:00:00') < today) {
       COURSES.splice(i, 1);
     }
   }
-})();
+}

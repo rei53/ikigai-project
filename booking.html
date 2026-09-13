@@ -253,7 +253,6 @@
 
   const params = new URLSearchParams(window.location.search);
   const id = params.get('course');
-  const course = COURSES.find(c => c.id === id);
   const content = document.getElementById('content');
 
   const statusLabel = { open: '募集中', few: '残りわずか', closed: '受付終了' };
@@ -275,14 +274,52 @@
     return `${catchLine}<p class="booking-desc">${desc}</p>${itemsBlock}${belongingsBlock}`;
   }
 
-  if (!course) {
+  // 寺ヨガの日程はApps Script（スプレッドシートの「日程」タブ）から読み込んでから表示する
+  loadCourses(SCRIPT_URL).then(({ scheduleLoaded }) => {
+    const course = COURSES.find(c => c.id === id) || findByLegacyTeraYogaId(id);
+    if (!course) {
+      renderNotFound(!scheduleLoaded && String(id || '').indexOf('tera-yoga') === 0);
+    } else if (course.bookingType === 'external') {
+      renderExternalBooking(course);
+    } else if (course.status === 'closed') {
+      renderClosed(course);
+    } else {
+      renderInternalBooking(course);
+    }
+  });
+
+  // 「日程」タブで締切にした回は、フォームを出さずに受付終了をお知らせする
+  function renderClosed(c) {
+    document.title = c.name + ' ｜ IKIGAIプロジェクト®';
     content.innerHTML = `
       <div class="not-found">
-        <h1>講座が見つかりませんでした</h1>
-        <p style="color:var(--muted); margin-bottom:20px;">お手数ですが、トップページから改めて講座をお選びください。</p>
+        <h1>${c.name}</h1>
+        <p style="margin-bottom:8px;">${c.nextDateText}　${c.time}</p>
+        <p style="color:var(--muted); margin-bottom:20px;">この回はお申し込みの受付を終了しました。ほかの日程はトップページからお選びください。</p>
         <a class="btn" href="index.html#program">プログラム一覧へ</a>
       </div>`;
-  } else if (course.bookingType === 'external') {
+  }
+
+  // 日程をスプレッドシートへ移す前のリンク（例：tera-yoga-hosenji-1018）は年を含まない。
+  // LINEやInstagramで共有済みのリンクが切れないよう、同じ会場・同じ月日の回に読み替える。
+  function findByLegacyTeraYogaId(legacyId) {
+    const m = /^(tera-yoga-(?:hosenji|saihoji))-(\d{4})$/.exec(String(legacyId || ''));
+    if (!m) return null;
+    return COURSES.find(c => new RegExp('^' + m[1] + '-\\d{4}' + m[2] + '$').test(c.id)) || null;
+  }
+
+  function renderNotFound(loadFailed) {
+    content.innerHTML = `
+      <div class="not-found">
+        <h1>${loadFailed ? '日程を読み込めませんでした' : '講座が見つかりませんでした'}</h1>
+        <p style="color:var(--muted); margin-bottom:20px;">${loadFailed
+          ? 'お手数ですが、時間をおいてページを再読み込みしてください。'
+          : 'お申し込みの受付が終了したか、日程が変更になった可能性があります。トップページから改めて講座をお選びください。'}</p>
+        <a class="btn" href="index.html#program">プログラム一覧へ</a>
+      </div>`;
+  }
+
+  function renderExternalBooking(course) {
     document.title = course.name + ' お申し込み ｜ IKIGAIプロジェクト®';
 
     content.innerHTML = `
@@ -312,8 +349,6 @@
           ご不明な点はIKIGAIプロジェクト（<a href="mailto:${CONTACT_EMAIL}" style="color:var(--sage-dark); font-weight:700;">${CONTACT_EMAIL}</a>）までお気軽にご連絡ください。
         </div>
       </div>`;
-  } else {
-    renderInternalBooking(course);
   }
 
   function renderInternalBooking(c) {
