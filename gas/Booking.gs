@@ -12,9 +12,10 @@ function handleBookingSubmission_(payload) {
   const message = String(payload.message || '').trim();
   const paymentMethod = String(payload.paymentMethod || '').trim();
   const priceTier = String(payload.priceTier || '').trim();
-  // 「セルフケア動画」を希望していても、対象外の講座からのリクエストなら無視する
-  const addVideo = payload.addVideo === true && SELF_CARE_VIDEO_ELIGIBLE_COURSES.indexOf(courseId) !== -1;
   const isVideoCourse = courseId === SELF_CARE_VIDEO_COURSE_ID;
+  const course = isVideoCourse ? null : findCourse_(courseId);
+  // 「セルフケア動画」を希望していても、対象外の講座からのリクエストなら無視する
+  const addVideo = payload.addVideo === true && !!course && course.videoEligible;
 
   if (!name || !email || !courseId) {
     return { ok: false, error: 'お名前・メールアドレス・講座は必須です。' };
@@ -38,9 +39,14 @@ function handleBookingSubmission_(payload) {
     }
     baseAmount = tier.amount;
     courseName = SELF_CARE_VIDEO_NAME + '（' + tier.label + '）';
-  } else {
-    baseAmount = COURSE_PRICES[courseId];
-    courseName = COURSE_NAMES[courseId];
+  } else if (course) {
+    // 「日程」タブで締切にした回や、開催日を過ぎた回は受け付けない
+    const today = Utilities.formatDate(new Date(), 'Asia/Tokyo', 'yyyy-MM-dd');
+    if (course.status === 'closed' || (course.date && course.date < today)) {
+      return { ok: false, error: 'この回のお申し込み受付は終了しました。' };
+    }
+    baseAmount = course.amount;
+    courseName = course.name;
   }
 
   if (!baseAmount || !courseName) {

@@ -37,9 +37,19 @@ const BANK_TRANSFER_INFO = `
 ※恐れ入りますが振込手数料はご負担ください
 `.trim();
 
-// 講座ID → 金額（円）。
-// 重要：ここが決済に使う「本当の金額」です。data/courses.js のamountは表示用にすぎません。
-// 料金を変更したときは、このマップと data/courses.js の両方を書き換えてください。
+// 寺ヨガの会場ごとの設定。日程そのものはスプレッドシートの「日程」タブに書く（Schedule.gs）。
+// 重要：price が決済に使う「本当の金額」です。data/courses.js のテンプレートのamountは表示用にすぎません。
+// 料金を変更したときは、ここと data/courses.js の両方を書き換えてください。
+const VENUES = {
+  '法泉寺': { slug: 'hosenji', price: 1500, name: '寺ヨガ（法泉寺・大人の隠れ家）', videoEligible: true },
+  '西方寺': { slug: 'saihoji', price: 2000, name: '寺ヨガ（西方寺・大人の寺子屋）', videoEligible: true }
+};
+
+// ここから下の3つのマップ（COURSE_PRICES・COURSE_NAMES・COURSE_DATES）は、
+// 「日程」タブへ移行する前に受け付けた予約のためだけに残しています。
+// 新しい日程をここへ追加する必要はありません。
+
+// 講座ID → 金額（円）
 const COURSE_PRICES = {
   'tera-yoga-hosenji-0719': 1500,
   'tera-yoga-hosenji-0823': 1500,
@@ -51,7 +61,7 @@ const COURSE_PRICES = {
   'tera-yoga-saihoji-1107': 2000
 };
 
-// 講座ID → メール文面用の表示名（data/courses.jsのnameと合わせてください）
+// 講座ID → メール文面用の表示名
 const COURSE_NAMES = {
   'tera-yoga-hosenji-0719': '寺ヨガ（法泉寺・大人の隠れ家）2026年7月19日',
   'tera-yoga-hosenji-0823': '寺ヨガ（法泉寺・大人の隠れ家）2026年8月23日',
@@ -64,7 +74,6 @@ const COURSE_NAMES = {
 };
 
 // 講座ID → 開催日（YYYY-MM-DD）。2日前リマインダーの日付照合に使う。
-// data/courses.js の nextDate と合わせてください。
 const COURSE_DATES = {
   'tera-yoga-hosenji-0719': '2026-07-19',
   'tera-yoga-hosenji-0823': '2026-08-23',
@@ -77,7 +86,8 @@ const COURSE_DATES = {
 };
 
 // セルフケア動画（寺ヨガの申し込みと同時に追加できるオプション）
-// 対象講座IDのみ SELF_CARE_VIDEO_PRICE が加算される。data/courses.js の videoAddonPrice と合わせてください。
+// 追加できるのは VENUES の videoEligible が true の会場と、下の旧来の講座IDのみ。
+// SELF_CARE_VIDEO_PRICE は data/courses.js の videoAddonPrice と合わせてください。
 const SELF_CARE_VIDEO_ELIGIBLE_COURSES = ['tera-yoga-hosenji-0719', 'tera-yoga-hosenji-0823', 'tera-yoga-hosenji-0913', 'tera-yoga-hosenji-1018', 'tera-yoga-hosenji-1115', 'tera-yoga-hosenji-1220', 'tera-yoga-saihoji-0905', 'tera-yoga-saihoji-1107'];
 const SELF_CARE_VIDEO_PRICE = 1000;
 const SELF_CARE_VIDEO_NAME = 'セルフケア動画';

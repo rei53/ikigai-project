@@ -22,6 +22,9 @@ function doGet(e) {
     if (action === 'instagram') {
       return jsonResponse_({ ok: true, result: getInstagramFeed_() });
     }
+    if (action === 'schedule') {
+      return jsonResponse_({ ok: true, result: getPublicSchedule_() });
+    }
     if (action === 'admin') {
       const key = e.parameter.key || '';
       return jsonResponse_(getAllBookingsForAdmin_(key));

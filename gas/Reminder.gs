@@ -21,6 +21,7 @@ function sendTwoDaysBeforeReminders() {
   limit.setDate(limit.getDate() + REMINDER_DAYS_BEFORE);
 
   const data = sheet.getRange(2, 1, lastRow - 1, COL.REMINDER_SENT).getValues();
+  const courseDates = {};
 
   data.forEach(function (row, i) {
     const rowNum = i + 2;
@@ -33,7 +34,12 @@ function sendTwoDaysBeforeReminders() {
     if (status !== 'paid' && status !== 'pending_payment' && status !== 'pending_bank_transfer') return;
     if (reminderSent === 'sent') return;
 
-    const eventDate = parseCourseDate_(COURSE_DATES[courseId]);
+    // 同じ講座の予約が何件あっても、日程タブを読むのは1講座1回だけにする
+    if (!(courseId in courseDates)) {
+      const course = findCourse_(courseId);
+      courseDates[courseId] = course ? course.date : null;
+    }
+    const eventDate = parseCourseDate_(courseDates[courseId]);
     if (!eventDate) return;
 
     // 開催日を過ぎたものは送らない。まだ2日より先のものは、日が近づいてから送る。
