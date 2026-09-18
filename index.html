@@ -406,10 +406,15 @@
   .field-dialog {
     width: min(560px, calc(100% - 32px)); max-height: calc(100% - 48px); margin: auto;
     border: none; border-radius: 18px; padding: 34px 30px 28px; color: var(--ink);
-    background: var(--white); box-shadow: var(--shadow-lg);
+    background: var(--white); box-shadow: var(--shadow-lg); overflow-y: auto;
   }
+  .field-dialog-group { margin: 18px 0; padding-top: 16px; border-top: 1px solid var(--line); }
+  .field-dialog-group h4 { font-size: 0.98rem; color: var(--sage-dark); margin-bottom: 6px; }
+  .field-dialog-group h4 small { display: inline-block; margin-left: 6px; font-size: 0.72rem; font-weight: 700; color: var(--gold); }
+  .field-dialog-group strong { color: var(--ink); }
+  .field-dialog-group ul { margin: 8px 0 0; }
   .field-dialog::backdrop { background: rgba(32,75,92,0.55); }
-  .field-dialog-tag { display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; color: var(--sage); margin-bottom: 8px; }
+  .field-dialog-tag { display: block; padding-right: 40px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; color: var(--sage); margin-bottom: 8px; }
   .field-dialog h3 { font-size: 1.2rem; line-height: 1.6; color: var(--sage-deep); margin-bottom: 14px; }
   .field-dialog p { font-size: 0.92rem; line-height: 1.9; color: var(--muted); }
   .field-dialog ul { list-style: none; margin: 18px 0; display: grid; gap: 10px; }
@@ -954,22 +959,67 @@
       <a class="field-item field-item-link has-photo" href="#schedule"><span class="field-photo"><img src="images/mindfulness-yoga.jpg" alt="マインドフルネスヨーガの様子" loading="lazy" style="object-position: center 30%;"></span>カルチャーセンター<small>リビングカルチャー高松</small></a>
       <div class="field-item has-photo"><span class="field-photo"><img src="images/field-community.jpg" alt="サンサン館みきでのいすヨーガの様子「姿勢が変われば、未来が変わる。」" loading="lazy"></span>地域コミュニティ<small>サンサン館みき ほか</small><button type="button" class="field-detail-btn" data-dialog="communityDialog">詳しく見る →</button></div>
       <a class="field-item field-item-link has-photo" href="#schedule"><span class="field-photo"><img src="images/hero-yoga.jpg" alt="夜のマインドフルネスヨーガの様子" loading="lazy"></span>フィットネス<small>瀬戸内フィットネス</small></a>
-      <div class="field-item has-photo"><span class="field-photo"><img src="images/field-gakudo.jpg" alt="学童でこどもヨーガを楽しむ子どもたち" loading="lazy" style="object-position: center 8%;"></span>放課後児童健全育成事業（学童）</div>
+      <div class="field-item has-photo"><span class="field-photo"><img src="images/field-gakudo.jpg" alt="学童でこどもヨーガを楽しむ子どもたち" loading="lazy" style="object-position: center 8%;"></span>放課後児童健全育成事業（学童）<button type="button" class="field-detail-btn" data-dialog="kidsDialog">詳しく見る →</button></div>
       <div class="field-item">少年院</div>
     </div>
   </div>
 
   <dialog class="field-dialog" id="communityDialog" aria-labelledby="communityDialogTitle">
     <button type="button" class="field-dialog-close" aria-label="閉じる">×</button>
-    <span class="field-dialog-tag">地域コミュニティ・施設のご担当者さまへ</span>
-    <h3 id="communityDialogTitle">誰もがほっと、イキイキできる時間を<br>地域の皆さまに。</h3>
-    <p>お腹の中から最期の瞬間まで。生涯発達の視点で、参加される一人ひとりの「今」に寄り添います。</p>
-    <ul>
-      <li>朝ヨガ・夜ヨガ・いすヨーガなど、対象や会場に合わせたプログラム</li>
-      <li>身体・こころ・人とのつながりを丸ごと見つめ、成長と回復を支えます</li>
-      <li>発達心理学の裏付けに基づく、健やかな心身を育む内容</li>
-    </ul>
-    <p>講座の企画・開催のご相談を、お気軽にお寄せください。</p>
+    <span class="field-dialog-tag">自治体・福祉施設・教育機関・企業のご担当者さまへ</span>
+    <h3 id="communityDialogTitle">心身の健康づくりを、<br>ヨーガとマインドフルネスで。</h3>
+    <p>お腹の中から最期の瞬間まで。生涯発達の視点と発達心理学の知見に基づき、対象・人数・会場に合わせた講座や研修をお届けします。</p>
+
+    <div class="field-dialog-group">
+      <h4>高齢者・介護施設 <small>介護予防・健康寿命の延伸</small></h4>
+      <p><strong>いすヨーガ ―「ずっと歩けるカラダへ」</strong><br>椅子に座ったままできるので、膝や腰が心配な方も安心です。介護予防・フレイル予防の教室、施設のレクリエーション、地域の通いの場に。</p>
+    </div>
+
+    <div class="field-dialog-group">
+      <h4>子育て支援・教育 <small>こどもの心身の健全育成</small></h4>
+      <p>親子のふれあい事業、子育て支援施設、幼稚園・保育園、学童でのこどもヨーガ。不登校のお子さんをもつ保護者の方のためのセルフケア講座も行います。</p>
+    </div>
+
+    <div class="field-dialog-group">
+      <h4>企業・職場 <small>健康経営・福利厚生</small></h4>
+      <p>オフィスの椅子でできるヨーガで、肩こり・腰痛予防とリフレッシュ。管理職のためのマインドフルネス研修で、ストレスケアと集中力を高めます。</p>
+    </div>
+
+    <div class="field-dialog-group">
+      <h4>行政・地域 <small>地域共生社会・多世代交流</small></h4>
+      <p>住民向けの健康講座、多世代交流のイベント、孤立を防ぐ居場所づくりに。誰もがほっと、イキイキできる時間を届けます。</p>
+    </div>
+
+    <p>講座の企画・開催、研修のご依頼をお気軽にご相談ください。</p>
+    <div class="field-dialog-actions">
+      <a class="field-dialog-cta" href="#contact">ご相談・お問い合わせ →</a>
+    </div>
+  </dialog>
+
+  <dialog class="field-dialog" id="kidsDialog" aria-labelledby="kidsDialogTitle">
+    <button type="button" class="field-dialog-close" aria-label="閉じる">×</button>
+    <span class="field-dialog-tag">学童・保育園・幼稚園・子育て支援のご担当者さまへ</span>
+    <h3 id="kidsDialogTitle">まねして、動いて、<br>呼吸に気づく。</h3>
+    <p>まねまねヨーガの「まねをする・身体を動かす・呼吸に気づく」という要素は、自己調整力や感情表現の育ちに自然とつながっています。言葉で説明するより、まず一緒に体験していただくことが一番の近道です。</p>
+
+    <div class="field-dialog-group">
+      <h4>現場で見られる子どもたちの変化</h4>
+      <ul>
+        <li>いつもソワソワしていた子が、夢見のポーズで「あ～落ち着くわー」</li>
+        <li>ギスギスしていた雰囲気が、少しずつほぐれていく</li>
+        <li>「ヨガ大好き！またやりたい！」</li>
+      </ul>
+    </div>
+
+    <div class="field-dialog-group">
+      <h4>一緒に体験された大人の方の声</h4>
+      <ul>
+        <li>「気持ちいい」「落ち着く」</li>
+        <li>「ヨガってこういうものだったんですね」</li>
+      </ul>
+    </div>
+
+    <p>スマホやゲームなど手軽な刺激があふれる毎日だからこそ、待つ時間、自分を感じる時間は、子どもにとって大切で贅沢な時間です。その積み重ねが、身体と心の土台にそっと根づいていくことを願っています。</p>
     <div class="field-dialog-actions">
       <a class="field-dialog-cta" href="#contact">ご相談・お問い合わせ →</a>
     </div>
