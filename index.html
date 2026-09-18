@@ -390,8 +390,13 @@
     transition: background 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
   }
   .field-item:hover { background: rgba(255,255,255,0.16); border-color: rgba(205,234,224,0.5); transform: translateY(-5px); }
+  .field-item { display: flex; flex-direction: column; justify-content: center; }
+  /* 写真付きのカードは、写真をカードの上端いっぱいに置き、その下に文字を並べる */
+  .field-item.has-photo { justify-content: flex-start; overflow: hidden; }
+  .field-photo { display: block; margin: -28px -20px 20px; aspect-ratio: 16/10; overflow: hidden; }
+  .field-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .field-item small { display: block; font-size: 0.72rem; font-weight: 400; opacity: 0.75; margin-top: 6px; }
-  a.field-item-link { text-decoration: none; display: block; cursor: pointer; }
+  a.field-item-link { text-decoration: none; cursor: pointer; }
   a.field-item-link::after { content: '予約する →'; display: block; margin-top: 10px; font-size: 0.72rem; color: var(--gold-light); font-weight: 700; }
 
   /* ─── TARGET ─── */
@@ -915,11 +920,11 @@
       <p class="section-lead center">高松市周辺6拠点をはじめ、多様な現場でヨーガとマインドフルネスを届けています。</p>
     </div>
     <div class="field-grid reveal-grid">
-      <a class="field-item field-item-link" href="#schedule">お寺<br><small>法泉寺・西方寺</small></a>
-      <a class="field-item field-item-link" href="#schedule">カルチャーセンター<br><small>リビングカルチャー高松</small></a>
-      <div class="field-item">地域コミュニティ<br><small>サンサン館みき ほか</small></div>
-      <a class="field-item field-item-link" href="#schedule">フィットネス<br><small>瀬戸内フィットネス</small></a>
-      <div class="field-item">放課後児童健全育成事業（学童）</div>
+      <a class="field-item field-item-link has-photo" href="#schedule"><span class="field-photo"><img src="images/hosenji-class.jpg" alt="法泉寺 座禅堂での寺ヨガの様子" loading="lazy"></span>お寺<small>法泉寺・西方寺</small></a>
+      <a class="field-item field-item-link has-photo" href="#schedule"><span class="field-photo"><img src="images/mindfulness-yoga.jpg" alt="マインドフルネスヨーガの様子" loading="lazy" style="object-position: center 30%;"></span>カルチャーセンター<small>リビングカルチャー高松</small></a>
+      <div class="field-item has-photo"><span class="field-photo"><img src="images/field-community.jpg" alt="サンサン館みきでのいすヨーガの様子" loading="lazy"></span>地域コミュニティ<small>サンサン館みき ほか</small></div>
+      <a class="field-item field-item-link has-photo" href="#schedule"><span class="field-photo"><img src="images/hero-yoga.jpg" alt="夜のマインドフルネスヨーガの様子" loading="lazy"></span>フィットネス<small>瀬戸内フィットネス</small></a>
+      <div class="field-item has-photo"><span class="field-photo"><img src="images/field-gakudo.jpg" alt="学童でこどもヨーガを楽しむ子どもたち" loading="lazy" style="object-position: center 8%;"></span>放課後児童健全育成事業（学童）</div>
       <div class="field-item">少年院</div>
     </div>
   </div>
