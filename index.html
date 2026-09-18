@@ -397,6 +397,36 @@
   .field-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .field-item small { display: block; font-size: 0.72rem; font-weight: 400; opacity: 0.75; margin-top: 6px; }
   a.field-item-link { text-decoration: none; cursor: pointer; }
+  .field-detail-btn {
+    margin-top: 10px; align-self: center; background: none; border: none; cursor: pointer;
+    font-family: inherit; font-size: 0.72rem; font-weight: 700; color: var(--gold-light);
+  }
+  .field-detail-btn:hover { text-decoration: underline; }
+  /* 活動フィールドの「詳しく見る」で開く、主催者さま向けのご案内 */
+  .field-dialog {
+    width: min(560px, calc(100% - 32px)); max-height: calc(100% - 48px); margin: auto;
+    border: none; border-radius: 18px; padding: 34px 30px 28px; color: var(--ink);
+    background: var(--white); box-shadow: var(--shadow-lg);
+  }
+  .field-dialog::backdrop { background: rgba(32,75,92,0.55); }
+  .field-dialog-tag { display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; color: var(--sage); margin-bottom: 8px; }
+  .field-dialog h3 { font-size: 1.2rem; line-height: 1.6; color: var(--sage-deep); margin-bottom: 14px; }
+  .field-dialog p { font-size: 0.92rem; line-height: 1.9; color: var(--muted); }
+  .field-dialog ul { list-style: none; margin: 18px 0; display: grid; gap: 10px; }
+  .field-dialog li {
+    font-size: 0.9rem; line-height: 1.7; padding: 10px 14px 10px 36px; position: relative;
+    background: var(--warm); border-radius: 10px;
+  }
+  .field-dialog li::before { content: '✓'; position: absolute; left: 14px; top: 10px; color: var(--gold); font-weight: 700; }
+  .field-dialog-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 22px; }
+  .field-dialog-close {
+    position: absolute; top: 12px; right: 14px; width: 36px; height: 36px; border: none; border-radius: 50%;
+    background: var(--warm); color: var(--sage-dark); font-size: 1.2rem; cursor: pointer;
+  }
+  .field-dialog-cta {
+    display: inline-block; padding: 12px 26px; border-radius: 999px; font-size: 0.9rem; font-weight: 700;
+    text-decoration: none; background: var(--sage-dark); color: var(--white);
+  }
   a.field-item-link::after { content: '予約する →'; display: block; margin-top: 10px; font-size: 0.72rem; color: var(--gold-light); font-weight: 700; }
 
   /* ─── TARGET ─── */
@@ -922,12 +952,28 @@
     <div class="field-grid reveal-grid">
       <a class="field-item field-item-link has-photo" href="#schedule"><span class="field-photo"><img src="images/hosenji-class.jpg" alt="法泉寺 座禅堂での寺ヨガの様子" loading="lazy"></span>お寺<small>法泉寺・西方寺</small></a>
       <a class="field-item field-item-link has-photo" href="#schedule"><span class="field-photo"><img src="images/mindfulness-yoga.jpg" alt="マインドフルネスヨーガの様子" loading="lazy" style="object-position: center 30%;"></span>カルチャーセンター<small>リビングカルチャー高松</small></a>
-      <div class="field-item has-photo"><span class="field-photo"><img src="images/field-community.jpg" alt="サンサン館みきでのいすヨーガの様子「姿勢が変われば、未来が変わる。」" loading="lazy"></span>地域コミュニティ<small>サンサン館みき ほか</small></div>
+      <div class="field-item has-photo"><span class="field-photo"><img src="images/field-community.jpg" alt="サンサン館みきでのいすヨーガの様子「姿勢が変われば、未来が変わる。」" loading="lazy"></span>地域コミュニティ<small>サンサン館みき ほか</small><button type="button" class="field-detail-btn" data-dialog="communityDialog">詳しく見る →</button></div>
       <a class="field-item field-item-link has-photo" href="#schedule"><span class="field-photo"><img src="images/hero-yoga.jpg" alt="夜のマインドフルネスヨーガの様子" loading="lazy"></span>フィットネス<small>瀬戸内フィットネス</small></a>
       <div class="field-item has-photo"><span class="field-photo"><img src="images/field-gakudo.jpg" alt="学童でこどもヨーガを楽しむ子どもたち" loading="lazy" style="object-position: center 8%;"></span>放課後児童健全育成事業（学童）</div>
       <div class="field-item">少年院</div>
     </div>
   </div>
+
+  <dialog class="field-dialog" id="communityDialog" aria-labelledby="communityDialogTitle">
+    <button type="button" class="field-dialog-close" aria-label="閉じる">×</button>
+    <span class="field-dialog-tag">地域コミュニティ・施設のご担当者さまへ</span>
+    <h3 id="communityDialogTitle">誰もがほっと、イキイキできる時間を<br>地域の皆さまに。</h3>
+    <p>お腹の中から最期の瞬間まで。生涯発達の視点で、参加される一人ひとりの「今」に寄り添います。</p>
+    <ul>
+      <li>朝ヨガ・夜ヨガ・いすヨーガなど、対象や会場に合わせたプログラム</li>
+      <li>身体・こころ・人とのつながりを丸ごと見つめ、成長と回復を支えます</li>
+      <li>発達心理学の裏付けに基づく、健やかな心身を育む内容</li>
+    </ul>
+    <p>講座の企画・開催のご相談を、お気軽にお寄せください。</p>
+    <div class="field-dialog-actions">
+      <a class="field-dialog-cta" href="#contact">ご相談・お問い合わせ →</a>
+    </div>
+  </dialog>
 </section>
 
 <section class="target" id="target">
@@ -1410,6 +1456,19 @@
     standaloneSection.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
   }
   }
+
+  // 活動フィールドの「詳しく見る」：ご案内のダイアログを開く。背景クリック・×・お問い合わせリンクで閉じる。
+  document.querySelectorAll('.field-detail-btn').forEach(btn => {
+    const dialog = document.getElementById(btn.dataset.dialog);
+    if (!dialog || typeof dialog.showModal !== 'function') return;
+    btn.addEventListener('click', () => dialog.showModal());
+    dialog.addEventListener('click', ev => {
+      // ダイアログの余白をクリックしても閉じないよう、枠の外（背景）かどうかを座標で判定する
+      const r = dialog.getBoundingClientRect();
+      const outside = ev.clientX < r.left || ev.clientX > r.right || ev.clientY < r.top || ev.clientY > r.bottom;
+      if ((ev.target === dialog && outside) || ev.target.closest('.field-dialog-close, .field-dialog-cta')) dialog.close();
+    });
+  });
 
   const navToggle = document.getElementById('navToggle');
   const navLinks = document.getElementById('navLinks');
