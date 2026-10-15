@@ -32,7 +32,7 @@ function readScheduleRows_() {
 
   values.forEach(function (row, i) {
     const venueText = String(row[0] || '').trim();
-    const venueKey = Object.keys(VENUES).filter(function (k) { return venueText.indexOf(k) !== -1; })[0];
+    const venueKey = findVenueKey_(venueText);
     const date = normalizeScheduleDate_(row[1], tz);
     if (!venueKey || !date) return; // 空行や書きかけの行は無視する
 
@@ -93,6 +93,19 @@ function findCourse_(courseId) {
     };
   }
   return null;
+}
+
+/**
+ * 会場の欄の文字から VENUES のキーを探す。
+ * 「法泉寺（ママ）」のように、別のキーを含む名前があるため、
+ * まず完全一致を見て、無ければ「含まれるキーのうち一番長いもの」を選ぶ。
+ */
+function findVenueKey_(venueText) {
+  const keys = Object.keys(VENUES);
+  if (keys.indexOf(venueText) !== -1) return venueText;
+  const matched = keys.filter(function (k) { return venueText.indexOf(k) !== -1; });
+  matched.sort(function (a, b) { return b.length - a.length; });
+  return matched[0];
 }
 
 // 日付セルを 'yyyy-MM-dd' にそろえる。日付として読めなければ null。

@@ -42,7 +42,8 @@ const BANK_TRANSFER_INFO = `
 // 料金を変更したときは、ここと data/courses.js の両方を書き換えてください。
 const VENUES = {
   '法泉寺': { slug: 'hosenji', price: 1500, name: '寺ヨガ（法泉寺・大人の隠れ家）', videoEligible: true },
-  '西方寺': { slug: 'saihoji', price: 2000, name: '寺ヨガ（西方寺・大人の寺子屋）', videoEligible: true }
+  '西方寺': { slug: 'saihoji', price: 2000, name: '寺ヨガ（西方寺・大人の寺子屋）', videoEligible: true },
+  '法泉寺（ママ）': { slug: 'hosenji-mama', price: 1500, name: 'ママのためのYOGA with kids（法泉寺）', videoEligible: true }
 };
 
 // ここから下の3つのマップ（COURSE_PRICES・COURSE_NAMES・COURSE_DATES）は、

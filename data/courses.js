@@ -55,6 +55,29 @@ const SAIHOJI_TEMPLATE = {
   status: 'open'
 };
 
+// 法泉寺「ママのためのYOGA with kids」の内容（複数日程で共通）。持ち物・金額は大人の寺ヨガと同じ。
+const HOSENJI_MAMA_TEMPLATE = {
+  category: 'tera-yoga',
+  target: '個人向け',
+  bookingType: 'internal',
+  timeOfDay: null,
+  oneOff: true,
+  name: 'ママのためのYOGA with kids（法泉寺）',
+  venue: '法泉寺 座禅堂',
+  scheduleText: 'お子さんと一緒に参加できる45分',
+  time: '10:45〜11:30',
+  capacity: '定員10組',
+  price: '1回 1,500円',
+  amount: 1500,
+  videoAddonPrice: 1000,
+  image: 'images/hosenji-class.jpg',
+  catch: 'お子さんと一緒に、ママのための時間を。',
+  description: 'お子さんを連れてご参加いただけるクラスです。\n泣いても、動き回っても大丈夫。静かな座禅堂で、まずはママ自身の呼吸と身体に意識を向ける時間を過ごします。\nお子さんも一緒に楽しめる動きを取り入れながら、無理のないペースで進めます。',
+  items: ['ママのためのヨーガ（お子さんと一緒に）'],
+  belongings: ['ヨガマット または バスタオル', '飲み物'],
+  status: 'open'
+};
+
 // 寺ヨガ（法泉寺・西方寺）の日程はここには書かない。スプレッドシートの「日程」タブから読み込む（下の loadCourses）。
 const COURSES = [
   {
@@ -239,7 +262,11 @@ COURSES.push({
 
 // 寺ヨガ（法泉寺・西方寺）の日程は、予約システムのスプレッドシート「日程」タブで管理している。
 // Apps Scriptから今日以降の日程を受け取り、会場ごとのテンプレートと組み合わせて COURSES に加える。
-const TERA_YOGA_TEMPLATES = { hosenji: HOSENJI_TEMPLATE, saihoji: SAIHOJI_TEMPLATE };
+const TERA_YOGA_TEMPLATES = {
+  hosenji: HOSENJI_TEMPLATE,
+  saihoji: SAIHOJI_TEMPLATE,
+  'hosenji-mama': HOSENJI_MAMA_TEMPLATE
+};
 
 function formatNextDateText(date) {
   const [y, m, d] = date.split('-').map(Number);
