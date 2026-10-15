@@ -92,8 +92,10 @@ const COURSE_DATES = {
 const SELF_CARE_VIDEO_ELIGIBLE_COURSES = ['tera-yoga-hosenji-0719', 'tera-yoga-hosenji-0823', 'tera-yoga-hosenji-0913', 'tera-yoga-hosenji-1018', 'tera-yoga-hosenji-1115', 'tera-yoga-hosenji-1220', 'tera-yoga-saihoji-0905', 'tera-yoga-saihoji-1107'];
 const SELF_CARE_VIDEO_PRICE = 1000;
 const SELF_CARE_VIDEO_NAME = 'セルフケア動画';
-// 現在の視聴期限。毎月変わるので、ここを書き換えて再デプロイしてください（data/courses.js の VIDEO_DEADLINE と合わせる）。
-const SELF_CARE_VIDEO_DEADLINE = '10月14日（水）';
+// メール文面での視聴期間のご案内。期限を決めて募集するときは
+// '現在の視聴期限は10月14日（水）までです。期限はお申し込み時期にかかわらず全員共通ですので、お早めにご視聴ください。'
+// のように書き換えて再デプロイしてください（data/courses.js の VIDEO_VIEWING_NOTE と合わせる）。
+const SELF_CARE_VIDEO_VIEWING_NOTE = '視聴期間は4週間ほどです。';
 
 // セルフケア動画の単独お申し込み。
 // ご受講状況によって金額が変わるため、COURSE_PRICES ではなくこちらを使う。

@@ -223,10 +223,12 @@ const COURSES = [
   }
 ];
 
-// セルフケア動画の視聴期限。毎月変わるので、ここだけ書き換えてください（トップ・予約ページに反映されます）。
-// メール文面用の SELF_CARE_VIDEO_DEADLINE（gas/Config.gs）も同じ日付に合わせ、Apps Scriptを貼り替えて再デプロイしてください。
-const VIDEO_DEADLINE = '10月14日（水）';
-const VIDEO_VIEWING_NOTE = `現在の視聴期限は${VIDEO_DEADLINE}までです。期限はお申し込み時期にかかわらず全員共通です。`;
+// セルフケア動画の視聴期間の案内（トップ・予約ページに反映されます）。
+// 期限を決めて募集するときは、ここを `現在の視聴期限は10月14日（水）までです。期限はお申し込み時期にかかわらず全員共通です。`
+// のように書き換え、メール文面用の SELF_CARE_VIDEO_VIEWING_NOTE（gas/Config.gs）も同じ文に合わせて、
+// Apps Scriptを貼り替えて再デプロイしてください。
+const VIDEO_VIEWING_PERIOD = '視聴期間 4週間ほど';
+const VIDEO_VIEWING_NOTE = '視聴期間は4週間ほどです。';
 
 // セルフケア動画の単独お申し込み。
 // standalone: true は日付を持たない商品の目印。スケジュール表と募集中カードからは外し、
@@ -244,7 +246,7 @@ COURSES.push({
   scheduleText: 'いつでもお申し込みいただけます',
   nextDate: null,
   nextDateText: 'いつでもお申し込みいただけます',
-  time: `視聴期限 ${VIDEO_DEADLINE}まで`,
+  time: VIDEO_VIEWING_PERIOD,
   capacity: '定員なし',
   price: '1,000円〜2,500円（受講状況により異なります）',
   priceTiers: [
@@ -254,8 +256,8 @@ COURSES.push({
   ],
   image: 'images/mindfulness-yoga.jpg',
   catch: 'ご自宅で、いつでも整える',
-  description: `レッスンで行っているセルフケアを、ご自宅でも続けていただけるようまとめた動画です。\n短い時間でも、日々の習慣にすることで身体は変わっていきます。\n\n${VIDEO_VIEWING_NOTE}お早めにご視聴ください。\n視聴URLと注意事項は、ご入金の確認後に公式LINEよりお送りします。`,
-  items: [`セルフケア動画（視聴期限 ${VIDEO_DEADLINE}まで）`],
+  description: `レッスンで行っているセルフケアを、ご自宅でも続けていただけるようまとめた動画です。\n短い時間でも、日々の習慣にすることで身体は変わっていきます。\n\n${VIDEO_VIEWING_NOTE}\n視聴URLと注意事項は、ご入金の確認後に公式LINEよりお送りします。`,
+  items: [`セルフケア動画（${VIDEO_VIEWING_PERIOD}）`],
   belongings: ['ヨガマット または バスタオル（お持ちの方）'],
   status: 'open'
 });
