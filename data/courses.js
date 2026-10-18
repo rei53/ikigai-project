@@ -227,8 +227,8 @@ const COURSES = [
 // 期限を決めて募集するときは、ここを `現在の視聴期限は10月14日（水）までです。期限はお申し込み時期にかかわらず全員共通です。`
 // のように書き換え、メール文面用の SELF_CARE_VIDEO_VIEWING_NOTE（gas/Config.gs）も同じ文に合わせて、
 // Apps Scriptを貼り替えて再デプロイしてください。
-const VIDEO_VIEWING_PERIOD = '視聴期間 4週間ほど';
-const VIDEO_VIEWING_NOTE = '視聴期間は4週間ほどです。';
+const VIDEO_VIEWING_PERIOD = '視聴期限 11月14日（土）まで';
+const VIDEO_VIEWING_NOTE = '現在の視聴期限は11月14日（土）までです。期限はお申し込み時期にかかわらず全員共通です。';
 
 // セルフケア動画の単独お申し込み。
 // standalone: true は日付を持たない商品の目印。スケジュール表と募集中カードからは外し、
@@ -241,7 +241,7 @@ COURSES.push({
   bookingType: 'internal',
   standalone: true,
   timeOfDay: null,
-  name: 'セルフケア動画',
+  name: 'セルフケア動画「お腹グニャも、反り腰も bye bye!」',
   venue: 'オンライン（動画視聴）',
   scheduleText: 'いつでもお申し込みいただけます',
   nextDate: null,
@@ -255,9 +255,9 @@ COURSES.push({
     { id: 'none', label: 'レッスンを受講していない方', amount: 2500 }
   ],
   image: 'images/mindfulness-yoga.jpg',
-  catch: 'ご自宅で、いつでも整える',
-  description: `レッスンで行っているセルフケアを、ご自宅でも続けていただけるようまとめた動画です。\n短い時間でも、日々の習慣にすることで身体は変わっていきます。\n\n${VIDEO_VIEWING_NOTE}\n視聴URLと注意事項は、ご入金の確認後に公式LINEよりお送りします。`,
-  items: [`セルフケア動画（${VIDEO_VIEWING_PERIOD}）`],
+  catch: 'お腹グニャも、反り腰も bye bye!',
+  description: `肩甲骨と骨盤の連動を意識しながら、お腹はシュッと、整った姿勢へ。姿勢改善・骨盤調整にも。\nレッスンで行っているセルフケアを、ご自宅でも続けていただけるようまとめた動画です。短い時間でも、日々の習慣にすることで身体は変わっていきます。\n\n${VIDEO_VIEWING_NOTE}\n視聴URLと注意事項は、ご入金の確認後に公式LINEよりお送りします。`,
+  items: ['姿勢改善・骨盤調整のセルフケア', `視聴期限 11月14日（土）まで`],
   belongings: ['ヨガマット または バスタオル（お持ちの方）'],
   status: 'open'
 });
