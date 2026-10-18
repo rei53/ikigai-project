@@ -229,8 +229,15 @@ const COURSES = [
 // 期限を決めて募集するときは、ここを `現在の視聴期限は10月14日（水）までです。期限はお申し込み時期にかかわらず全員共通です。`
 // のように書き換え、メール文面用の SELF_CARE_VIDEO_VIEWING_NOTE（gas/Config.gs）も同じ文に合わせて、
 // Apps Scriptを貼り替えて再デプロイしてください。
-const VIDEO_VIEWING_PERIOD = '視聴期限 11月14日（土）まで';
-const VIDEO_VIEWING_NOTE = '現在の視聴期限は11月14日（土）までです。期限はお申し込み時期にかかわらず全員共通です。';
+// 今回の募集の視聴期限。次の募集では、ここと gas/Config.gs の SELF_CARE_VIDEO_DEADLINE を書き換える。
+const VIDEO_DEADLINE_DATE = '2026-11-14';
+const VIDEO_DEADLINE_TEXT = (function () {
+  const [y, m, d] = VIDEO_DEADLINE_DATE.split('-').map(Number);
+  const week = ['日', '月', '火', '水', '木', '金', '土'][new Date(y, m - 1, d).getDay()];
+  return `${m}月${d}日（${week}）`;
+})();
+const VIDEO_VIEWING_PERIOD = `視聴期限 ${VIDEO_DEADLINE_TEXT}まで`;
+const VIDEO_VIEWING_NOTE = `現在の視聴期限は${VIDEO_DEADLINE_TEXT}までです。期限はお申し込み時期にかかわらず全員共通です。`;
 
 // セルフケア動画の単独お申し込み。
 // standalone: true は日付を持たない商品の目印。スケジュール表と募集中カードからは外し、
@@ -259,7 +266,7 @@ COURSES.push({
   image: 'images/mindfulness-yoga.jpg',
   catch: 'お腹グニャも、反り腰も bye bye!',
   description: `肩甲骨と骨盤の連動を意識しながら、お腹はシュッと、整った姿勢へ。姿勢改善・骨盤調整にも。\nレッスンで行っているセルフケアを、ご自宅でも続けていただけるようまとめた動画です。短い時間でも、日々の習慣にすることで身体は変わっていきます。\n\n${VIDEO_VIEWING_NOTE}\n視聴URLと注意事項は、ご入金の確認後に公式LINEよりお送りします。`,
-  items: ['姿勢改善・骨盤調整のセルフケア', `視聴期限 11月14日（土）まで`],
+  items: ['姿勢改善・骨盤調整のセルフケア', VIDEO_VIEWING_PERIOD],
   belongings: ['ヨガマット または バスタオル（お持ちの方）'],
   status: 'open'
 });

@@ -404,8 +404,8 @@
           ${videoRows.length ? `
           <div class="roster-video">
             <h3>セルフケア動画のお申し込み（この回）${videoRows.length}名</h3>
-            <ul>${videoRows.map(b => `<li>☐ ${escapeHtml(b.name)}${b.kana ? '（' + escapeHtml(b.kana) + '）' : ''}　${b.status === 'paid' ? '入金済み' : '<span class="roster-cash">未確認</span>'}　${escapeHtml(b.email)}</li>`).join('')}</ul>
-            <p class="roster-note">視聴URLは公式LINEから個別にお送りします。お送りしたら☐に印を付けてください。</p>
+            <ul>${videoRows.map(b => `<li>${b.videoSent ? '☑' : '☐'} ${escapeHtml(b.name)}${b.kana ? '（' + escapeHtml(b.kana) + '）' : ''}　${b.status === 'paid' ? '入金済み' : '<span class="roster-cash">未確認</span>'}　${b.videoSent ? '送付済み' : '<span class="roster-cash">URL未送付</span>'}${b.videoTerm ? '　視聴期限 ' + formatEventDate(b.videoTerm) : ''}</li>`).join('')}</ul>
+            <p class="roster-note">この回に参加される方の動画のお申し込みです。開催後に、公式LINEから視聴URLをお送りします。</p>
           </div>` : ''}
           <table>
             <thead><tr><th></th><th>お名前</th><th>人数</th><th>お支払い</th><th>特典</th><th>電話</th><th>ご要望</th></tr></thead>
@@ -420,44 +420,68 @@
   // 単独でのお申し込みと、寺ヨガに追加された分の両方を1つのリストにまとめる。
   // 視聴URLは公式LINEから手作業でお送りする運用なので、送付済みかどうかはここでは持たない。
 
+  function videoAmount(b) {
+    return b.courseId === 'self-care-video' ? (Number(b.amount) || 0) : 1000;
+  }
+
   function renderVideoList() {
     const rows = allBookings
       .filter(b => (b.courseId === 'self-care-video' || b.addVideo) && b.status !== 'cancelled' && b.status !== 'failed')
       .sort((a, b) => String(b.timestamp).localeCompare(String(a.timestamp)));
 
-    const paid = rows.filter(b => b.status === 'paid');
-    const unpaid = rows.filter(b => b.status !== 'paid');
-    const revenue = rows.reduce((sum, b) => sum + (b.courseId === 'self-care-video' ? (Number(b.amount) || 0) : 1000), 0);
+    // 募集の回（視聴期限）ごとにまとめる。期限を記録する前の申し込みは「期限の記録なし」に入る。
+    const terms = [...new Set(rows.map(b => b.videoTerm || ''))]
+      .sort((a, b) => String(b).localeCompare(String(a)));
 
-    const tableRows = rows.length ? rows.map(b => `
-      <tr>
-        <td class="check">☐</td>
-        <td>${escapeHtml(b.name)}${b.kana ? '<br><span style="color:var(--muted); font-size:0.78rem;">' + escapeHtml(b.kana) + '</span>' : ''}</td>
-        <td>${escapeHtml(b.email)}</td>
-        <td>${b.courseId === 'self-care-video' ? '動画のみ' : '寺ヨガに追加'}<br><span style="color:var(--muted); font-size:0.76rem;">${escapeHtml(b.courseName)}</span></td>
-        <td>¥${(b.courseId === 'self-care-video' ? (Number(b.amount) || 0) : 1000).toLocaleString()}</td>
-        <td><span class="badge badge-${b.status}">${STATUS_LABEL[b.status] || b.status}</span></td>
-        <td>${formatDateTime(b.timestamp)}</td>
-      </tr>`).join('')
-      : '<tr><td colspan="7" class="empty">まだお申し込みがありません。</td></tr>';
+    if (!rows.length) {
+      document.getElementById('videoBody').innerHTML =
+        '<div class="roster-card"><div class="empty">まだお申し込みがありません。</div></div>';
+      return;
+    }
 
-    document.getElementById('videoBody').innerHTML = `
+    document.getElementById('videoBody').innerHTML = terms.map(term => {
+      const group = rows.filter(b => (b.videoTerm || '') === term);
+      const paid = group.filter(b => b.status === 'paid');
+      const sent = group.filter(b => b.videoSent);
+      const revenue = group.reduce((sum, b) => sum + videoAmount(b), 0);
+
+      const tableRows = group.map(b => {
+        // 寺ヨガと同時に申し込まれた分は、その回の開催後にご視聴いただく
+        const course = schedule.find(s => s.id === b.courseId);
+        const origin = b.courseId === 'self-care-video'
+          ? '動画のみ'
+          : '寺ヨガに追加' + (course ? '（' + formatEventDate(course.date) + 'の開催後）' : '');
+        return `
+        <tr>
+          <td class="check">${b.videoSent ? '☑' : '☐'}</td>
+          <td>${escapeHtml(b.name)}${b.kana ? '<br><span style="color:var(--muted); font-size:0.78rem;">' + escapeHtml(b.kana) + '</span>' : ''}</td>
+          <td>${escapeHtml(b.email)}</td>
+          <td>${origin}<br><span style="color:var(--muted); font-size:0.76rem;">${escapeHtml(b.courseName)}</span></td>
+          <td>¥${videoAmount(b).toLocaleString()}</td>
+          <td><span class="badge badge-${b.status}">${STATUS_LABEL[b.status] || b.status}</span></td>
+          <td>${b.videoSent ? '送付済み' : '<span class="roster-cash">未送付</span>'}</td>
+          <td>${formatDateTime(b.timestamp)}</td>
+        </tr>`;
+      }).join('');
+
+      return `
       <div class="roster-card">
         <div class="roster-head">
-          <h2>セルフケア動画のお申し込み</h2>
+          <h2>セルフケア動画 ${term ? '／ 視聴期限 ' + formatEventDate(term) + 'まで' : '／ 期限の記録なし（以前のお申し込み）'}</h2>
         </div>
         <div class="roster-sum">
-          <div>お申し込み<strong>${rows.length}名</strong></div>
+          <div>お申し込み<strong>${group.length}名</strong></div>
           <div>入金確認済み<strong>${paid.length}名</strong></div>
-          <div>未確認<strong>${unpaid.length}名</strong></div>
+          <div>URL送付済み<strong>${sent.length}名</strong></div>
           <div>金額合計<strong>¥${revenue.toLocaleString()}</strong></div>
         </div>
         <table>
-          <thead><tr><th></th><th>お名前</th><th>メール</th><th>種別</th><th>金額</th><th>状態</th><th>申込日時</th></tr></thead>
+          <thead><tr><th></th><th>お名前</th><th>メール</th><th>申し込み元</th><th>金額</th><th>入金</th><th>URL送付</th><th>申込日時</th></tr></thead>
           <tbody>${tableRows}</tbody>
         </table>
-        <p class="roster-note">視聴URLは公式LINEから個別にお送りする運用です。お送りした方のチェック欄☐に印を付けてお使いください。寺ヨガに追加された分は1,000円で計算しています。</p>
+        <p class="roster-note">視聴URLは公式LINEから個別にお送りする運用です。お送りしたら、予約シートの「動画送付」の列に「済」と入れてください（ここの表示が「送付済み」に変わります）。寺ヨガに追加された分は1,000円で計算しています。</p>
       </div>`;
+    }).join('');
   }
 
   document.querySelectorAll('.tab-btn').forEach(btn => {

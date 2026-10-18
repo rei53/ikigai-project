@@ -102,7 +102,18 @@ const SELF_CARE_VIDEO_NAME = 'セルフケア動画';
 // メール文面での視聴期間のご案内。期限を決めて募集するときは
 // '現在の視聴期限は10月14日（水）までです。期限はお申し込み時期にかかわらず全員共通ですので、お早めにご視聴ください。'
 // のように書き換えて再デプロイしてください（data/courses.js の VIDEO_VIEWING_NOTE と合わせる）。
-const SELF_CARE_VIDEO_VIEWING_NOTE = '現在の視聴期限は11月14日（土）までです。期限はお申し込み時期にかかわらず全員共通ですので、お早めにご視聴ください。';
+// 今回の募集の視聴期限（yyyy-MM-dd）。次の募集を始めるときは、ここの日付と
+// data/courses.js の VIDEO_DEADLINE_DATE を書き換える。
+// 申し込み1件ごとに、この日付が「どの回の募集か」としてシートに記録される。
+const SELF_CARE_VIDEO_DEADLINE = '2026-11-14';
+const SELF_CARE_VIDEO_VIEWING_NOTE = '現在の視聴期限は' + formatDeadline_(SELF_CARE_VIDEO_DEADLINE) + 'までです。期限はお申し込み時期にかかわらず全員共通ですので、お早めにご視聴ください。';
+
+// '2026-11-14' を「11月14日（土）」の形にする
+function formatDeadline_(date) {
+  const p = String(date).split('-').map(Number);
+  const week = ['日', '月', '火', '水', '木', '金', '土'][new Date(p[0], p[1] - 1, p[2]).getDay()];
+  return p[1] + '月' + p[2] + '日（' + week + '）';
+}
 
 // セルフケア動画の単独お申し込み。
 // ご受講状況によって金額が変わるため、COURSE_PRICES ではなくこちらを使う。
@@ -137,7 +148,10 @@ const COL = {
   ADD_VIDEO: 16,
   REMINDER_SENT: 17,
   // 「ママのためのYOGA with kids」でお聞きするお子さまの人数・年齢・性別
-  KIDS: 18
+  KIDS: 18,
+  // セルフケア動画：どの回の募集か（視聴期限の日付）と、視聴URLを送ったかどうか
+  VIDEO_TERM: 19,
+  VIDEO_SENT: 20
 };
 
 function getSheet_() {

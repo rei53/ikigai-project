@@ -85,7 +85,10 @@ function handleBookingSubmission_(payload) {
       '', '',
       showVideoGuidance ? 'yes' : '',
       '',
-      kidsText
+      kidsText,
+      // どの回の募集かが後から分かるように、申し込み時点の視聴期限を残す
+      showVideoGuidance ? SELF_CARE_VIDEO_DEADLINE : '',
+      ''
     ]);
 
     sendPaymentInstructions_(email, name, courseName, amount, paymentMethod, showVideoGuidance);
