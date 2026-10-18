@@ -13,7 +13,9 @@
  */
 
 const SCHEDULE_SHEET_NAME = '日程';
-const SCHEDULE_HEADERS = ['会場', '日付', '時間', '状態', '浄財', '浄財支払い'];
+// 1〜6列目は手で入れる欄。7列目から右は updateRosterSheet（Roster.gs）が自動で書き込む欄。
+const SCHEDULE_HEADERS = ['会場', '日付', '時間', '状態', '浄財', '浄財支払い', '申込', '参加者', '動画', 'URL送付'];
+const SCHEDULE_INPUT_COLUMNS = 6;
 const SCHEDULE_CACHE_KEY = 'SCHEDULE_JSON';
 // サイトへ返す日程のキャッシュ時間（秒）。シートを直してから最大この時間で反映される。
 const SCHEDULE_CACHE_SECONDS = 300;
@@ -24,7 +26,7 @@ function readScheduleRows_() {
   const sheet = ss.getSheetByName(SCHEDULE_SHEET_NAME);
   if (!sheet || sheet.getLastRow() < 2) return [];
 
-  const range = sheet.getRange(2, 1, sheet.getLastRow() - 1, SCHEDULE_HEADERS.length);
+  const range = sheet.getRange(2, 1, sheet.getLastRow() - 1, SCHEDULE_INPUT_COLUMNS);
   const values = range.getValues();
   const displays = range.getDisplayValues();
   const tz = ss.getSpreadsheetTimeZone();
@@ -43,6 +45,7 @@ function readScheduleRows_() {
     seen[id] = true;
 
     rows.push({
+      rowNum: i + 2, // 参加者リストを書き戻すときに使う
       id: id,
       venue: venue.slug,
       date: date,
@@ -189,7 +192,7 @@ function setupScheduleSheet() {
       ['法泉寺', new Date(2026, 11, 20), '9:30〜10:30', '募集中', '', '未払い'],
       ['西方寺', new Date(2026, 10, 7), '9:30〜11:00', '募集中', '', '未払い']
     ];
-    sheet.getRange(2, 1, initial.length, SCHEDULE_HEADERS.length).setValues(initial);
+    sheet.getRange(2, 1, initial.length, SCHEDULE_INPUT_COLUMNS).setValues(initial);
   }
 
   sheet.autoResizeColumns(1, SCHEDULE_HEADERS.length);

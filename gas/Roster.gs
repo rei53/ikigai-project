@@ -1,33 +1,35 @@
 /**
- * 参加者リスト（スプレッドシートの「参加者リスト」タブ）
+ * 参加者リスト（「日程」タブの右側に書き出す）
  *
- * 当日の受付用に、開催日ごとの参加者のお名前と、セルフケア動画のお申し込み・
- * 視聴URLを送ったかどうかを、シート上で一覧にする。
+ * 「日程」タブの各行（＝1回の開催）の右に、申し込みの人数・参加者のお名前・
+ * セルフケア動画のお申し込み・視聴URLを送ったかどうかを自動で書き込む。
  *
  * 使い方：スプレッドシートを開くと上に「IKIGAI」メニューが出るので、
  * 「参加者リストを更新」を選ぶ（毎朝6時にも自動で作り直される）。
  *
- * 動画の「URL送付」は Bookings シートの「動画送付」列に「済」と入れると反映される。
+ * 7列目から右は自動で上書きされるので、手では書かないこと。
+ * 「動画」の送付状況は Bookings シートの「動画送付」列に「済」と入れると反映される。
  */
-
-const ROSTER_SHEET_NAME = '参加者リスト';
-const ROSTER_HEADERS = ['開催日', '時間', '講座', 'お名前', 'フリガナ', '人数', 'お子さま', '入金', '動画', 'URL送付'];
 
 function updateRosterSheet() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const sheet = ss.getSheetByName(ROSTER_SHEET_NAME) || ss.insertSheet(ROSTER_SHEET_NAME);
-  const bookings = getSheet_();
-  const today = Utilities.formatDate(new Date(), 'Asia/Tokyo', 'yyyy-MM-dd');
+  const sheet = ss.getSheetByName(SCHEDULE_SHEET_NAME);
+  if (!sheet) return 0;
 
-  // これからの開催（今日を含む）だけを、日付の近い順に並べる
-  const courses = readScheduleRows_()
-    .filter(function (c) { return c.date >= today; })
-    .sort(function (a, b) { return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+  const courses = readScheduleRows_();
+  if (!courses.length) return 0;
 
-  const lastRow = bookings.getLastRow();
-  const data = lastRow < 2 ? [] : bookings.getRange(2, 1, lastRow - 1, COL.VIDEO_SENT).getValues();
+  const bookingSheet = getSheet_();
+  const lastRow = bookingSheet.getLastRow();
+  const data = lastRow < 2 ? [] : bookingSheet.getRange(2, 1, lastRow - 1, COL.VIDEO_SENT).getValues();
 
-  const rows = [];
+  // 見出し（7列目から右）を整える
+  const outFrom = SCHEDULE_INPUT_COLUMNS + 1;
+  const outCount = SCHEDULE_HEADERS.length - SCHEDULE_INPUT_COLUMNS;
+  sheet.getRange(1, outFrom, 1, outCount)
+    .setValues([SCHEDULE_HEADERS.slice(SCHEDULE_INPUT_COLUMNS)])
+    .setFontWeight('bold');
+
   courses.forEach(function (course) {
     const entries = data
       .filter(function (r) {
@@ -39,41 +41,38 @@ function updateRosterSheet() {
         return String(a[COL.KANA - 1] || a[COL.NAME - 1]).localeCompare(String(b[COL.KANA - 1] || b[COL.NAME - 1]), 'ja');
       });
 
-    if (!entries.length) {
-      rows.push([course.date, course.time, course.name, '（お申し込みなし）', '', '', '', '', '', '']);
-      return;
-    }
+    const adults = entries.reduce(function (sum, r) { return sum + (Number(r[COL.PEOPLE - 1]) || 1); }, 0);
+    const kids = entries.reduce(function (sum, r) { return sum + (parseInt(r[COL.KIDS - 1], 10) || 0); }, 0);
+    const videoEntries = entries.filter(function (r) { return r[COL.ADD_VIDEO - 1] === 'yes'; });
+    const sentCount = videoEntries.filter(function (r) {
+      return /済|送った|OK/.test(String(r[COL.VIDEO_SENT - 1] || ''));
+    }).length;
 
-    entries.forEach(function (r) {
-      rows.push([
-        course.date,
-        course.time,
-        course.name,
-        r[COL.NAME - 1],
-        r[COL.KANA - 1],
-        r[COL.PEOPLE - 1],
-        r[COL.KIDS - 1] || '',
-        r[COL.STATUS - 1] === 'paid' ? '入金済み' : '未確認',
-        r[COL.ADD_VIDEO - 1] === 'yes' ? 'あり' : '',
-        r[COL.ADD_VIDEO - 1] === 'yes' ? (/済|送った|OK/.test(String(r[COL.VIDEO_SENT - 1] || '')) ? '送付済み' : '未送付') : ''
-      ]);
-    });
+    const names = entries.map(function (r) {
+      const kidsText = r[COL.KIDS - 1] ? '＋子ども' + r[COL.KIDS - 1] : '';
+      const unpaid = r[COL.STATUS - 1] === 'paid' ? '' : '（未入金）';
+      return String(r[COL.NAME - 1]) + kidsText + unpaid;
+    }).join('、');
+
+    sheet.getRange(course.rowNum, outFrom, 1, outCount).setValues([[
+      entries.length ? ('大人' + adults + '名' + (kids ? '・子ども' + kids + '名' : '')) : '0名',
+      names,
+      videoEntries.length ? videoEntries.length + '名' : '',
+      videoEntries.length ? (sentCount === videoEntries.length ? '送付済み' : sentCount + '/' + videoEntries.length + '送付') : ''
+    ]]);
   });
 
-  sheet.clear();
-  sheet.getRange(1, 1, 1, ROSTER_HEADERS.length).setValues([ROSTER_HEADERS]).setFontWeight('bold');
-  sheet.setFrozenRows(1);
-  if (rows.length) {
-    sheet.getRange(2, 1, rows.length, ROSTER_HEADERS.length).setValues(rows);
-  }
-  sheet.getRange(1, 1, 1, ROSTER_HEADERS.length)
-    .offset(1, 0, Math.max(rows.length, 1), ROSTER_HEADERS.length)
-    .setVerticalAlignment('top');
-  sheet.autoResizeColumns(1, ROSTER_HEADERS.length);
+  sheet.getRange(2, outFrom + 1, Math.max(courses.length, 1), 1).setWrap(true);
+  sheet.setColumnWidth(outFrom + 1, 320);
 
   const updatedAt = Utilities.formatDate(new Date(), 'Asia/Tokyo', 'M月d日 HH:mm');
-  sheet.getRange(1, ROSTER_HEADERS.length + 2).setValue('最終更新：' + updatedAt);
-  return rows.length;
+  sheet.getRange(1, SCHEDULE_HEADERS.length + 2).setValue('参加者リスト 最終更新：' + updatedAt);
+
+  // 以前の「参加者リスト」タブを使っていた場合は、重複するので片付ける
+  const oldSheet = ss.getSheetByName('参加者リスト');
+  if (oldSheet) ss.deleteSheet(oldSheet);
+
+  return courses.length;
 }
 
 // スプレッドシートを開いたときにメニューを出す（シンプルトリガー）
