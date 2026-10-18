@@ -134,7 +134,9 @@ const COL = {
   PAID_AT: 14,
   LAST_ERROR: 15,
   ADD_VIDEO: 16,
-  REMINDER_SENT: 17
+  REMINDER_SENT: 17,
+  // 「ママのためのYOGA with kids」でお聞きするお子さまの人数・年齢・性別
+  KIDS: 18
 };
 
 function getSheet_() {

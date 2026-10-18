@@ -387,7 +387,11 @@
           <div class="form-row"><label>フリガナ</label><input type="text" name="kana"></div>
           <div class="form-row"><label>メールアドレス *</label><input type="email" name="email" required></div>
           <div class="form-row"><label>電話番号</label><input type="tel" name="phone"></div>
-          ${c.priceTiers ? '' : `<div class="form-row"><label>参加人数</label><input type="number" name="people" min="1" value="1"></div>`}
+          ${c.priceTiers ? '' : c.withKids
+            ? `<div class="form-row"><label>大人の人数</label><input type="number" name="people" min="1" value="1"></div>
+          <div class="form-row"><label>お子さんの人数</label><input type="number" name="kids" min="0" value="1"></div>
+          <div class="form-row"><label>お子さんの年齢・性別</label><input type="text" name="kidsDetail" placeholder="例：3歳 女の子、1歳 男の子"></div>`
+            : `<div class="form-row"><label>参加人数</label><input type="number" name="people" min="1" value="1"></div>`}
           ${c.priceTiers ? `
           <div class="form-row">
             <label>ご受講状況 *</label>
@@ -493,6 +497,8 @@
         email: form.email.value.trim(),
         phone: form.phone.value.trim(),
         people: form.people ? form.people.value : '1',
+        kids: form.kids ? form.kids.value : '',
+        kidsDetail: form.kidsDetail ? form.kidsDetail.value.trim() : '',
         message: form.message.value.trim(),
         paymentMethod: paymentMethodInput ? paymentMethodInput.value : '',
         addVideo: !!(form.addVideo && form.addVideo.checked),

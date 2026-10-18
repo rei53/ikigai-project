@@ -11,6 +11,10 @@ function handleBookingSubmission_(payload) {
   const people = String(payload.people || '').trim();
   const message = String(payload.message || '').trim();
   const paymentMethod = String(payload.paymentMethod || '').trim();
+  // お子さま連れのクラス（ママのためのYOGA with kids）だけで使う
+  const kids = String(payload.kids || '').trim();
+  const kidsDetail = String(payload.kidsDetail || '').trim();
+  const kidsText = kids ? (kids + '名' + (kidsDetail ? '（' + kidsDetail + '）' : '')) : '';
   const priceTier = String(payload.priceTier || '').trim();
   const isVideoCourse = courseId === SELF_CARE_VIDEO_COURSE_ID;
   const course = isVideoCourse ? null : findCourse_(courseId);
@@ -80,11 +84,12 @@ function handleBookingSubmission_(payload) {
       paymentMethod, amount, status,
       '', '',
       showVideoGuidance ? 'yes' : '',
-      ''
+      '',
+      kidsText
     ]);
 
     sendPaymentInstructions_(email, name, courseName, amount, paymentMethod, showVideoGuidance);
-    sendOwnerNotification_(name, courseName, amount, paymentMethod, status);
+    sendOwnerNotification_(name, courseName, amount, paymentMethod, status, people, kidsText);
 
     return { ok: true, method: paymentMethod, amount: amount, bookingId: bookingId };
   });

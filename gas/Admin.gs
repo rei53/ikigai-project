@@ -40,7 +40,7 @@ function getAllBookingsForAdmin_(key) {
     return { ok: true, bookings: [] };
   }
 
-  const data = sheet.getRange(2, 1, lastRow - 1, COL.REMINDER_SENT).getValues();
+  const data = sheet.getRange(2, 1, lastRow - 1, COL.KIDS).getValues();
 
   const bookings = data.map(function (row) {
     return {
@@ -58,7 +58,8 @@ function getAllBookingsForAdmin_(key) {
       amount: row[COL.AMOUNT - 1],
       status: row[COL.STATUS - 1],
       paidAt: row[COL.PAID_AT - 1] instanceof Date ? row[COL.PAID_AT - 1].toISOString() : (row[COL.PAID_AT - 1] || null),
-      addVideo: row[COL.ADD_VIDEO - 1] === 'yes'
+      addVideo: row[COL.ADD_VIDEO - 1] === 'yes',
+      kids: row[COL.KIDS - 1] || ''
     };
   });
 

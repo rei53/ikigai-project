@@ -116,6 +116,7 @@
 
   @media print {
     nav, footer, .tab-row, .dash-header, .stat-grid, .filter-row, #listView, .roster-note-screen { display: none !important; }
+    #videoView[style*="none"], #rosterView[style*="none"] { display: none !important; }
     body { background: var(--white); }
     main { padding: 0; }
     .roster-card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; margin-bottom: 14px; }
@@ -160,6 +161,11 @@
       <div class="tab-row">
         <button type="button" class="tab-btn active" data-view="list">申し込み一覧</button>
         <button type="button" class="tab-btn" data-view="roster">当日リスト</button>
+        <button type="button" class="tab-btn" data-view="video">動画リスト</button>
+      </div>
+
+      <div id="videoView" style="display:none;">
+        <div id="videoBody"></div>
       </div>
 
       <div id="rosterView" style="display:none;">
@@ -306,7 +312,7 @@
         <td>${escapeHtml(b.name)}${b.kana ? '<br><span style="color:var(--muted); font-size:0.76rem;">' + escapeHtml(b.kana) + '</span>' : ''}</td>
         <td>${escapeHtml(b.email)}${b.phone ? '<br><span style="color:var(--muted); font-size:0.76rem;">' + escapeHtml(b.phone) + '</span>' : ''}</td>
         <td>${escapeHtml(b.courseName)}</td>
-        <td>${escapeHtml(b.people)}</td>
+        <td>${escapeHtml(b.people)}${b.kids ? '<br><span style="color:var(--muted); font-size:0.76rem;">子ども' + escapeHtml(b.kids) + '</span>' : ''}</td>
         <td>${b.addVideo ? 'セルフケア動画' : ''}</td>
         <td>${METHOD_LABEL[b.paymentMethod] || b.paymentMethod}</td>
         <td>¥${(Number(b.amount) || 0).toLocaleString()}</td>
@@ -357,6 +363,8 @@
         .sort((a, b) => String(a.kana || a.name).localeCompare(String(b.kana || b.name), 'ja'));
 
       const people = rows.reduce((sum, b) => sum + (Number(b.people) || 1), 0);
+      // お子さまの人数は「2名（3歳 女の子…）」の形で入っているので、先頭の数字だけ足す
+      const kidsTotal = rows.reduce((sum, b) => sum + (parseInt(b.kids, 10) || 0), 0);
       const cashRows = rows.filter(b => b.paymentMethod === 'cash' && b.status !== 'paid');
       const cashTotal = cashRows.reduce((sum, b) => sum + (Number(b.amount) || 0), 0);
       const videoCount = rows.filter(b => b.addVideo).length;
@@ -365,7 +373,7 @@
         <tr>
           <td class="check">☐</td>
           <td>${escapeHtml(b.name)}${b.kana ? '<br><span style="color:var(--muted); font-size:0.78rem;">' + escapeHtml(b.kana) + '</span>' : ''}</td>
-          <td>${escapeHtml(b.people || 1)}名</td>
+          <td>大人${escapeHtml(b.people || 1)}名${b.kids ? '<br><span style="color:var(--sage-dark); font-size:0.78rem;">子ども' + escapeHtml(b.kids) + '</span>' : ''}</td>
           <td>${b.status === 'paid'
             ? '入金済み'
             : `<span class="${b.paymentMethod === 'cash' ? 'roster-cash' : ''}">${METHOD_LABEL[b.paymentMethod] || ''}${b.paymentMethod === 'cash' ? ' ¥' + (Number(b.amount) || 0).toLocaleString() : '（未確認）'}</span>`}</td>
@@ -382,7 +390,7 @@
             <span class="roster-time">${formatEventDate(course.date)}　${escapeHtml(course.time || '')}</span>
           </div>
           <div class="roster-sum">
-            <div>参加予定<strong>${people}名</strong>（${rows.length}件）</div>
+            <div>参加予定<strong>大人${people}名${kidsTotal ? '・子ども' + kidsTotal + '名' : ''}</strong>（${rows.length}件）</div>
             <div>当日集金<strong>¥${cashTotal.toLocaleString()}</strong>（${cashRows.length}件）</div>
             <div>セルフケア動画<strong>${videoCount}名</strong></div>
             <div>浄財<strong>${course.donation ? '¥' + Number(course.donation).toLocaleString() : '—'}</strong></div>
@@ -396,12 +404,58 @@
     }).join('');
   }
 
+  // ── セルフケア動画のお申し込み ───────────────
+  // 単独でのお申し込みと、寺ヨガに追加された分の両方を1つのリストにまとめる。
+  // 視聴URLは公式LINEから手作業でお送りする運用なので、送付済みかどうかはここでは持たない。
+
+  function renderVideoList() {
+    const rows = allBookings
+      .filter(b => (b.courseId === 'self-care-video' || b.addVideo) && b.status !== 'cancelled' && b.status !== 'failed')
+      .sort((a, b) => String(b.timestamp).localeCompare(String(a.timestamp)));
+
+    const paid = rows.filter(b => b.status === 'paid');
+    const unpaid = rows.filter(b => b.status !== 'paid');
+    const revenue = rows.reduce((sum, b) => sum + (b.courseId === 'self-care-video' ? (Number(b.amount) || 0) : 1000), 0);
+
+    const tableRows = rows.length ? rows.map(b => `
+      <tr>
+        <td class="check">☐</td>
+        <td>${escapeHtml(b.name)}${b.kana ? '<br><span style="color:var(--muted); font-size:0.78rem;">' + escapeHtml(b.kana) + '</span>' : ''}</td>
+        <td>${escapeHtml(b.email)}</td>
+        <td>${b.courseId === 'self-care-video' ? '動画のみ' : '寺ヨガに追加'}<br><span style="color:var(--muted); font-size:0.76rem;">${escapeHtml(b.courseName)}</span></td>
+        <td>¥${(b.courseId === 'self-care-video' ? (Number(b.amount) || 0) : 1000).toLocaleString()}</td>
+        <td><span class="badge badge-${b.status}">${STATUS_LABEL[b.status] || b.status}</span></td>
+        <td>${formatDateTime(b.timestamp)}</td>
+      </tr>`).join('')
+      : '<tr><td colspan="7" class="empty">まだお申し込みがありません。</td></tr>';
+
+    document.getElementById('videoBody').innerHTML = `
+      <div class="roster-card">
+        <div class="roster-head">
+          <h2>セルフケア動画のお申し込み</h2>
+        </div>
+        <div class="roster-sum">
+          <div>お申し込み<strong>${rows.length}名</strong></div>
+          <div>入金確認済み<strong>${paid.length}名</strong></div>
+          <div>未確認<strong>${unpaid.length}名</strong></div>
+          <div>金額合計<strong>¥${revenue.toLocaleString()}</strong></div>
+        </div>
+        <table>
+          <thead><tr><th></th><th>お名前</th><th>メール</th><th>種別</th><th>金額</th><th>状態</th><th>申込日時</th></tr></thead>
+          <tbody>${tableRows}</tbody>
+        </table>
+        <p class="roster-note">視聴URLは公式LINEから個別にお送りする運用です。お送りした方のチェック欄☐に印を付けてお使いください。寺ヨガに追加された分は1,000円で計算しています。</p>
+      </div>`;
+  }
+
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
-      const roster = btn.dataset.view === 'roster';
-      document.getElementById('rosterView').style.display = roster ? 'block' : 'none';
-      document.getElementById('listView').style.display = roster ? 'none' : 'block';
+      const view = btn.dataset.view;
+      document.getElementById('rosterView').style.display = view === 'roster' ? 'block' : 'none';
+      document.getElementById('videoView').style.display = view === 'video' ? 'block' : 'none';
+      document.getElementById('listView').style.display = view === 'list' ? 'block' : 'none';
+      if (view === 'video') renderVideoList();
     });
   });
   document.getElementById('rosterDate').addEventListener('change', renderRoster);

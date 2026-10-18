@@ -147,7 +147,7 @@ function sendReminderEmail_(email, name, courseName, dateText) {
   });
 }
 
-function sendOwnerNotification_(name, courseName, amount, paymentMethod, status) {
+function sendOwnerNotification_(name, courseName, amount, paymentMethod, status, people, kidsText) {
   const methodLabel = paymentMethod === 'paypay' ? 'PayPay（QRコード）'
     : paymentMethod === 'cash' ? '当日現金'
     : 'ゆうちょ振込';
@@ -156,6 +156,8 @@ function sendOwnerNotification_(name, courseName, amount, paymentMethod, status)
     subject: '【新規予約】' + courseName + '（' + methodLabel + '）',
     body: 'お名前: ' + name + '\n' +
       '講座: ' + courseName + '\n' +
+      (people ? '大人: ' + people + '名\n' : '') +
+      (kidsText ? 'お子さま: ' + kidsText + '\n' : '') +
       '金額: ' + amount + '円\n' +
       '支払い方法: ' + methodLabel + '\n' +
       'ステータス: ' + status + '\n\n' +

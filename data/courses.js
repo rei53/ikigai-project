@@ -63,6 +63,8 @@ const HOSENJI_MAMA_TEMPLATE = {
   timeOfDay: null,
   oneOff: true,
   name: 'ママのためのYOGA with kids（法泉寺）',
+  // お申し込みフォームで、大人の人数とお子さまの人数・年齢・性別をお聞きする
+  withKids: true,
   venue: '法泉寺 座禅堂',
   scheduleText: 'お子さんと一緒に参加できる45分',
   time: '10:45〜11:30',
