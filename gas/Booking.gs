@@ -23,7 +23,7 @@ function handleBookingSubmission_(payload) {
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
     return { ok: false, error: 'メールアドレスの形式が正しくありません。' };
   }
-  if (paymentMethod !== 'paypay' && paymentMethod !== 'bank_transfer') {
+  if (paymentMethod !== 'paypay' && paymentMethod !== 'bank_transfer' && paymentMethod !== 'cash') {
     return { ok: false, error: '支払い方法を選択してください。' };
   }
 
@@ -65,9 +65,12 @@ function handleBookingSubmission_(payload) {
   const sheet = getSheet_();
 
   return withBookingLock_(function () {
-    // PayPay（QRコード）・ゆうちょ振込のどちらも、入金確認は主催者が手作業で行う。
+    // PayPay（QRコード）・ゆうちょ振込・当日現金のいずれも、入金確認は主催者が手作業で行う。
     // ここでは申し込みを受け付けて、お支払い方法の案内メールを送るところまで。
-    const status = paymentMethod === 'paypay' ? 'pending_payment' : 'pending_bank_transfer';
+    // 当日現金は、開催日に受付で受け取ってから status を paid にする。
+    const status = paymentMethod === 'paypay' ? 'pending_payment'
+      : paymentMethod === 'cash' ? 'pending_cash'
+      : 'pending_bank_transfer';
 
     sheet.appendRow([
       bookingId,

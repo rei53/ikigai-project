@@ -65,5 +65,11 @@ function getAllBookingsForAdmin_(key) {
   // 新しい申し込みが上に来るように
   bookings.reverse();
 
-  return { ok: true, bookings: bookings };
+  // 当日リスト用に、日程タブの内容（開催日・時間・浄財）も一緒に返す。
+  // 浄財はお寺へお納めする金額で、サイトには出さず管理ページだけで使う。
+  const schedule = readScheduleRows_().map(function (r) {
+    return { id: r.id, date: r.date, time: r.time, name: r.name, donation: r.donation };
+  });
+
+  return { ok: true, bookings: bookings, schedule: schedule };
 }

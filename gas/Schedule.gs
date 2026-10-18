@@ -5,14 +5,15 @@
  * アプリから行を足すだけで、サイトの表示・予約受付・2日前リマインダーに反映されます。
  * コードの貼り替えや再デプロイは不要です。
  *
- * 列：会場（法泉寺／西方寺）｜日付｜時間（空欄なら会場の標準時間）｜状態（空欄＝募集中／残りわずか／締切）
+ * 列：会場（法泉寺／西方寺）｜日付｜時間（空欄なら会場の標準時間）｜状態（空欄＝募集中／残りわずか／締切）｜浄財
+ * 「浄財」はお寺へお納めする金額。サイトには出さず、管理ページの当日リストにだけ表示する。
  *
  * 料金や講座名は会場ごとに Config.gs の VENUES で決まります。
  * サイトへは doGet(action=schedule) で、今日以降の日程だけを返します。
  */
 
 const SCHEDULE_SHEET_NAME = '日程';
-const SCHEDULE_HEADERS = ['会場', '日付', '時間', '状態'];
+const SCHEDULE_HEADERS = ['会場', '日付', '時間', '状態', '浄財'];
 const SCHEDULE_CACHE_KEY = 'SCHEDULE_JSON';
 // サイトへ返す日程のキャッシュ時間（秒）。シートを直してから最大この時間で反映される。
 const SCHEDULE_CACHE_SECONDS = 300;
@@ -47,6 +48,7 @@ function readScheduleRows_() {
       date: date,
       time: normalizeScheduleTime_(displays[i][2]),
       status: normalizeScheduleStatus_(displays[i][3]),
+      donation: normalizeScheduleDonation_(row[4]),
       amount: venue.price,
       name: venue.name + formatScheduleDateForName_(date),
       videoEligible: venue.videoEligible
@@ -123,6 +125,12 @@ function normalizeScheduleTime_(text) {
   return String(text || '').trim().replace(/\s*[-~～ー−]\s*/g, '〜');
 }
 
+// 浄財の欄。数字として読めなければ null（＝まだ決めていない）。
+function normalizeScheduleDonation_(value) {
+  const n = Number(String(value == null ? '' : value).replace(/[¥,、円\s]/g, ''));
+  return isNaN(n) || n === 0 ? null : n;
+}
+
 function normalizeScheduleStatus_(text) {
   const t = String(text || '').trim();
   if (/締|満|終了|中止/.test(t)) return 'closed';
@@ -166,13 +174,15 @@ function setupScheduleSheet() {
   sheet.getRange(2, 3, maxRows, 1).setNumberFormat('@');
   sheet.getRange(2, 4, maxRows, 1).setDataValidation(
     SpreadsheetApp.newDataValidation().requireValueInList(['募集中', '残りわずか', '締切'], true).build());
+  // 浄財はお寺へお納めする金額。空欄でもよく、管理ページの当日リストにだけ出る。
+  sheet.getRange(2, 5, maxRows, 1).setNumberFormat('#,##0');
 
   if (isNew) {
     const initial = [
-      ['法泉寺', new Date(2026, 9, 18), '9:30〜10:30', '募集中'],
-      ['法泉寺', new Date(2026, 10, 15), '9:30〜10:30', '募集中'],
-      ['法泉寺', new Date(2026, 11, 20), '9:30〜10:30', '募集中'],
-      ['西方寺', new Date(2026, 10, 7), '9:30〜11:00', '募集中']
+      ['法泉寺', new Date(2026, 9, 18), '9:30〜10:30', '募集中', ''],
+      ['法泉寺', new Date(2026, 10, 15), '9:30〜10:30', '募集中', ''],
+      ['法泉寺', new Date(2026, 11, 20), '9:30〜10:30', '募集中', ''],
+      ['西方寺', new Date(2026, 10, 7), '9:30〜11:00', '募集中', '']
     ];
     sheet.getRange(2, 1, initial.length, SCHEDULE_HEADERS.length).setValues(initial);
   }

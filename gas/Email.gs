@@ -51,10 +51,13 @@ function nl2br_(text) {
 function sendPaymentInstructions_(email, name, courseName, amount, paymentMethod, addVideo) {
   if (!email) return;
   const isPayPay = paymentMethod === 'paypay';
+  const isCash = paymentMethod === 'cash';
 
   const payBlockText = isPayPay
     ? '【お支払い方法：PayPay】\n' + PAYPAY_INFO + '\n※QRコードはこのメールに添付しています。'
-    : '【お支払い方法：ゆうちょ振込】\n' + BANK_TRANSFER_INFO;
+    : isCash
+      ? '【お支払い方法：当日現金】\n' + CASH_INFO
+      : '【お支払い方法：ゆうちょ振込】\n' + BANK_TRANSFER_INFO;
 
   const textBody = name + ' 様\n\n' +
     '「' + courseName + '」にお申し込みいただき、ありがとうございます。\n' +
@@ -67,7 +70,9 @@ function sendPaymentInstructions_(email, name, courseName, amount, paymentMethod
         '初めて友だち追加された方は、LINEのお名前だけではどなたか分からないためです。\n' +
         LINE_URL + '\n\n'
       : '') +
-    'ご入金の確認をもちまして予約確定となります。\n' +
+    (isCash
+      ? 'ご予約を承りました。当日、受付でお支払いください。\n'
+      : 'ご入金の確認をもちまして予約確定となります。\n') +
     videoGuidanceBlock_(addVideo, false) + '\n' +
     'ご不明な点がございましたら、このメールにご返信ください。\n\n' +
     SENDER_NAME + '\n' + REPLY_TO;
@@ -87,7 +92,9 @@ function sendPaymentInstructions_(email, name, courseName, amount, paymentMethod
       (qrBlob
         ? '<p><img src="cid:paypayQr" alt="PayPayのお支払い用QRコード" style="max-width:240px; width:100%; border:1px solid #ddd; border-radius:8px;"></p>'
         : '<p>QRコードは<a href="' + SITE_BOOKING_URL + '">お申し込みページ</a>に掲載しています。</p>')
-    : '<p><strong>【お支払い方法：ゆうちょ振込】</strong><br>' + nl2br_(BANK_TRANSFER_INFO) + '</p>';
+    : isCash
+      ? '<p><strong>【お支払い方法：当日現金】</strong><br>' + nl2br_(CASH_INFO) + '</p>'
+      : '<p><strong>【お支払い方法：ゆうちょ振込】</strong><br>' + nl2br_(BANK_TRANSFER_INFO) + '</p>';
 
   const htmlBody =
     '<div style="font-family:sans-serif; font-size:14px; line-height:1.8; color:#333;">' +
@@ -102,7 +109,9 @@ function sendPaymentInstructions_(email, name, courseName, amount, paymentMethod
         '初めて友だち追加された方は、LINEのお名前だけではどなたか分からないためです。<br>' +
         '<a href="' + LINE_URL + '">' + LINE_URL + '</a></p>'
       : '') +
-    '<p>ご入金の確認をもちまして予約確定となります。</p>' +
+    (isCash
+      ? '<p>ご予約を承りました。当日、受付でお支払いください。</p>'
+      : '<p>ご入金の確認をもちまして予約確定となります。</p>') +
     nl2br_(videoGuidanceBlock_(addVideo, false)) +
     '<p>ご不明な点がございましたら、このメールにご返信ください。</p>' +
     '<p>' + htmlEscape_(SENDER_NAME) + '<br>' + htmlEscape_(REPLY_TO) + '</p>' +
@@ -139,7 +148,9 @@ function sendReminderEmail_(email, name, courseName, dateText) {
 }
 
 function sendOwnerNotification_(name, courseName, amount, paymentMethod, status) {
-  const methodLabel = paymentMethod === 'paypay' ? 'PayPay（QRコード）' : 'ゆうちょ振込';
+  const methodLabel = paymentMethod === 'paypay' ? 'PayPay（QRコード）'
+    : paymentMethod === 'cash' ? '当日現金'
+    : 'ゆうちょ振込';
   MailApp.sendEmail({
     to: OWNER_EMAIL,
     subject: '【新規予約】' + courseName + '（' + methodLabel + '）',

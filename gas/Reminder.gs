@@ -31,7 +31,7 @@ function sendTwoDaysBeforeReminders() {
 
     // 入金確認は手動でタイムラグがあるため、申し込み済みの方すべてに送る。
     // キャンセル（cancelled）など、それ以外のステータスは対象外。
-    if (status !== 'paid' && status !== 'pending_payment' && status !== 'pending_bank_transfer') return;
+    if (status !== 'paid' && status !== 'pending_payment' && status !== 'pending_bank_transfer' && status !== 'pending_cash') return;
     if (reminderSent === 'sent') return;
 
     // 同じ講座の予約が何件あっても、日程タブを読むのは1講座1回だけにする

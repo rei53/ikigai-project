@@ -87,10 +87,39 @@
 
   .badge { display: inline-block; font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 10px; }
   .badge-paid { background: var(--gold-light); color: var(--sage-deep); }
-  .badge-pending_payment, .badge-pending_bank_transfer { background: #fde8d0; color: #8a5a1e; }
+  .badge-pending_payment, .badge-pending_bank_transfer, .badge-pending_cash { background: #fde8d0; color: #8a5a1e; }
   .badge-failed { background: #f6d9d6; color: #9b3a32; }
 
   .loading, .empty { text-align: center; color: var(--muted); padding: 40px; }
+
+  /* 画面の切り替え（申し込み一覧／当日リスト） */
+  .tab-row { display: flex; gap: 8px; margin-bottom: 20px; }
+  .tab-btn {
+    font-family: inherit; font-size: 0.86rem; font-weight: 700; padding: 10px 20px; border-radius: 22px;
+    border: 1.5px solid var(--line); background: var(--white); color: var(--muted); cursor: pointer;
+  }
+  .tab-btn.active { background: var(--sage-dark); border-color: var(--sage-dark); color: var(--white); }
+
+  /* 当日リスト：開催日ごとに、受付で見る内容だけを大きめに並べる */
+  .roster-card { background: var(--white); border-radius: 16px; box-shadow: var(--shadow-sm); padding: 24px 22px; margin-bottom: 20px; }
+  .roster-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+  .roster-head h2 { font-size: 1.1rem; color: var(--sage-deep); }
+  .roster-time { font-size: 0.9rem; font-weight: 700; color: var(--sage-dark); }
+  .roster-sum { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0 18px; }
+  .roster-sum div { background: var(--warm); border-radius: 10px; padding: 10px 16px; font-size: 0.82rem; }
+  .roster-sum strong { display: block; font-size: 1.15rem; color: var(--ink); }
+  .roster-card table { white-space: normal; font-size: 0.88rem; }
+  .roster-card th { text-transform: none; font-size: 0.74rem; }
+  .roster-card td.check { width: 34px; font-size: 1.1rem; color: var(--sage-light); }
+  .roster-note { font-size: 0.78rem; color: var(--muted); margin-top: 12px; }
+  .roster-cash { color: #8a5a1e; font-weight: 700; }
+
+  @media print {
+    nav, footer, .tab-row, .dash-header, .stat-grid, .filter-row, #listView, .roster-note-screen { display: none !important; }
+    body { background: var(--white); }
+    main { padding: 0; }
+    .roster-card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; margin-bottom: 14px; }
+  }
 
   footer { background: var(--ink); color: rgba(255,255,255,0.5); padding: 30px 24px; text-align: center; font-size: 0.78rem; }
 
@@ -128,6 +157,20 @@
         </div>
       </div>
 
+      <div class="tab-row">
+        <button type="button" class="tab-btn active" data-view="list">申し込み一覧</button>
+        <button type="button" class="tab-btn" data-view="roster">当日リスト</button>
+      </div>
+
+      <div id="rosterView" style="display:none;">
+        <div class="filter-row roster-note-screen">
+          <select id="rosterDate"></select>
+          <button class="btn btn-outline" id="printBtn">印刷する</button>
+        </div>
+        <div id="rosterBody"></div>
+      </div>
+
+      <div id="listView">
       <div class="stat-grid" id="statGrid"></div>
 
       <div class="filter-row">
@@ -137,6 +180,7 @@
           <option value="paid">決済済み</option>
           <option value="pending_payment">決済待ち（PayPay）</option>
           <option value="pending_bank_transfer">振込待ち</option>
+          <option value="pending_cash">当日現金</option>
           <option value="failed">失敗</option>
         </select>
       </div>
@@ -152,6 +196,7 @@
           <tbody id="bookingTableBody"></tbody>
         </table>
       </div>
+      </div>
     </div>
 
   </div>
@@ -165,8 +210,10 @@
     paid: '決済済み',
     pending_payment: '決済待ち（PayPay）',
     pending_bank_transfer: '振込待ち',
+    pending_cash: '当日現金',
     failed: '失敗'
   };
+  const METHOD_LABEL = { paypay: 'PayPay', bank_transfer: '銀行振込', cash: '当日現金' };
 
   const loginCard = document.getElementById('loginCard');
   const dashboard = document.getElementById('dashboard');
@@ -175,6 +222,7 @@
   const loginError = document.getElementById('loginError');
 
   let allBookings = [];
+  let schedule = [];
 
   function escapeHtml(str) {
     return String(str == null ? '' : str).replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s]));
@@ -205,10 +253,12 @@
         }
         sessionStorage.setItem('ikigaiAdminKey', key);
         allBookings = res.bookings || [];
+        schedule = res.schedule || [];
         loginCard.style.display = 'none';
         dashboard.style.display = 'block';
         renderStats();
         renderTable();
+        renderRosterDates();
       })
       .catch(() => {
         loginBtn.disabled = false;
@@ -258,12 +308,104 @@
         <td>${escapeHtml(b.courseName)}</td>
         <td>${escapeHtml(b.people)}</td>
         <td>${b.addVideo ? 'セルフケア動画' : ''}</td>
-        <td>${b.paymentMethod === 'paypay' ? 'PayPay' : '銀行振込'}</td>
+        <td>${METHOD_LABEL[b.paymentMethod] || b.paymentMethod}</td>
         <td>¥${(Number(b.amount) || 0).toLocaleString()}</td>
         <td><span class="badge badge-${b.status}">${STATUS_LABEL[b.status] || b.status}</span></td>
       </tr>
     `).join('');
   }
+
+  // ── 当日リスト ─────────────────────────────
+  // 日程タブの開催日ごとに、受付で見る内容（お名前・人数・支払い・浄財）だけをまとめて出す。
+
+  function formatEventDate(date) {
+    const [y, m, d] = String(date).split('-').map(Number);
+    const week = ['日', '月', '火', '水', '木', '金', '土'][new Date(y, m - 1, d).getDay()];
+    return `${y}年${m}月${d}日（${week}）`;
+  }
+
+  function renderRosterDates() {
+    const select = document.getElementById('rosterDate');
+    const today = new Date().toISOString().slice(0, 10);
+    const dates = [...new Set(schedule.map(s => s.date))].sort();
+    if (!dates.length) {
+      select.innerHTML = '<option value="">日程がありません</option>';
+      renderRoster();
+      return;
+    }
+    // 直近のこれからの開催日を初期選択にする（すべて過ぎていれば最後の回）
+    const defaultDate = dates.find(d => d >= today) || dates[dates.length - 1];
+    select.innerHTML = dates.map(d =>
+      `<option value="${d}"${d === defaultDate ? ' selected' : ''}>${formatEventDate(d)}</option>`).join('');
+    renderRoster();
+  }
+
+  function renderRoster() {
+    const date = document.getElementById('rosterDate').value;
+    const body = document.getElementById('rosterBody');
+    const courses = schedule.filter(s => s.date === date);
+
+    if (!courses.length) {
+      body.innerHTML = '<div class="roster-card"><div class="empty">この日の講座がありません。</div></div>';
+      return;
+    }
+
+    body.innerHTML = courses.map(course => {
+      // キャンセル（cancelled）など、受付対象でないものは出さない
+      const rows = allBookings
+        .filter(b => b.courseId === course.id && b.status !== 'cancelled' && b.status !== 'failed')
+        .sort((a, b) => String(a.kana || a.name).localeCompare(String(b.kana || b.name), 'ja'));
+
+      const people = rows.reduce((sum, b) => sum + (Number(b.people) || 1), 0);
+      const cashRows = rows.filter(b => b.paymentMethod === 'cash' && b.status !== 'paid');
+      const cashTotal = cashRows.reduce((sum, b) => sum + (Number(b.amount) || 0), 0);
+      const videoCount = rows.filter(b => b.addVideo).length;
+
+      const tableRows = rows.length ? rows.map(b => `
+        <tr>
+          <td class="check">☐</td>
+          <td>${escapeHtml(b.name)}${b.kana ? '<br><span style="color:var(--muted); font-size:0.78rem;">' + escapeHtml(b.kana) + '</span>' : ''}</td>
+          <td>${escapeHtml(b.people || 1)}名</td>
+          <td>${b.status === 'paid'
+            ? '入金済み'
+            : `<span class="${b.paymentMethod === 'cash' ? 'roster-cash' : ''}">${METHOD_LABEL[b.paymentMethod] || ''}${b.paymentMethod === 'cash' ? ' ¥' + (Number(b.amount) || 0).toLocaleString() : '（未確認）'}</span>`}</td>
+          <td>${b.addVideo ? '動画あり' : ''}</td>
+          <td>${escapeHtml(b.phone || '')}</td>
+          <td>${escapeHtml(b.message || '')}</td>
+        </tr>`).join('')
+        : '<tr><td colspan="7" class="empty">まだお申し込みがありません。</td></tr>';
+
+      return `
+        <div class="roster-card">
+          <div class="roster-head">
+            <h2>${escapeHtml(course.name)}</h2>
+            <span class="roster-time">${formatEventDate(course.date)}　${escapeHtml(course.time || '')}</span>
+          </div>
+          <div class="roster-sum">
+            <div>参加予定<strong>${people}名</strong>（${rows.length}件）</div>
+            <div>当日集金<strong>¥${cashTotal.toLocaleString()}</strong>（${cashRows.length}件）</div>
+            <div>セルフケア動画<strong>${videoCount}名</strong></div>
+            <div>浄財<strong>${course.donation ? '¥' + Number(course.donation).toLocaleString() : '—'}</strong></div>
+          </div>
+          <table>
+            <thead><tr><th></th><th>お名前</th><th>人数</th><th>お支払い</th><th>特典</th><th>電話</th><th>ご要望</th></tr></thead>
+            <tbody>${tableRows}</tbody>
+          </table>
+          <p class="roster-note">浄財は「日程」タブの浄財の欄に入れた金額です。当日集金は、現金でお支払い予定の方の合計です（シートで paid にすると「入金済み」に変わります）。</p>
+        </div>`;
+    }).join('');
+  }
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+      const roster = btn.dataset.view === 'roster';
+      document.getElementById('rosterView').style.display = roster ? 'block' : 'none';
+      document.getElementById('listView').style.display = roster ? 'none' : 'block';
+    });
+  });
+  document.getElementById('rosterDate').addEventListener('change', renderRoster);
+  document.getElementById('printBtn').addEventListener('click', () => window.print());
 
   loginBtn.addEventListener('click', () => {
     const key = adminKeyInput.value.trim();

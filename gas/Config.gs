@@ -28,6 +28,12 @@ PayPayアプリで下のQRコードを読み取り、金額をご入力のうえ
 // 画像を差し替えたときは images/payment-paypay.png を置き換えるだけでよい。
 const PAYPAY_QR_IMAGE_URL = 'https://raw.githubusercontent.com/rei53/ikigai-project/main/images/payment-paypay.png';
 
+// 当日現金払いの案内文
+const CASH_INFO = `
+当日、会場の受付でお支払いください。
+恐れ入りますが、お釣りのないようご用意いただけると助かります。
+`.trim();
+
 // 銀行振込の案内文
 const BANK_TRANSFER_INFO = `
 ゆうちょ銀行

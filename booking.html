@@ -420,6 +420,7 @@
             <div class="payment-options">
               <label class="payment-option"><input type="radio" name="paymentMethod" value="paypay" required> PayPay（オンライン決済）</label>
               <label class="payment-option"><input type="radio" name="paymentMethod" value="bank_transfer" required> 銀行振込</label>
+              <label class="payment-option"><input type="radio" name="paymentMethod" value="cash" required> 当日現金</label>
             </div>
             <div class="payment-reference" id="paypayInfo" hidden>
               <img src="images/payment-paypay.png" alt="PayPayのお支払い用QRコード">
@@ -435,6 +436,13 @@
                 <span class="bank-info-note">※恐れ入りますが振込手数料はご負担ください</span>
               </div>
             </div>
+            <div class="payment-reference" id="cashInfo" hidden>
+              <div class="bank-info">
+                <span class="bank-info-title">当日現金</span>
+                当日、会場の受付でお支払いください。<br>
+                <span class="bank-info-note">※恐れ入りますが、お釣りのないようご用意いただけると助かります</span>
+              </div>
+            </div>
           </div>
           <div class="order-total"><span>お支払い合計</span><span id="orderTotal">¥${(c.priceTiers ? c.priceTiers[0].amount : c.amount).toLocaleString()}</span></div>
           <div class="form-error" id="form-error" style="display:none;"></div>
@@ -445,10 +453,12 @@
     // 選んだお支払い方法に応じて、PayPayのQRか振込先のどちらかだけを表示する
     const paypayInfo = document.getElementById('paypayInfo');
     const bankInfo = document.getElementById('bankInfo');
+    const cashInfo = document.getElementById('cashInfo');
     document.querySelectorAll('input[name="paymentMethod"]').forEach(function (radio) {
       radio.addEventListener('change', function () {
         paypayInfo.hidden = radio.value !== 'paypay';
         bankInfo.hidden = radio.value !== 'bank_transfer';
+        cashInfo.hidden = radio.value !== 'cash';
       });
     });
 
@@ -521,6 +531,9 @@
           }
           const payBlock = res.method === 'paypay'
             ? `<img src="images/payment-paypay.png" alt="PayPayのお支払い用QRコード" style="display:block; max-width:220px; width:100%; margin:0 auto; border-radius:12px;">`
+            : res.method === 'cash'
+            ? `<div class="bank-instructions">当日、会場の受付でお支払いください
+※恐れ入りますが、お釣りのないようご用意いただけると助かります</div>`
             : `<div class="bank-instructions">ゆうちょ銀行
 記号：16130　番号：19673021
 （普通：六一八店 1967302）
@@ -534,6 +547,8 @@
               ${payBlock}
               ${res.method === 'paypay'
                 ? `<p style="color:var(--muted); margin-top:18px;">お支払い後、<a href="https://lin.ee/61XYyrz" target="_blank" rel="noopener" style="color:var(--sage-dark); font-weight:700;">公式LINE</a>へお支払い画面のスクリーンショットをお送りください。その際、<strong>お申し込み時のお名前も一緒にお送りください</strong>（初めて友だち追加された方は、LINEのお名前だけではどなたか分からないためです）。ご入金の確認をもちまして予約確定となります。</p>`
+                : res.method === 'cash'
+                ? `<p style="color:var(--muted); margin-top:18px;">ご予約を承りました。当日、受付でお支払いください。</p>`
                 : `<p style="color:var(--muted); margin-top:18px;">ご入金の確認をもちまして予約確定となります。確認まで数日いただく場合がございます。</p>`}
               <p style="color:var(--muted); margin-top:12px; font-size:0.86rem;">同じ内容を確認メールでもお送りしました。</p>
             </div>`;
