@@ -31,7 +31,8 @@ const PAYPAY_QR_IMAGE_URL = 'https://raw.githubusercontent.com/rei53/ikigai-proj
 // 当日現金払いの案内文
 const CASH_INFO = `
 当日、会場の受付でお支払いください。
-恐れ入りますが、お釣りのないようご用意いただけると助かります。
+恐れ入りますが、お釣りのないようにお持ちください。
+※できるだけPayPay・銀行振込でのお支払いにご協力をお願いいたします。
 `.trim();
 
 // 銀行振込の案内文

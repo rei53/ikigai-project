@@ -424,7 +424,7 @@
             <div class="payment-options">
               <label class="payment-option"><input type="radio" name="paymentMethod" value="paypay" required> PayPay（オンライン決済）</label>
               <label class="payment-option"><input type="radio" name="paymentMethod" value="bank_transfer" required> 銀行振込</label>
-              <label class="payment-option"><input type="radio" name="paymentMethod" value="cash" required> 当日現金</label>
+              <label class="payment-option"><input type="radio" name="paymentMethod" value="cash" required> 当日現金（やむを得ない場合）</label>
             </div>
             <div class="payment-reference" id="paypayInfo" hidden>
               <img src="images/payment-paypay.png" alt="PayPayのお支払い用QRコード">
@@ -444,7 +444,8 @@
               <div class="bank-info">
                 <span class="bank-info-title">当日現金</span>
                 当日、会場の受付でお支払いください。<br>
-                <span class="bank-info-note">※恐れ入りますが、お釣りのないようご用意いただけると助かります</span>
+                恐れ入りますが、<strong>お釣りのないようにお持ちください。</strong><br>
+                <span class="bank-info-note">※できるだけPayPay・銀行振込でのお支払いにご協力をお願いいたします</span>
               </div>
             </div>
           </div>
@@ -539,7 +540,7 @@
             ? `<img src="images/payment-paypay.png" alt="PayPayのお支払い用QRコード" style="display:block; max-width:220px; width:100%; margin:0 auto; border-radius:12px;">`
             : res.method === 'cash'
             ? `<div class="bank-instructions">当日、会場の受付でお支払いください
-※恐れ入りますが、お釣りのないようご用意いただけると助かります</div>`
+恐れ入りますが、お釣りのないようにお持ちください</div>`
             : `<div class="bank-instructions">ゆうちょ銀行
 記号：16130　番号：19673021
 （普通：六一八店 1967302）
