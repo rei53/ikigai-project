@@ -13,7 +13,7 @@
  */
 
 const SCHEDULE_SHEET_NAME = '日程';
-const SCHEDULE_HEADERS = ['会場', '日付', '時間', '状態', '浄財'];
+const SCHEDULE_HEADERS = ['会場', '日付', '時間', '状態', '浄財', '浄財支払い'];
 const SCHEDULE_CACHE_KEY = 'SCHEDULE_JSON';
 // サイトへ返す日程のキャッシュ時間（秒）。シートを直してから最大この時間で反映される。
 const SCHEDULE_CACHE_SECONDS = 300;
@@ -49,6 +49,8 @@ function readScheduleRows_() {
       time: normalizeScheduleTime_(displays[i][2]),
       status: normalizeScheduleStatus_(displays[i][3]),
       donation: normalizeScheduleDonation_(row[4]),
+      donationPaid: /済|払った|OK/.test(String(displays[i][5] || '')),
+      donationNote: String(displays[i][5] || '').trim(),
       amount: venue.price,
       name: venue.name + formatScheduleDateForName_(date),
       videoEligible: venue.videoEligible
@@ -176,13 +178,16 @@ function setupScheduleSheet() {
     SpreadsheetApp.newDataValidation().requireValueInList(['募集中', '残りわずか', '締切'], true).build());
   // 浄財はお寺へお納めする金額。空欄でもよく、管理ページの当日リストにだけ出る。
   sheet.getRange(2, 5, maxRows, 1).setNumberFormat('#,##0');
+  // 浄財をお納めしたら「支払済み」にする。当日リストの表示が変わる。
+  sheet.getRange(2, 6, maxRows, 1).setDataValidation(
+    SpreadsheetApp.newDataValidation().requireValueInList(['未払い', '支払済み'], true).build());
 
   if (isNew) {
     const initial = [
-      ['法泉寺', new Date(2026, 9, 18), '9:30〜10:30', '募集中', ''],
-      ['法泉寺', new Date(2026, 10, 15), '9:30〜10:30', '募集中', ''],
-      ['法泉寺', new Date(2026, 11, 20), '9:30〜10:30', '募集中', ''],
-      ['西方寺', new Date(2026, 10, 7), '9:30〜11:00', '募集中', '']
+      ['法泉寺', new Date(2026, 9, 18), '9:30〜10:30', '募集中', '', '未払い'],
+      ['法泉寺', new Date(2026, 10, 15), '9:30〜10:30', '募集中', '', '未払い'],
+      ['法泉寺', new Date(2026, 11, 20), '9:30〜10:30', '募集中', '', '未払い'],
+      ['西方寺', new Date(2026, 10, 7), '9:30〜11:00', '募集中', '', '未払い']
     ];
     sheet.getRange(2, 1, initial.length, SCHEDULE_HEADERS.length).setValues(initial);
   }

@@ -69,7 +69,7 @@ function getAllBookingsForAdmin_(key) {
   // 当日リスト用に、日程タブの内容（開催日・時間・浄財）も一緒に返す。
   // 浄財はお寺へお納めする金額で、サイトには出さず管理ページだけで使う。
   const schedule = readScheduleRows_().map(function (r) {
-    return { id: r.id, date: r.date, time: r.time, name: r.name, donation: r.donation };
+    return { id: r.id, date: r.date, time: r.time, name: r.name, donation: r.donation, donationPaid: r.donationPaid, donationNote: r.donationNote };
   });
 
   return { ok: true, bookings: bookings, schedule: schedule };
