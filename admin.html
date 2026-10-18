@@ -366,9 +366,6 @@
       const kidsTotal = rows.reduce((sum, b) => sum + (parseInt(b.kids, 10) || 0), 0);
       const cashRows = rows.filter(b => b.paymentMethod === 'cash' && b.status !== 'paid');
       const cashTotal = cashRows.reduce((sum, b) => sum + (Number(b.amount) || 0), 0);
-      const videoRows = rows.filter(b => b.addVideo);
-      const videoCount = videoRows.length;
-
       // 当日の受付で見るのはお名前だけでよいので、名簿はお名前に絞る
       const tableRows = rows.length ? rows.map(b => `
         <tr>
@@ -385,22 +382,12 @@
           </div>
           <div class="roster-sum">
             <div>参加予定<strong>大人${people}名${kidsTotal ? '・子ども' + kidsTotal + '名' : ''}</strong>（${rows.length}件）</div>
-            <div>当日集金<strong>¥${cashTotal.toLocaleString()}</strong>（${cashRows.length}件）</div>
-            <div>セルフケア動画<strong>${videoCount}名</strong></div>
-            <div>浄財<strong>${course.donation ? '¥' + Number(course.donation).toLocaleString() : '—'}</strong>
-              <span class="${course.donationPaid ? '' : 'roster-cash'}">${course.donationPaid ? '支払済み' : '未払い'}</span></div>
+            ${cashTotal ? `<div>当日集金<strong>¥${cashTotal.toLocaleString()}</strong>（${cashRows.length}件）</div>` : ''}
           </div>
-          ${videoRows.length ? `
-          <div class="roster-video">
-            <h3>セルフケア動画のお申し込み（この回）${videoRows.length}名</h3>
-            <ul>${videoRows.map(b => `<li>${b.videoSent ? '☑' : '☐'} ${escapeHtml(b.name)}${b.kana ? '（' + escapeHtml(b.kana) + '）' : ''}　${b.status === 'paid' ? '入金済み' : '<span class="roster-cash">未確認</span>'}　${b.videoSent ? '送付済み' : '<span class="roster-cash">URL未送付</span>'}${b.videoTerm ? '　視聴期限 ' + formatEventDate(b.videoTerm) : ''}</li>`).join('')}</ul>
-            <p class="roster-note">この回に参加される方の動画のお申し込みです。開催後に、公式LINEから視聴URLをお送りします。</p>
-          </div>` : ''}
           <table>
             <thead><tr><th></th><th>お名前</th></tr></thead>
             <tbody>${tableRows}</tbody>
           </table>
-          <p class="roster-note">浄財は「日程」タブの浄財の欄に入れた金額です。当日集金は、現金でお支払い予定の方の合計です（シートで paid にすると「入金済み」に変わります）。</p>
         </div>`;
     }).join('');
   }
