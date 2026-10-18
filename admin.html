@@ -374,19 +374,13 @@
       const videoRows = rows.filter(b => b.addVideo);
       const videoCount = videoRows.length;
 
+      // 当日の受付で見るのはお名前だけでよいので、名簿はお名前に絞る
       const tableRows = rows.length ? rows.map(b => `
         <tr>
           <td class="check">☐</td>
           <td>${escapeHtml(b.name)}${b.kana ? '<br><span style="color:var(--muted); font-size:0.78rem;">' + escapeHtml(b.kana) + '</span>' : ''}</td>
-          <td>大人${escapeHtml(b.people || 1)}名${b.kids ? '<br><span style="color:var(--sage-dark); font-size:0.78rem;">子ども' + escapeHtml(b.kids) + '</span>' : ''}</td>
-          <td>${b.status === 'paid'
-            ? '入金済み'
-            : `<span class="${b.paymentMethod === 'cash' ? 'roster-cash' : ''}">${METHOD_LABEL[b.paymentMethod] || ''}${b.paymentMethod === 'cash' ? ' ¥' + (Number(b.amount) || 0).toLocaleString() : '（未確認）'}</span>`}</td>
-          <td>${b.addVideo ? '動画あり' : ''}</td>
-          <td>${escapeHtml(b.phone || '')}</td>
-          <td>${escapeHtml(b.message || '')}</td>
         </tr>`).join('')
-        : '<tr><td colspan="7" class="empty">まだお申し込みがありません。</td></tr>';
+        : '<tr><td colspan="2" class="empty">まだお申し込みがありません。</td></tr>';
 
       return `
         <div class="roster-card">
@@ -408,7 +402,7 @@
             <p class="roster-note">この回に参加される方の動画のお申し込みです。開催後に、公式LINEから視聴URLをお送りします。</p>
           </div>` : ''}
           <table>
-            <thead><tr><th></th><th>お名前</th><th>人数</th><th>お支払い</th><th>特典</th><th>電話</th><th>ご要望</th></tr></thead>
+            <thead><tr><th></th><th>お名前</th></tr></thead>
             <tbody>${tableRows}</tbody>
           </table>
           <p class="roster-note">浄財は「日程」タブの浄財の欄に入れた金額です。当日集金は、現金でお支払い予定の方の合計です（シートで paid にすると「入金済み」に変わります）。</p>

@@ -48,6 +48,11 @@ function setupTriggers() {
     .everyDays(1)
     .atHour(9)
     .create();
+  ScriptApp.newTrigger('updateRosterSheet')
+    .timeBased()
+    .everyDays(1)
+    .atHour(6)
+    .create();
   ScriptApp.newTrigger('refreshInstagramCache')
     .timeBased()
     .everyHours(6)
