@@ -279,6 +279,21 @@ const TERA_YOGA_TEMPLATES = {
   'hosenji-mama': HOSENJI_MAMA_TEMPLATE
 };
 
+// 回ごとに内容が違うときは、講座ID（tera-yoga-会場-YYYYMMDD）をキーにして上書きする。
+// ここに書いた項目だけが差し替わり、書かなかった項目は会場のテンプレートのままになる。
+const COURSE_OVERRIDES = {
+  'tera-yoga-saihoji-20261107': {
+    catch: 'レーズン1粒から始まる、お寺の朝時間。',
+    scheduleText: '味わうことからはじまる、心を整える90分',
+    description: '「マインドフルネスって、これでいいの？」\nそう感じたことはありませんか。\n\n正解を探さなくていい時間です。眠くなったら「眠くなっているな」、退屈だと思ったら「退屈だと思っているな」。そう気づけることが、マインドフルネスの第一歩です。\n\n秋の朝、お寺で、これまでにない「味わう」体験を。初めての方も安心してご参加いただけます。',
+    items: [
+      'マインドフルネス・イーティング（レーズン1粒を五感で味わう）',
+      '感じたことを分かち合う、寺子屋の時間',
+      '秋の呼吸法と、やさしいポーズ'
+    ]
+  }
+};
+
 function formatNextDateText(date) {
   const [y, m, d] = date.split('-').map(Number);
   const week = ['日', '月', '火', '水', '木', '金', '土'][new Date(y, m - 1, d).getDay()];
@@ -301,7 +316,8 @@ function loadCourses(scriptUrl) {
           nextDate: item.date,
           nextDateText: formatNextDateText(item.date),
           time: item.time || template.time,
-          status: item.status || template.status
+          status: item.status || template.status,
+          ...(COURSE_OVERRIDES[item.id] || {})
         });
       });
       return true;
