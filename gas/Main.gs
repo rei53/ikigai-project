@@ -11,8 +11,9 @@ function doPost(e) {
       : handleBookingSubmission_(payload);
     return jsonResponse_(result);
   } catch (err) {
-    sendErrorAlert_('doPost', err);
-    return jsonResponse_({ ok: false, error: 'サーバーエラーが発生しました。' });
+    // 通知自体が失敗しても、サイトへは必ずJSONを返す（返さないとサイト側が「通信エラー」になる）
+    try { sendErrorAlert_('doPost', err); } catch (ignore) {}
+    return jsonResponse_({ ok: false, error: 'サーバーエラーが発生しました。お手数ですが、公式LINEよりご連絡ください。' });
   }
 }
 
@@ -31,7 +32,7 @@ function doGet(e) {
     }
     return jsonResponse_({ ok: false, error: '不明なリクエストです。' });
   } catch (err) {
-    sendErrorAlert_('doGet', err);
+    try { sendErrorAlert_('doGet', err); } catch (ignore) {}
     return jsonResponse_({ ok: false, error: 'サーバーエラーが発生しました。' });
   }
 }

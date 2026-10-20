@@ -198,6 +198,50 @@ function sendContactAutoReply_(email, name) {
   });
 }
 
+/**
+ * お支払いの案内メールを送り直す（手動で実行する）
+ *
+ * 何らかの理由で案内メールが届かなかったときに使う。
+ * Apps Scriptエディタで関数を選んで実行すると、まだ入金確認が済んでいない行すべてに
+ * 案内メールを送り直す。行番号を指定したいときは resendPaymentInstructions(5) のように
+ * 実行ログから呼び出す。
+ */
+function resendPaymentInstructions(rowNumber) {
+  const sheet = getSheet_();
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return 0;
+
+  const from = rowNumber || 2;
+  const count = rowNumber ? 1 : lastRow - 1;
+  const data = sheet.getRange(from, 1, count, COL.ADD_VIDEO).getValues();
+  let sent = 0;
+
+  data.forEach(function (row, i) {
+    const rowNum = from + i;
+    const status = row[COL.STATUS - 1];
+    // 行番号を指定したときはその行だけ。指定なしのときは、まだ入金確認が済んでいない行が対象。
+    if (!rowNumber && status !== 'pending_payment' && status !== 'pending_bank_transfer' && status !== 'pending_cash') return;
+
+    try {
+      sendPaymentInstructions_(
+        row[COL.EMAIL - 1],
+        row[COL.NAME - 1],
+        row[COL.COURSE_NAME - 1],
+        row[COL.AMOUNT - 1],
+        row[COL.PAYMENT_METHOD - 1],
+        row[COL.ADD_VIDEO - 1] === 'yes'
+      );
+      sheet.getRange(rowNum, COL.LAST_ERROR).setValue('案内メール再送 ' + Utilities.formatDate(new Date(), 'Asia/Tokyo', 'M/d HH:mm'));
+      sent++;
+    } catch (err) {
+      try { sendErrorAlert_('案内メールの再送（行=' + rowNum + '）', err); } catch (ignore) {}
+    }
+  });
+
+  Logger.log('案内メールを' + sent + '件送り直しました。');
+  return sent;
+}
+
 function sendErrorAlert_(context, err) {
   MailApp.sendEmail({
     to: OWNER_EMAIL,

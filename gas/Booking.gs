@@ -91,8 +91,21 @@ function handleBookingSubmission_(payload) {
       ''
     ]);
 
-    sendPaymentInstructions_(email, name, courseName, amount, paymentMethod, showVideoGuidance);
-    sendOwnerNotification_(name, courseName, amount, paymentMethod, status, people, kidsText);
+    // メールの送信に失敗しても、お申し込み自体は受け付けたものとして扱う。
+    // （失敗を投げるとサイト側が「通信エラー」になり、お客様が二重に申し込んでしまうため）
+    // 失敗したときは行の「エラー」欄に残し、主催者へ通知する。あとで resendPaymentInstructions(行番号) で送り直せる。
+    try {
+      sendPaymentInstructions_(email, name, courseName, amount, paymentMethod, showVideoGuidance);
+      sendOwnerNotification_(name, courseName, amount, paymentMethod, status, people, kidsText);
+    } catch (err) {
+      const rowNum = sheet.getLastRow();
+      try {
+        sheet.getRange(rowNum, COL.LAST_ERROR).setValue('メール送信に失敗：' + err);
+      } catch (ignore) {}
+      try {
+        sendErrorAlert_('案内メールの送信（行=' + rowNum + '／' + name + '様）', err);
+      } catch (ignore) {}
+    }
 
     return { ok: true, method: paymentMethod, amount: amount, bookingId: bookingId };
   });
