@@ -676,8 +676,14 @@
   .schedule-table th, .schedule-table td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--line); }
   .schedule-table th { color: var(--sage-dark); font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; }
   .schedule-table tr:last-child td { border-bottom: none; }
-  .schedule-table-wrap { overflow-x: auto; border-radius: 16px; border: 1px solid var(--line); }
-  @media (max-width: 640px) { .schedule-table { font-size: 0.8rem; } .schedule-table th, .schedule-table td { padding: 10px 12px; } }
+  .schedule-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 16px; border: 1px solid var(--line); }
+  .schedule-scroll-hint { display: none; font-size: 0.78rem; color: var(--muted); margin: 0 0 8px; text-align: right; }
+  @media (max-width: 640px) {
+    .schedule-table { font-size: 0.8rem; min-width: 620px; }
+    .schedule-table th, .schedule-table td { padding: 10px 12px; }
+    .schedule-table th { white-space: nowrap; }
+    .schedule-scroll-hint { display: block; }
+  }
 
   /* ─── PROFILE ─── */
   .profile { background: var(--white); }
@@ -780,7 +786,7 @@
   @media (max-width: 860px) {
     .about-grid, .profile-grid { grid-template-columns: 1fr; }
     .yoga-grid, .philosophy-grid, .field-grid { grid-template-columns: repeat(2, 1fr); }
-    .profile-photo { max-width: 260px; margin: 0 auto; }
+    .profile-photo { position: static; max-width: 260px; margin: 0 auto; }
   }
   @media (max-width: 520px) {
     .yoga-grid, .philosophy-grid, .field-grid { grid-template-columns: 1fr; }
@@ -1267,6 +1273,7 @@
     <div id="openCourseGrid" class="open-course-grid reveal-grid"></div>
 
     <h3 class="schedule-subhead">開催スケジュール一覧</h3>
+    <p class="schedule-scroll-hint">← 横にスクロールできます →</p>
     <div class="schedule-table-wrap">
       <table class="schedule-table">
         <thead>
