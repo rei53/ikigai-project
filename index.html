@@ -344,6 +344,21 @@
   .yoga-grid {
     display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; max-width: 1080px; margin: 0 auto;
   }
+  /* 感覚統合の説明（こどもヨーガとは の中） */
+  .kankaku-box {
+    max-width: 840px; margin: 0 auto 40px; background: var(--white); border-radius: 18px;
+    padding: 34px 32px; box-shadow: var(--shadow-sm); border-left: 4px solid var(--gold);
+  }
+  .kankaku-box h3 { font-family: 'Noto Serif JP', serif; font-size: 1.1rem; color: var(--sage-dark); margin-bottom: 14px; }
+  .kankaku-box p { font-size: 0.9rem; color: var(--muted); line-height: 1.95; }
+  .kankaku-box ul { list-style: none; margin: 18px 0; display: grid; gap: 10px; }
+  .kankaku-box li {
+    font-size: 0.9rem; line-height: 1.8; color: var(--ink);
+    background: var(--warm); border-radius: 10px; padding: 12px 16px 12px 38px; position: relative;
+  }
+  .kankaku-box li::before { content: '●'; position: absolute; left: 16px; top: 12px; font-size: 0.6rem; color: var(--gold); }
+  .kankaku-box strong { color: var(--sage-dark); }
+  @media (max-width: 640px) { .kankaku-box { padding: 26px 20px; } }
   .yoga-card {
     background: var(--white); border-radius: 18px; padding: 36px 28px;
     box-shadow: var(--shadow-sm); text-align: center; border: 1px solid rgba(47,109,133,0.06);
@@ -904,6 +919,17 @@
       <h2 class="section-title center">こどもヨーガとは</h2>
       <p class="section-lead center">こどもと、こどもを取り巻く大人へのマインドフルネスを尊重したヨーガです。単にポーズをとるだけのヨガではなく、保育・教育・福祉・心理などの学問的な裏付けをベースに、子どもの健全な心身の育成を目指したプログラムをお届けしています。</p>
       <p class="section-lead center">ヨガとマインドフルネスで育む感覚統合。ポーズやふれあいを通した「感覚統合あそび」で、からだを動かしながら、自分の感覚に気づく力を育てます。</p>
+    </div>
+
+    <div class="kankaku-box reveal">
+      <h3>ヨガとマインドフルネスで育む感覚統合</h3>
+      <p>人は「感覚」を土台に育ちます。目で見る・耳で聞くといった感覚だけでなく、ふだん意識しにくい感覚――からだの傾きやバランスを感じる力、力加減やからだの位置を感じる力、肌でふれて感じる力――が、姿勢や集中力、気持ちの安定を静かに支えています。</p>
+      <ul>
+        <li><strong>バランスのポーズ</strong>で、姿勢を保つ力と、ゆれても立て直す力を育てます</li>
+        <li><strong>押す・引く・支え合う動き</strong>で、「どれくらいの力で」が少しずつ分かるようになります</li>
+        <li><strong>ふれあいと呼吸</strong>で、気持ちが落ち着く感覚を、からだで覚えていきます</li>
+      </ul>
+      <p>上手にできることは目指しません。「いま、自分のからだはこう感じている」と気づけること。その積み重ねが、学びにも、人との関わりにも、生きる力の土台になります。</p>
     </div>
     <div class="yoga-video-wrap reveal">
       <video class="yoga-video" controls playsinline preload="none" poster="images/kodomo-yoga-poster.jpg">
