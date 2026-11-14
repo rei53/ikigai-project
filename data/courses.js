@@ -181,7 +181,8 @@ const COURSES = [
     capacity: '定員12名',
     price: '1回 1,650円',
     image: 'images/mindfulness-yoga.jpg',
-    description: '心身を整えるマインドフルネスを取り入れた、朝の時間のヨーガです。\n\n所在地：香川県高松市丸亀町6-1 フェスタ1ビル3階',
+    catch: '情報があふれる毎日に、心の筋トレを。',
+    description: '情報があふれる毎日に、心の筋トレを。\nゆっくり感じながら動き、体の内側の感覚「内受容感覚」を磨き、ゆらぎにくい心と体へ。\n\n所在地：香川県高松市丸亀町6-1 フェスタ1ビル3階',
     facilityNote: 'リビングカルチャーセンター高松校（TEL：<a href="tel:0878111777" style="color:var(--sage-dark); font-weight:700;">087-811-1777</a>）の窓口・カルチャー会員申し込みより直接お申し込みください。詳細は<a href="https://culture.takalivi.com/course" target="_blank" rel="noopener" style="color:var(--sage-dark); font-weight:700;">公式サイト</a>をご確認ください。',
     status: 'few'
   },
