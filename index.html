@@ -382,6 +382,23 @@
   .philosophy-grid {
     display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; max-width: 1080px; margin: 0 auto;
   }
+  /* 支援のアプローチ（環境を整える／本人に力をつける） */
+  .approach { max-width: 1080px; margin: 48px auto 0; }
+  .approach > h3 {
+    font-family: 'Noto Serif JP', serif; font-size: 1.15rem; color: var(--sage-deep);
+    text-align: center; margin-bottom: 12px;
+  }
+  .approach > p { font-size: 0.9rem; line-height: 1.95; color: var(--muted); text-align: center; max-width: 760px; margin: 0 auto 26px; }
+  .approach-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+  .approach-card {
+    background: var(--warm); border-radius: 16px; padding: 28px 26px; border: 1px solid var(--line);
+  }
+  .approach-num { font-family: 'Noto Serif JP', serif; font-size: 1.3rem; font-weight: 700; color: var(--gold); }
+  .approach-card h4 { font-size: 1.02rem; color: var(--sage-dark); margin: 4px 0 6px; }
+  .approach-term { font-size: 0.82rem; font-weight: 700; color: var(--sage); margin-bottom: 10px; }
+  .approach-card p { font-size: 0.88rem; line-height: 1.9; color: var(--muted); }
+  .approach strong { color: var(--sage-dark); }
+  @media (max-width: 900px) { .approach-grid { grid-template-columns: 1fr; } }
   .phil-card {
     position: relative; padding: 30px 24px 28px; border-radius: 16px; background: var(--cream);
     border: 1px solid var(--line); overflow: hidden;
@@ -985,6 +1002,25 @@
         <div class="num">04</div>
         <h4>人的環境への支援</h4>
         <p>子育て世代や教育・介護・福祉・医療関係者自身が心身を整えるための場も提供します。</p>
+      </div>
+    </div>
+
+    <div class="approach reveal">
+      <h3>生きづらさは、その人と環境のあいだに生まれる</h3>
+      <p>同じ場面でも、しんどさの大きさは人によって、そして環境によって変わります。だからIKIGAIプロジェクト®では、<strong>環境を整えること</strong>と、<strong>本人の力を引き出すこと</strong>の両方から支援します。</p>
+      <div class="approach-grid">
+        <div class="approach-card">
+          <span class="approach-num">01</span>
+          <h4>環境を整える</h4>
+          <p class="approach-term">MBPBS（マインドフルネスに基づく積極的行動支援）</p>
+          <p>マインドフルネス（瞑想・気づき）と、積極的行動支援（PBS）を組み合わせたプログラムです。支える側の大人が落ち着きを取り戻すことで、場の空気が変わり、子どもや利用者の行動も変わっていきます。</p>
+        </div>
+        <div class="approach-card">
+          <span class="approach-num">02</span>
+          <h4>本人に力をつける</h4>
+          <p class="approach-term">心理的レジリエンス／エンパワーメントヨガ</p>
+          <p>認知行動療法の考え方を取り入れ、「自分でどうにかやっていける」というたくましさを引き出します。刺激を受けても、すぐには反応しない。そのための<strong>心の筋トレ</strong>です。</p>
+        </div>
       </div>
     </div>
   </div>
