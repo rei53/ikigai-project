@@ -219,7 +219,7 @@ const COURSES = [
     time: '10:30〜12:00',
     capacity: '開催告知にてご案内',
     price: '開催告知にてご案内',
-    image: 'images/mindfulness-yoga.jpg',
+    image: 'images/mindfulness-side-stretch.jpg',
     description: '本講座（全6回）。第1・3・5週の月曜日に開催（祝日・休館日を除く）。\n\n【現行クール（全6回）】7/6、8/3、8/31、9/7、10/5、10/19\n【次回クール】11/2〜',
     facilityNote: '高松校（講座No.7630）へ直接お申し込みください。',
     status: 'open'
