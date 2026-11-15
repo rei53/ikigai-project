@@ -231,7 +231,7 @@ const COURSES = [
 // のように書き換え、メール文面用の SELF_CARE_VIDEO_VIEWING_NOTE（gas/Config.gs）も同じ文に合わせて、
 // Apps Scriptを貼り替えて再デプロイしてください。
 // 今回の募集の視聴期限。次の募集では、ここと gas/Config.gs の SELF_CARE_VIDEO_DEADLINE を書き換える。
-const VIDEO_DEADLINE_DATE = '2026-11-14';
+const VIDEO_DEADLINE_DATE = '2026-12-14';
 const VIDEO_DEADLINE_TEXT = (function () {
   const [y, m, d] = VIDEO_DEADLINE_DATE.split('-').map(Number);
   const week = ['日', '月', '火', '水', '木', '金', '土'][new Date(y, m - 1, d).getDay()];
@@ -251,7 +251,7 @@ COURSES.push({
   bookingType: 'internal',
   standalone: true,
   timeOfDay: null,
-  name: 'セルフケア動画「お腹グニャも、反り腰も bye bye!」',
+  name: 'セルフケア動画「冬の血管ケア」（11月の動画）',
   venue: 'オンライン（動画視聴）',
   scheduleText: 'いつでもお申し込みいただけます',
   nextDate: null,
@@ -265,9 +265,9 @@ COURSES.push({
     { id: 'none', label: 'レッスンを受講していない方', amount: 2500 }
   ],
   image: 'images/mindfulness-yoga.jpg',
-  catch: 'お腹グニャも、反り腰も bye bye!',
-  description: `肩甲骨と骨盤の連動を意識しながら、お腹はシュッと、整った姿勢へ。姿勢改善・骨盤調整にも。\nレッスンで行っているセルフケアを、ご自宅でも続けていただけるようまとめた動画です。短い時間でも、日々の習慣にすることで身体は変わっていきます。\n\n${VIDEO_VIEWING_NOTE}\n視聴URLと注意事項は、ご入金の確認後に公式LINEよりお送りします。`,
-  items: ['姿勢改善・骨盤調整のセルフケア', VIDEO_VIEWING_PERIOD],
+  catch: '脚の血管をのばして、冬のからだを巡らせる。',
+  description: `脚の5つの動脈を伸ばす「血管のばし」。ゆっくり動いて巡らせ、深い呼吸でからだを落ち着かせます。\nレッスンで行っているセルフケアを、ご自宅でも続けていただけるようまとめた動画です。短い時間でも、日々の習慣にすることで身体は変わっていきます。\n\n${VIDEO_VIEWING_NOTE}\n視聴URLと注意事項は、ご入金の確認後に公式LINEよりお送りします。`,
+  items: ['脚の5つの動脈をのばす「血管のばし」', '深い呼吸でからだを落ち着かせる時間', VIDEO_VIEWING_PERIOD],
   belongings: ['ヨガマット または バスタオル（お持ちの方）'],
   status: 'open'
 });

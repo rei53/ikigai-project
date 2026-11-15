@@ -105,7 +105,7 @@ const SELF_CARE_VIDEO_NAME = 'セルフケア動画';
 // 今回の募集の視聴期限（yyyy-MM-dd）。次の募集を始めるときは、ここの日付と
 // data/courses.js の VIDEO_DEADLINE_DATE を書き換える。
 // 申し込み1件ごとに、この日付が「どの回の募集か」としてシートに記録される。
-const SELF_CARE_VIDEO_DEADLINE = '2026-11-14';
+const SELF_CARE_VIDEO_DEADLINE = '2026-12-14';
 const SELF_CARE_VIDEO_VIEWING_NOTE = '現在の視聴期限は' + formatDeadline_(SELF_CARE_VIDEO_DEADLINE) + 'までです。期限はお申し込み時期にかかわらず全員共通ですので、お早めにご視聴ください。';
 
 // '2026-11-14' を「11月14日（土）」の形にする
